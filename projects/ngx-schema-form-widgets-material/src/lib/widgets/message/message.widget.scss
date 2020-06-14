@@ -1,0 +1,42 @@
+.ui-message {
+  border: 1px solid;
+  margin: 0 0.25em;
+  padding: 0.25em 0.5em;
+  display: inline-block;
+  vertical-align: top;
+}
+.ui-message .ui-message-text {
+  margin-left: 5px;
+}
+.ui-message .ui-message-icon,
+.ui-message .ui-message-text {
+  vertical-align: middle;
+}
+.ui-message .ui-message-icon {
+  background: none;
+  /** color: #fff;**/
+  margin-top: -2px;
+}
+.ui-message .ui-corner-all {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+
+/* reset font size */
+::ng-deep {
+  .ui-message.mat-toolbar {
+    font-size: unset;
+  }
+}
+
+.ui-corner-all {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+
+/** leave icon color white for secondary */
+.ui-message:not(.mat-secondary) .ui-message-icon {
+  color: #fff;
+}

@@ -1,0 +1,40 @@
+<!--
+Element 'schema':
+        - title
+        - name
+        - description
+        - oneOf
+        - readOnly
+-->
+<mat-form-field class="ngx-ui-mat-form-field"
+  [class.ngx-ui-widget-full-width]="!schema.widget?.size"
+>
+
+  <!-- Placeholder input required for usage of mat-form-field to format the mat-hint right -->
+  <input matInput data-hidden="placeholder" aria-hidden="true" class="ngx-ui-mat-form-field-placeholder" style="display:none" tabindex="-1">
+
+  <label for="radio-group-label-{{id}}">{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
+      {{formProperty|IsRequiredAsterisk}}
+    </label>
+
+<mat-radio-group [formControl]="control" class="ngx-ui-mat-radio-group"
+  attr.aria-labelledby="radio-group-label-{{id}}"
+  [disabled]="schema.readOnly"
+
+  [required]="(formProperty|IsRequiredAttr)"
+>
+  <mat-radio-button
+    *ngFor="let option of schema.oneOf"
+    [name]="name"
+    [value]="option.enum[0]"
+    [disabled]="option.readOnly"
+    class="ngx-ui-mat-radio-button"
+  >
+    {{option.description || (schema.hasOwnProperty('title') ? schema.title :formProperty.path) + ' ' + option.enum[0]}}
+  </mat-radio-button>
+</mat-radio-group>
+<mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>
+<mat-error *ngIf="control?.errors">
+  <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
+</mat-error>
+</mat-form-field>

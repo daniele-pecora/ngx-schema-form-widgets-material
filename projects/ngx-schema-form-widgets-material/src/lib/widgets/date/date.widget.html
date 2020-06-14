@@ -1,0 +1,119 @@
+<!--
+
+Element 'p-calendar'
+ - id           : style id
+ - placeholder  : placeholder
+
+Element 'p-calendar' in 'widget' field do represent the same as in the primeng documentation
+
+           - dateFormat
+           - locale
+           - showIcon
+           - icon
+           - readonlyInput
+           - dataType
+           - yearRange        ***unavailable-feature----always on
+           - yearNavigator    ***unavailable-feature----always on
+           - monthNavigator   ***unavailable-feature----always on
+           - showOnFocus
+           - disabled
+
+         - minDate                        - Supports a Date object or a Date string format parsable from Date object constructor
+                                            May be also used in combination with its counterpart 'maxAge' or 'maxDate'
+                                            see also : https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Date
+         - maxDate                        - Supports a Date object or a Date string format parsable from Date object constructor
+                                            May be also used in combination with its counterpart 'minAge' or 'minDate'
+                                            see also : https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Date
+
+
+
+
+Attribute 'locale'
+  - Since we have defined some locales for the calendar  'de','en' and 'it'
+    the locale can be also set as string type using 'de','en' and 'it'
+
+Element 'widget':
+        - prefix [ {icon, text }]
+        - suffix  [ {icon, text }]
+        - filled = filled background for the input section of the widget
+
+            - minAge          Set the min age to select in calendar.
+                              May be also used in combination with its counterpart 'minAge' or 'minDate'
+                              Format pattern used <years:month:days>
+                              eg.:
+                                  - 18 years, 2 month and 4 days : '18:2:4'
+                                  - 10 month                     : '0:10:0'
+                                  - 12  days                     : '0:0:12'
+
+                              Use negative values for ages in the past.
+                              eg, it is required a specific age of a person:
+                                  - min. 18 year                 : '-18:0:0'
+                                  - min. 10 year                 : '-10:0:0'
+
+                              This will override and will be translated to a date and set into the primeng attribute 'minDate'
+
+            - maxAge          Set the max age to select in calendar.
+                              May be also used in combination with its counterpart 'maxAge' or 'maxDate'
+                              Format pattern used <years:month:days>
+                              eg.:
+                                  - 18 years, 2 month and 4 days : '18:2:4'
+                                  - 10 month                     : '0:10:0'
+                                  - 12  days                     : '0:0:12'
+
+                              Use negative values for ages in the past.
+                              eg, it is required a specific age of a person:
+                                  - min. 18 year                 : '-18:0:0'
+                                  - min. 10 year                 : '-10:0:0'
+
+                              This will override and will be translated to a date and set into the primeng attribute 'maxDate'.
+
+          - preset         Use the same pattern as minAge/maxAge to add or subtract any date from today on.
+                           This will override any value set for json schema standard property 'default'.
+                           Format pattern used <years:month:days>
+                           e.g.:
+                                - today                        : '0:0:0'
+                                - yesterday                    : '0:0:-1'
+                                - tomorrow                     : '0:0:1'
+                                - today last month             : '0:-1:0'
+                                - today next month             : '0:1:0'
+                                - today last year              : '-1:0:0'
+                                - today next year              : '1:0:0'
+
+todo: we need transformation of the date string from model to form and vice-versa
+
+-->
+
+<mat-form-field [appearance]="schema?.widget?.filled?'fill':'standard'"
+  [class.ngx-ui-widget-full-width]="!schema.widget?.size"
+>
+  <mat-label>{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
+    {{formProperty|IsRequiredAsterisk}}
+  </mat-label>
+  <ngx-ui-widget-addon *ngIf="schema?.widget?.prefix" [addons]="schema.widget.prefix"></ngx-ui-widget-addon>
+
+  <input
+    #dateInputField
+    matInput
+    [matDatepicker]="picker"
+    (focus)="showOnFocus($event, picker)"
+    [max]="getMaxDate()"
+    [min]="getMinDate()"
+    (blur)="dateInput('blur', $event)"
+    (input)="dateInput('input', $event)"
+    (change)="dateInput('change', $event)"
+    (dateInput)="dateInput('dateInput', $event)"
+    (dateChange)="dateInput('dateChange', $event)"
+
+    [attr.required]="(formProperty|IsRequiredAttrString)"
+    [attr.aria-required]="(formProperty|IsRequiredAttr)"
+  >
+
+  <ngx-ui-widget-addon *ngIf="schema?.widget?.suffix" [addons]="schema.widget.suffix" [suffix]="true"></ngx-ui-widget-addon>
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+
+  <mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>
+  <mat-error *ngIf="control?.errors">
+    <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
+  </mat-error>
+</mat-form-field>

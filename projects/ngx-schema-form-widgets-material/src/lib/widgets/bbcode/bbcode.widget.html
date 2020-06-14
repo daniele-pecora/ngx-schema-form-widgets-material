@@ -1,0 +1,95 @@
+<!--
+Element 'schema'
+  - title = label
+
+Element 'widget'
+  - bbcode    = Any BBCODE to be parsed to HTML.
+                Will be wrapped into DIV HTML element.
+                The type may be a simple string or an array of strings (string|string[])
+
+Supported BBCODES
+<code>
+
+BBCode                                               | HTML
+---------------------------------------------------- | -------------------------------------------------------------
+[br]                                                 | <br>
+[b]text[/b]                                          | <strong>text</strong>
+[b class="fancy"]text[/b]                            | <strong class="fancy">text</strong>
+[b data-value="10"]text[/b]                          | <strong data-value="10">text</strong>
+[i]text[/i]                                          | <em>text</em>
+[i class="fancy"]text[/i]                            | <em class="fancy">text</em>
+[i data-value="10"]text[/i]                          | <em data-value="10">text</em>
+[u]text[/u]                                          | <u>text</u>
+[u class="fancy"]text[/u]                            | <u class="fancy">text</u>
+[u data-value="10"]text[/u]                          | <u data-value="10">text</u>
+[h1]text[/h1]                                        | <h1>text</h1>
+[h1 class="fancy"]text[/h1]                          | <h1 class="fancy">text</h1>
+[h1 data-value="10"]text[/h1]                        | <h1 data-value="10">text</h1>
+[h2]text[/h2]                                        | <h2>text</h2>
+[h2 class="fancy"]text[/h2]                          | <h2 class="fancy">text</h2>
+[h2 data-value="10"]text[/h2]                        | <h2 data-value="10">text</h2>
+[h3]text[/h3]                                        | <h3>text</h3>
+[h3 class="fancy"]text[/h3]                          | <h3 class="fancy">text</h3>
+[h3 data-value="10"]text[/h3]                        | <h3 data-value="10">text</h3>
+[h4]text[/h4]                                        | <h4>text</h4>
+[h4 class="fancy"]text[/h4]                          | <h4 class="fancy">text</h4>
+[h4 data-value="10"]text[/h4]                        | <h4 data-value="10">text</h4>
+[h5]text[/h5]                                        | <h5>text</h5>
+[h5 class="fancy"]text[/h5]                          | <h5 class="fancy">text</h5>
+[h5 data-value="10"]text[/h5]                        | <h5 data-value="10">text</h5>
+[h6]text[/h6]                                        | <h6>text</h6>
+[h6 class="fancy"]text[/h6]                          | <h6 class="fancy">text</h6>
+[h6 data-value="10"]text[/h6]                        | <h6 data-value="10">text</h6>
+[p]text[/p]                                          | <p>text</p>
+[p class="fancy"]text[/p]                            | <p class="fancy">text</p>
+[p data-value="10"]text[/p]                          | <p data-value="10">text</p>
+[color=#FF0000]text[/color]                          | <span style="color:#FF0000">text</span>
+[size=9]text[/size]                                  | <span style="font-size:9px">text</span>
+[img width=10]https://www.example.com/image.jpg[/img]| <img width=10 src="https://www.example.com/image.jpg">
+[img=https://www.example.com/image.jpg height=10]    | <img src="https://www.example.com/image.jpg" height="10">
+[email]info@example.com[/email]                      | <a href="mailto:info@example.com">info@example.com</a>
+[email=info@example.com]text[/email]                 | <a href="mailto:info@example.com">text</a>
+[url]https://www.example.com[/url]                   | <a href="https://www.example.com">https://www.example.com</a>
+[url=alert('hello world')|onclick]text[/url]         | <a onclick="alert('hello world')">text</a>
+[url=https://www.example.com target=_base]text[/url] | <a href="https://www.example.com" target="_base">text</a>
+[url=https://www.example.com]text[/url]              | <a href="https://www.example.com">text</a>
+[a=anker]text[/a]                                    | <a href="#anker" name="anker">text</a>
+[list]text[/list]                                    | <ul>text</ul>
+[*]text[/*]                                          | <li>text</li>
+
+</code>
+
+Additional supported BBCODES
+<code>
+
+BBCode                                               | HTML
+---------------------------------------------------- | -------------------------------------------------------------
+[hr]                                                 | <hr>
+[h1a]text[/h1a]                                        | <h1><a href="text" name="text" rel="noopener noreferrer">text</a></h1>
+[h1a class="fancy"]text[/h1a]                          | <h1 class="fancy"><a href="text" name="text" rel="noopener noreferrer">text</a></h1>
+[h1a data-value="10"]text[/h1a]                        | <h1 data-value="10"><a href="text" name="text" rel="noopener noreferrer">text</a></h1>
+[h2a]text[/h2a]                                        | <h2><a href="text" name="text" rel="noopener noreferrer">text</a></h2>
+[h2a class="fancy"]text[/h2a]                          | <h2 class="fancy"><a href="text" name="text" rel="noopener noreferrer">text</a></h2>
+[h2a data-value="10"]text[/h2a]                        | <h2 data-value="10"><a href="text" name="text" rel="noopener noreferrer">text</a></h2>
+[h3a]text[/h3a]                                        | <h3><a href="text" name="text" rel="noopener noreferrer">text</a></h3>
+[h3a class="fancy"]text[/h3a]                          | <h3 class="fancy"><a href="text" name="text" rel="noopener noreferrer">text</a></h3>
+[h3a data-value="10"]text[/h3a]                        | <h3 data-value="10"><a href="text" name="text" rel="noopener noreferrer">text</a></h3>
+[h4a]text[/h4a]                                        | <h4><a href="text" name="text" rel="noopener noreferrer">text</a></h4>
+[h4a class="fancy"]text[/h4a]                          | <h4 class="fancy"><a href="text" name="text" rel="noopener noreferrer">text</a></h4>
+[h4a data-value="10"]text[/h4a]                        | <h4 data-value="10"><a href="text" name="text" rel="noopener noreferrer">text</a></h4>
+[h5a]text[/h5a]                                        | <h5><a href="text" name="text" rel="noopener noreferrer">text</a></h5>
+[h5a class="fancy"]text[/h5a]                          | <h5 class="fancy"><a href="text" name="text" rel="noopener noreferrer">text</a></h5>
+[h5a data-value="10"]text[/h5a]                        | <h5 data-value="10"><a href="text" name="text" rel="noopener noreferrer">text</a></h5>
+[h6a]text[/h6a]                                        | <h6><a href="text" name="text" rel="noopener noreferrer">text</a></h6>
+[h6a class="fancy"]text[/h6a]                          | <h6 class="fancy"><a href="text" name="text" rel="noopener noreferrer">text</a></h6>
+[h6a data-value="10"]text[/h6a]                        | <h6 data-value="10"><a href="text" name="text" rel="noopener noreferrer">text</a></h6>
+</code>
+
+-->
+<div class="ui-g-12">
+  <label [attr.for]="id">
+    {{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
+    <ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+  </label>
+    <div [innerHTML]="this.htmlContent"></div>
+</div>

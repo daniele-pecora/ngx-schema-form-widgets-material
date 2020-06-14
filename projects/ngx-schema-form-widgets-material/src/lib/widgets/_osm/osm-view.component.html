@@ -1,0 +1,66 @@
+<aol-map [logo]="true" [width]="width" [height]="height" (onSingleClick)="onSingleClick($event)">
+  <aol-interaction-default></aol-interaction-default>
+  <aol-view [zoom]="zoom">
+    <aol-coordinate [x]="longitude" [y]="latitude" [srid]="'EPSG:4326'"></aol-coordinate>
+  </aol-view>
+  <aol-layer-tile [opacity]="opacity">
+    <aol-source-osm></aol-source-osm>
+  </aol-layer-tile>
+  <aol-layer-vector [opacity]="opacity">
+    <aol-source-vector>
+      <aol-feature>
+        <aol-geometry-point>
+          <aol-coordinate [x]="longitudePointer" [y]="latitudePointer" [srid]="'EPSG:4326'"></aol-coordinate>
+        </aol-geometry-point>
+        <aol-style>
+          <aol-style-circle [radius]="10">
+            <aol-style-stroke [color]="'black'" [width]="width"></aol-style-stroke>
+            <aol-style-fill [color]="'green'"></aol-style-fill>
+          </aol-style-circle>
+        </aol-style>
+      </aol-feature>
+      <aol-feature>
+        <aol-geometry-point>
+          <aol-coordinate [x]="longitudePointer" [y]="latitudePointer" [srid]="'EPSG:4326'"></aol-coordinate>
+        </aol-geometry-point>
+        <aol-style>
+          <aol-style-icon [src]="markerImage" [anchor]="[0.5, 1]" [anchorXUnits]="'fraction'" [anchorYUnits]="'fraction'" [scale]="0.1"
+                          [anchorOrigin]="'top-left'">
+          </aol-style-icon>
+        </aol-style>
+      </aol-feature>
+    </aol-source-vector>
+  </aol-layer-vector>
+  <aol-control>
+    <aol-content>
+      <div *ngIf="showControlsZoom" class="ol-overlaycontainer-stopevent">
+        <div class="ol-zoom ol-unselectable ol-control">
+          <button [title]="titleZoomIn" class="ol-zoom-in" type="button" title="Zoom in" (click)="increaseZoom()">+</button>
+          <button [title]="titleZoomOut" class="ol-zoom-out" type="button" title="Zoom out" (click)="decreaseZoom()">−</button>
+        </div>
+        <div *ngIf="showControlsCurrentLocation && position" class="ol-rotate ol-unselectable ol-control">
+          <button [title]="titleCurrentLocation" (click)="setCurrentLocation($event)">&#8982;</button>
+        </div>
+        <div class="ol-attribution ol-unselectable ol-control ol-uncollapsible">
+          <ul><li>© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a></li></ul>
+        </div>
+      </div>
+    </aol-content>
+  </aol-control>
+</aol-map>
+
+<ng-container *ngIf="showDebugInfo">
+<pre>
+zoom:{{zoom}}
+opacity:{{opacity}}
+latitude:{{latitude}}
+longitude:{{longitude}}
+latitudePointer:{{latitudePointer}}
+longitudePointer:{{longitudePointer}}
+pointedAddress:{{pointedAddress}}
+pointedAddressOrg:{{pointedAddressOrg}}
+position
+    lat: {{position?.coords?.latitude}}
+    lon: {{position?.coords?.longitude}}
+</pre>
+</ng-container>

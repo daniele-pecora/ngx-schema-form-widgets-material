@@ -1,0 +1,260 @@
+<!--
+  Element 'p-fileUpload' in 'widget'
+    - dataUriPrefix      : remove data uri prefix, keep only raw data. (removes things like "data:image/png;base64," from model data)
+    - deleteButtonLabel  : the title attribute of the delete button
+    - deleteButtonIcon   : the icon of the delete button
+    - showUploadInfo     : if <code>true</code> it shows the filename and size
+
+  Element 'p-fileUpload' in 'widget' field do represent the same as in the primeng documentation
+    - mode
+    - names
+    - url
+    - method
+    - multiple
+    - disabled
+    - accept
+    - maxFileSize
+    - auto
+    - withCredentials
+    - invalidFileSizeMessageSummary
+    - invalidFileSizeMessageDetail
+    - invalidFileTypeMessageSummary
+    - invalidFileTypeMessageDetail
+    - previewWidth
+    - chooseLabel
+    - uploadLabel
+    - cancelLabel
+    - customUpload
+    - showUploadButton
+    - showCancelButton
+
+
+  Known BUGS:
+    1) you may not select mode:basic and multiple:multiple together,
+       you want be able to select a file until you remove the existing first
+
+    2) when setting mode:advanced the 'choose' button will not be clickable
+       some extra CSS is required fix this issue:
+
+       /**
+        * fix primeng - file upload choose button
+        * see https://github.com/primefaces/primeng/issues/3455
+        */
+       .ui-fileupload-choose.ui-fileupload-choose-selected input[type=file],
+       .ui-fileupload-buttonbar .ui-fileupload-choose input {
+         display: block;
+       }
+
+
+
+
+
+   Hints:
+
+    - Only image files can be upload at client side as base64 data url
+
+    - customUpload, setting this to true (default) will use the upload implementation of the file.widget
+      which does not upload anything but creates a base64 string reprensentation and adds it
+      into the model
+
+      if set it enables this prperties per default:
+        - auto = true
+        - showUploadButton = false
+
+
+  Element 'widget'
+       - inlineLabel  : <code>false</code> will display the upload button below the label
+-->
+
+<div class="ui-g-12">
+  <div class="mat-inputfield_upload">
+
+
+    <label [attr.for]="id">
+      {{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
+      <ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+    </label>
+
+
+    <!-- TODO not all properties are yet supported... see also p-fileUpload block below-->
+    <ngx-ui-mat-fileUpload
+    *ngIf="schema.widget.multiple || !control.value"
+    [class.file-upload-label--display-block]="schema?.widget?.inlineLabel===false"
+
+    (onError)="onError($event)"
+    (onClear)="onClear($event)"
+    (onRemove)="onRemove($event)"
+    (onSelect)="onSelect($event)"
+    (onProgress)="onProgress($event)"
+
+    (uploadHandler)="onUploadWithCustomHandler($event)"
+    (onUpload)="onUpload($event)"
+    (onBeforeSend)="onBeforeSend($event)"
+
+
+    [mode]="schema.widget.mode||'basic'"
+    [name]="schema.widget.name||name"
+    [url]="schema.widget.url||null"
+    [method]="schema.widget.method||'POST'"
+    [multiple]="schema.widget.multiple==='multiple'||null"
+    [accept]="schema.widget.accept||null"
+    [maxFileSize]="schema.widget.maxFileSize||null"
+    [auto]="isBoolean(schema.widget.auto)?schema.widget.auto:true"
+    [withCredentials]="schema.widget.withCredentials||null"
+    [invalidFileSizeMessageSummary]="schema.widget.invalidFileSizeMessageSummary||null"
+    [invalidFileSizeMessageDetail]="schema.widget.invalidFileSizeMessageDetail||null"
+    [invalidFileTypeMessageSummary]="schema.widget.invalidFileTypeMessageSummary||null"
+    [invalidFileTypeMessageDetail]="schema.widget.invalidFileTypeMessageDetail||null"
+    [previewWidth]="schema.widget.previewWidth||50"
+    [chooseLabel]="schema.widget.chooseLabel||null"
+    [uploadLabel]="schema.widget.uploadLabel||null"
+    [cancelLabel]="schema.widget.cancelLabel||null"
+    [customUpload]="isBoolean(schema.widget.customUpload)?schema.widget.customUpload:true"
+    [showUploadButton]="(schema.widget.showUploadButton && !schema.widget.auto && !schema.widget.customUpload)||null"
+    [showCancelButton]="schema.widget.showCancelButton||null"
+    [files]="files"
+
+
+    [attr.id]="id"
+    [attr.formControl]="control"
+    [disabled]="schema.widget.disabled||(schema.readOnly?true:null)"
+
+    [required]="(formProperty|IsRequiredAttr)"
+    >
+    </ngx-ui-mat-fileUpload>
+
+<!--
+    <p-fileUpload
+      *ngIf="schema.widget.multiple || !control.value"
+
+      (onError)="onError($event)"
+      (onClear)="onClear($event)"
+      (onRemove)="onRemove($event)"
+      (onSelect)="onSelect($event)"
+      (onProgress)="onProgress($event)"
+
+      (uploadHandler)="onUploadWithCustomHandler($event)"
+      (onUpload)="onUpload($event)"
+      (onBeforeSend)="onBeforeSend($event)"
+
+
+      [mode]="schema.widget.mode||'basic'"
+      [name]="schema.widget.name||name"
+      [url]="schema.widget.url||null"
+      [method]="schema.widget.method||'POST'"
+      [multiple]="schema.widget.multiple==='multiple'||null"
+      [accept]="schema.widget.accept||null"
+      [maxFileSize]="schema.widget.maxFileSize||null"
+      [auto]="isBoolean(schema.widget.auto)?schema.widget.auto:true"
+      [withCredentials]="schema.widget.withCredentials||null"
+      [invalidFileSizeMessageSummary]="schema.widget.invalidFileSizeMessageSummary||null"
+      [invalidFileSizeMessageDetail]="schema.widget.invalidFileSizeMessageDetail||null"
+      [invalidFileTypeMessageSummary]="schema.widget.invalidFileTypeMessageSummary||null"
+      [invalidFileTypeMessageDetail]="schema.widget.invalidFileTypeMessageDetail||null"
+      [previewWidth]="schema.widget.previewWidth||50"
+      [chooseLabel]="schema.widget.chooseLabel||null"
+      [uploadLabel]="schema.widget.uploadLabel||null"
+      [cancelLabel]="schema.widget.cancelLabel||null"
+      [customUpload]="isBoolean(schema.widget.customUpload)?schema.widget.customUpload:true"
+      [showUploadButton]="(schema.widget.showUploadButton && !schema.widget.auto && !schema.widget.customUpload)||null"
+      [showCancelButton]="schema.widget.showCancelButton||null"
+      [files]="files"
+
+
+      [attr.id]="id"
+      [attr.formControl]="control"
+      [disabled]="schema.widget.disabled||(schema.readOnly?true:null)"
+    >
+    </p-fileUpload>
+-->
+<!--
+    <ngx-ui-field-validation-messages
+      [formComponent]="this"
+      [validationErrors]="control.errors"
+    >
+      <div class="ui-message ui-messages-info"
+           *ngIf="schema.description">
+        {{schema.description}}
+      </div>
+    </ngx-ui-field-validation-messages>
+-->
+    <ng-container *ngIf="schema.widget?.mode==='advanced' || schema.widget?.multiple==='multiple'">
+      <div style="background: grey;color:white;padding:1em">
+        <h3 *ngIf="schema.widget?.mode==='advanced'">Fileupload Widget - Advanced Mode is not fully supported yet!</h3>
+        <h3 *ngIf="schema.widget?.multiple==='multiple'">Fileupload Widget - Multiple File Mode is not fully supported yet!</h3>
+      </div>
+    </ng-container>
+
+    <div *ngIf="schema.widget.mode!=='advanced'; else loadImagesInAdvancedMode">
+      <ng-container [ngTemplateOutlet]="previewImageTemplate"></ng-container>
+    </div>
+
+    <ng-template #loadImagesInAdvancedMode>
+      <!--
+        In mode 'advanced' the list of files will be rendered inside the p-fileUpload component,
+        so nothing to do here
+      -->
+    </ng-template>
+
+    <ng-template #previewImageTemplate>
+      <ng-container *ngIf="uploadedFiles.length">
+        <ng-container *ngIf="uploadedFiles.length === 1;multipleFiles" [ngTemplateOutlet]="previewFileTemplate" [ngTemplateOutletContext]="{file:uploadedFiles[0]}">
+        </ng-container>
+        <ng-template #multipleFiles>
+          <ul *ngIf="uploadedFiles.length > 1">
+            <li *ngFor="let file of uploadedFiles">
+              <ng-container [ngTemplateOutlet]="previewFileTemplate" [ngTemplateOutletContext]="{file:file}"></ng-container>
+            </li>
+          </ul>
+        </ng-template>
+      </ng-container>
+    </ng-template>
+
+    <ng-template #previewFileTemplate let-file="file">
+      <img
+        class="input-upload-file--preview"
+        *ngIf="schema.widget?.previewWidth!==0 && isImage(file)"
+        [attr.width]="schema.widget.previewWidth||null"
+        [src]="file?.sanitizedURL"
+        (load)="imageLoaded($event,file)"
+      >
+      <object
+      *ngIf="schema.widget?.previewWidth!==0 && !isImage(file)"
+      [data]="file?.sanitizedURL"
+      [type]="file.type"
+      [attr.width]="schema.widget.previewWidth||null"
+      (load)="objectLoaded($event,file)"
+      >
+      </object>
+      <span *ngIf="schema.widget?.showUploadInfo" class="input-upload-file--infotext">{{file.name}} - {{bytesToSize(file.size).toUpperCase()}}</span>
+        <button
+          i18n-title
+          [attr.title]="schema.widget?.deleteButtonLabel || null"
+          *ngIf="!schema.widget?.deleteButtonLabel;else showButtonWithLabel"
+          mat-icon-button
+          color="secondary"
+          (click)="deleteFileInBasicUpload($event,file)"
+          >
+          <mat-icon>{{schema.widget?.deleteButtonIcon||'clear'}}</mat-icon>
+        </button>
+        <ng-template #showButtonWithLabel><button
+          i18n-title
+          [attr.title]="schema.widget?.deleteButtonLabel || null"
+          *ngIf="schema.widget?.deleteButtonLabel"
+          mat-raised-button
+          color="secondary"
+          (click)="deleteFileInBasicUpload($event,file)"
+          >
+          <mat-icon>{{schema.widget?.deleteButtonIcon||'clear'}}</mat-icon>
+          {{schema.widget?.deleteButtonLabel}}
+        </button></ng-template>
+    </ng-template>
+
+    <input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="control">
+  </div>
+</div>
+
+<mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>
+<mat-error *ngIf="control?.errors">
+  <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
+</mat-error>

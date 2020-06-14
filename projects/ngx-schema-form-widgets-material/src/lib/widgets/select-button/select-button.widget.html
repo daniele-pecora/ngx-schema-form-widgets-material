@@ -1,0 +1,81 @@
+<!--
+  Select a single value by pressing one button of a button group
+-->
+
+<!--
+Element 'schema':
+        - title
+        - name
+        - description
+        - oneOf
+        - readOnly
+-->
+
+<!--
+      Example
+      "oneOf": [
+        {
+          "description": "None",
+          "icon": "vi-none",
+          "enum": [
+            ""
+          ]
+        },
+        {
+          "description": "Group A",
+          "icon": "vi-icon-any",
+          "enum": [
+            "groupA"
+          ]
+        },
+        {
+          "description": "Group A",
+          "icon": "vi-icon-any",
+          "enum": [
+            "groupB"
+          ]
+        },
+        {
+          "description": "Group C",
+          "icon": "vi-icon-any",
+          "enum": [
+            "groupC"
+          ]
+        }
+      ]
+-->
+<mat-form-field class="ngx-ui-mat-form-field"
+[class.ngx-ui-widget-full-width]="!schema.widget?.size"
+>
+    <!-- Placeholder input required for usage of mat-form-field to format the mat-hint right -->
+    <input matInput data-hidden="placeholder" aria-hidden="true" class="ngx-ui-mat-form-field-placeholder" style="display:none" tabindex="-1"
+    [attr.required]="(formProperty|IsRequiredAttrString)"
+    [attr.aria-required]="(formProperty|IsRequiredAttr)"
+    >
+
+    <label for="select-button-label-{{id}}">{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
+        {{formProperty|IsRequiredAsterisk}}
+      </label>
+<div class="select-buttons">
+    <mat-button-toggle-group
+    [name]="name"
+    [formControl]="control"
+    [disabled]="schema?.readOnly"
+    (change)="onChange($event)"
+    attr.aria-labelledby="select-button-label-{{id}}"
+  >
+    <mat-button-toggle *ngFor="let option of createOptionsModel"
+      [value]="option.value"
+      (click)="onClick($event)"
+      [disabled]="option.disabled"
+      >
+      {{ option.label }}
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+    <mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>
+    <mat-error *ngIf="control?.errors">
+      <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
+    </mat-error>
+
+</mat-form-field>

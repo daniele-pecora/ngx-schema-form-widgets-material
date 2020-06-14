@@ -1,0 +1,196 @@
+<!--
+
+    Element "widget"
+
+        - card              : The card property.
+
+            Global card settings will define behavior of all cards:
+            - description   : A title shown for every card.
+                              This may also be an array of string and has support for BBCode.
+            - summary       : Some descriptive text.
+                              This may also be an array of string and has support for BBCode.
+            - style         : Some object with css style definitions for the card
+            - image         : An image shown for every card left of the header title.
+                              This may be an URL or a DATA-URL.
+            - imageStyle    : Some styling for the image.
+            - action        : A button definition (see ui widget 'button').
+            - readOnly      : Set if the widget has to be inactive.
+
+            Item settings will define behavior of a specific card
+                            Any of this properties above may be also set to an `oneOf` item
+                            to override the global settings.
+
+
+        Control settings
+        - selectedOnly      : boolean
+                              Defines if only the selected item should be shown when
+                              an item is selected
+        - selectedStyle     : Object with css style definitions for the card when selected
+        - summaryOnSelect   : boolean
+                              If true the content of the <code>summary</code> will only be shown on the selected item
+        - resetButton       : Reset action button definition
+                              Will only be shown if <code>selectedOnly</code> is <code>true</code>
+                              Same properties as the widget <code>button</code>
+                              exception no <code>action</code> is required and it has one addtional property:
+                              - inCard
+        - selectedButton    : Reset action button definition when showing on selected item
+                              Will only be shown if <code>selectedOnly</code> is <code>false</code>
+                              Same properties as the widget <code>button</code>
+                              exception no <code>action</code> is required and it has one addtional property:
+                              - inCard
+
+        - size              : Defines the size of the card
+                                    - small     (250px)
+                                    - regular   (350px)
+                                    - medium    (500px)
+                                    - big       (600px)
+
+-->
+
+<ng-template #actionButton let-button="action" let-item="item">
+    <!-- <button pButton type="button"
+    [class]="getButtonType(button)"
+    [label]="button.label"
+    [icon]="getIcon(button.icon)||null"
+    [iconPos]="button.iconPos||null"
+    [pTooltip]="button.description"
+    [id]="button.actionId"
+    [ngClass]="['ngx-ui-widget-button', ''+getButtonType(), 'ui-button-'+getSeverity(button.severity), (button.styleClass||'')]"
+    (click)="onOptionClick($event, item)"
+    [ngStyle]="button.inline===false?{display:'block'}:null"
+    [disabled]="schema?.widget?.card?.readOnly||item.readOnly"
+    ></button> -->
+    <ngx-ui-button-component [formProperty]="formProperty" [button]="button" (onClick)="onOptionClick($event, item)"
+        [disabled]="schema?.widget?.card?.readOnly||item.readOnly"
+        ></ngx-ui-button-component>
+</ng-template>
+
+<ng-template #resetButton let-button="action" let-item="item">
+    <!-- <button pButton type="button"
+    [class]="getButtonType(button)"
+    [label]="button.label"
+    [icon]="getIcon(button.icon)||null"
+    [iconPos]="button.iconPos||null"
+    [pTooltip]="button.description"
+    [id]="button.actionId"
+    [ngClass]="['ngx-ui-widget-button', ''+getButtonType(), 'ui-button-'+getSeverity(button.severity), (button.styleClass||'')]"
+    (click)="onOptionClick($event, item)"
+    [ngStyle]="button.inline===false?{display:'block'}:null"
+    [disabled]="schema?.widget?.card?.readOnly||item.readOnly"
+    [class.resetButtonInline]="schema?.widget?.resetButton?.inCard"
+    ></button> -->
+    <ngx-ui-button-component [formProperty]="formProperty" [button]="button" (onClick)="onOptionClick($event, item)"
+        [disabled]="schema?.widget?.card?.readOnly||item.readOnly"
+        [buttonClass]="schema?.widget?.resetButton?.inCard ? 'resetButtonInline':''"
+        class="ngx-ui-ui-button-component--margin-unset"
+        ></ngx-ui-button-component>
+</ng-template>
+
+<ng-template #selectedButton let-button="action" let-item="item">
+    <!-- <button pButton type="button"
+        [class]="getButtonType(button)"
+        [label]="button.label"
+        [icon]="getIcon(button.icon)||null"
+        [iconPos]="button.iconPos||null"
+        [pTooltip]="button.description"
+        [id]="button.actionId"
+        [ngClass]="['ngx-ui-widget-button', ''+getButtonType(), 'ui-button-'+getSeverity(button.severity), (button.styleClass||'')]"
+        (click)="onOptionClick($event, item)"
+        [ngStyle]="button.inline===false?{display:'block'}:null"
+        [disabled]="schema?.widget?.card?.readOnly||item.readOnly"
+        [class.selectedButtonInline]="schema?.widget?.selectedButton?.inCard"
+        ></button> -->
+    <ngx-ui-button-component [formProperty]="formProperty" [button]="button" (onClick)="onOptionClick($event, item)"
+        [disabled]="schema?.widget?.card?.readOnly||item.readOnly"
+        [buttonClass]="schema?.widget?.resetButton?.inCard ? 'selectedButtonInline':''"
+        class="ngx-ui-ui-button-component--margin-unset"
+        ></ngx-ui-button-component>
+</ng-template>
+
+<ng-template #itemContent let-item="item" let-showSummary="showSummary" let-selectedOnly="selectedOnly">
+    <div class="card_wrapper card_wrapper--{{schema?.widget?.card?.size||'regular'}} ui-g-nopad ui-g-12 ui-sm-12 ui-md-6 ui-lg-3 ui-xl-2 card_section_card"
+        [attr.xngClass]="!selectedOnly || !formProperty.value ? 'ui-g-12 ui-sm-12 ui-md-6 ui-lg-3 ui-xl-2':'ui-sm-12 ui-md-6 ui-lg-3 ui-xl-2'"
+        [class.card_size__regular]="showSummary" [class.card_size__small]="!showSummary"
+        [class.card-w-title]="schema?.widget?.card?.asCard && (item.description||item.enum[0])">
+
+        <ng-container *ngIf="schema?.widget?.selectedOnly">
+            <ng-container
+                *ngIf="formProperty.value && schema?.widget?.resetButton?.inCard && formProperty?.value===item?.enum[0]">
+                <ng-container *ngTemplateOutlet="resetButton;context:{
+                    action:schema?.widget?.resetButton,
+                    item:{enum:['']}
+                }">
+                </ng-container>
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="!schema?.widget?.selectedOnly">
+            <ng-container
+                *ngIf="formProperty.value && schema?.widget?.selectedButton?.inCard && formProperty?.value===item?.enum[0]">
+                <ng-container *ngTemplateOutlet="selectedButton;context:{
+                    action:schema?.widget?.selectedButton,
+                    item:{enum:['']}
+                }">
+                </ng-container>
+            </ng-container>
+        </ng-container>
+
+        <div class="ui-g-nopad card_container" [class.ui-g-12]="true || !formProperty.value"
+            [class.mat-card]="schema?.widget?.card?.asCard"
+            [attr.xngStyle]="!schema?.widget?.selectedOnly || !formProperty.value ? (schema?.widget?.card?.style||item.style) : ((schema?.widget?.selectedOnly && formProperty.value===item.enum[0]) ? (schema?.widget?.selectedStyle||item.selectedStyle) : null)"
+            [ngStyle]="!formProperty.value ? (schema?.widget?.card?.style||item.style) : ((formProperty.value===item.enum[0]) ? (schema?.widget?.selectedStyle||item.selectedStyle) : (schema?.widget?.card?.style||item.style))">
+            <div class="ui-g-nopad ui-g-12">
+                <img *ngIf="item.image||schema?.widget?.card?.image" class="ui-g-2 card_container-image"
+                    [src]="item.image||schema?.widget?.card?.image"
+                    [ngStyle]="item.imageStyle||schema?.widget?.card?.imageStyle">
+                <div class="ui-g-nopad ui-g-10 card_container-title">
+                    <h3 [innerHTML]="getSaveContent(item.description||schema?.widget?.card?.description)">
+                        - {{item.description||schema?.widget?.card?.description}} -
+                    </h3>
+                </div>
+            </div>
+            <div *ngIf="showSummary; else noSummary" class="ui-g-12 card_container-summary"
+                [innerHTML]="getSaveContent(item.summary||schema?.widget?.card?.summary)">
+            </div>
+            <ng-template #noSummary>
+                <div class="ui-g-12 card_container-summary"></div>
+            </ng-template>
+
+            <div *ngIf="(item.action||schema?.widget?.card?.action) && (!selectedOnly || !formProperty.value)"
+                class="ui-g-12 card_container-action">
+                <ng-container *ngTemplateOutlet="actionButton;context:{
+                        action:item.action||schema?.widget?.card?.action,
+                        item:item
+                    }">
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<div class="ui-g-12">
+    <h4 *ngIf="schema.title">{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}</h4>
+    <h5 *ngIf="schema.description">{{schema.description}}</h5>
+
+    <div class="card_section">
+        <ng-container *ngFor="let item of schema.oneOf">
+            <ng-container
+                *ngIf="!schema?.widget?.selectedOnly || (!formProperty.value || formProperty.value===item.enum[0])">
+                <ng-container *ngTemplateOutlet="itemContent;context:{
+                    item:item,
+                    showSummary: schema?.widget?.summaryOnSelect ? formProperty.value===item.enum[0] : (item.summary || schema?.widget?.card?.summary),
+                    selectedOnly: schema?.widget?.selectedOnly
+                }">
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </div>
+
+    <ng-container *ngIf="schema?.widget?.selectedOnly && formProperty.value && !schema?.widget?.resetButton?.inCard">
+        <ng-container *ngTemplateOutlet="resetButton;context:{
+                action:schema?.widget?.resetButton,
+                item:{enum:['']}
+            }">
+        </ng-container>
+    </ng-container>
+
+</div>

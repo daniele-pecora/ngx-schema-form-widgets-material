@@ -1,0 +1,100 @@
+.card_wrapper {
+  position: relative;
+
+  .card_container {
+    position: relative;
+    height: 100%;
+
+    &:hover {
+      --background: #cccccc;
+    }
+  }
+  .card_container-action {
+    text-align: right;
+    position: absolute;
+    bottom: 0px;
+  }
+
+  .card_container-title {
+    padding-left: 2em;
+  }
+
+  ::ng-deep {
+    /** since the button is declared in a separate component */
+  .resetButtonInline,
+  .selectedButtonInline {
+    float: right;
+    z-index: 9;
+    position: absolute;
+    right: 0;
+  }
+  .selectedButtonInline {
+    margin-top: -0.5em;
+    margin-right: -0.5em;
+  }
+  .resetButtonInline {
+    margin-top: -1em;
+    margin-right: -0.8em;
+  }
+
+  .ngx-ui-ui-button-component--margin-unset {
+      margin:unset;
+  }
+  }
+}
+
+.card_wrapper {
+  padding: 0.5em;
+}
+
+.card_wrapper--small {
+  min-width: 250px;
+  max-width: 250px;
+}
+
+.card_wrapper--regular {
+  min-width: 350px;
+  max-width: 350px;
+}
+
+.card_wrapper--medium {
+  min-width: 500px;
+  max-width: 500px;
+}
+
+.card_wrapper--big {
+  min-width: 600px;
+  max-width: 600px;
+}
+@media screen and (max-width: 40em) {
+ /**
+  * make the cards fit on small mobile devices
+  * using the default width
+  */
+  .card_wrapper--small, .card_wrapper--regular, .card_wrapper--medium, .card_wrapper--big {
+    min-width: unset;
+    max-width: unset;
+  }
+}
+
+.card_section {
+  display: -ms-Flexbox;
+  -ms-box-orient: horizontal;
+
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: flex;
+
+  -webkit-flex-flow: row wrap;
+  -moz-flex-flow: row wrap;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+}
+
+.card_section_card {
+  -webkit-flex: auto;
+  -moz-flex: auto;
+  -ms-flex: auto;
+  flex: auto;
+}

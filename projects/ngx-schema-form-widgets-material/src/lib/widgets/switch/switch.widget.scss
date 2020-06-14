@@ -1,0 +1,10 @@
+/**
+Hint label after select, switch, checkbox element
+taken from '.mat-form-field-subscript-wrapper'
+ */
+mat-slide-toggle ~ mat-hint {
+  display: block;
+  font-size: 75%;
+  margin-top: 0.54167em;
+  top: calc(100% - 1.66667em);
+}
