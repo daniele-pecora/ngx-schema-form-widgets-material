@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/ngx-schema-form-widgets-material-app",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -35,6 +36,12 @@
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -143,7 +150,8 @@
           "configurations": {
             "production": {
               "project": "projects/ngx-schema-form-widgets-material/ng-package.prod.json"
-            }
+            ,              "tsConfig": "projects/ngx-schema-form-widgets-material/tsconfig.lib.prod.json"
+}
           }
         },
         "test": {
@@ -172,7 +180,7 @@
   "defaultProject": "ngx-schema-form-widgets-material-app",
   "schematics": {
     "@schematics/angular:component": {
-      "styleext": "scss"
+      "style": "scss"
     }
   }
 }
