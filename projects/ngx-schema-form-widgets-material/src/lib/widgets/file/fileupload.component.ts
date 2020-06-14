@@ -72,7 +72,7 @@ export class FileuploadComponent {
    required
 
 
-  @ViewChild('fileUpload', { static: false })
+  @ViewChild('fileUpload')
   fileUpload: ElementRef
 
   inputFileName: string

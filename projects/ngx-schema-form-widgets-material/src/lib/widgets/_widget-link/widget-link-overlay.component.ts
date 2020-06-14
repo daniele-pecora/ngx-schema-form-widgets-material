@@ -1,6 +1,6 @@
 import {Component, Inject} from '@angular/core'
 import {SafeResourceUrl} from '@angular/platform-browser'
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material'
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'ngx-ui-widget-link-overlay',

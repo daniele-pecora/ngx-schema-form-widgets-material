@@ -1,12 +1,10 @@
 /**
  * Created by daniele on 27.09.17
  */
-import {AfterViewInit, Component, OnInit, ViewChild, ElementRef} from '@angular/core'
+import { AfterViewInit, Component, OnInit, ViewChild, ElementRef, Injectable } from '@angular/core'
 import {ControlWidget} from 'ngx-schema-form';
-import {
-  DateAdapter, MAT_DATE_FORMATS, MatDatepicker, MatDatepickerInputEvent, MatDatepickerIntl,
-  NativeDateAdapter
-} from '@angular/material'
+import { DateAdapter, MAT_DATE_FORMATS, NativeDateAdapter } from '@angular/material/core';
+import { MatDatepicker, MatDatepickerInputEvent, MatDatepickerIntl } from '@angular/material/datepicker';
 import {DateFormatHelper} from './date-format-helper'
 import {DateValueToStringConverter} from './date-value.converter'
 import {DateValueConverter} from './date-value.converter'
@@ -14,6 +12,7 @@ import {DateValueConverter} from './date-value.converter'
 import * as moment_ from 'moment'
 const moment = moment_
 
+@Injectable()
 export class DateWidgetComponentDateAdapter extends NativeDateAdapter {
   static DATE_FORMATS = {
     parse: {
@@ -185,7 +184,7 @@ export class DateWidgetComponent extends ControlWidget implements OnInit, AfterV
 
   dateValueConverter: DateValueToStringConverter = null;
 
-  @ViewChild('dateInputField', { static: false }) dateInputField: ElementRef
+  @ViewChild('dateInputField') dateInputField: ElementRef
   /** testing only , see ngAfterInitView method ... **/
   disableTestDateValidation = true;
 

@@ -17,7 +17,7 @@ import {
   UIWidgetsMaterialModule,
   WidgetRegistryMaterial
 } from '../../projects/ngx-schema-form-widgets-material/src/lib';
-import { MatCardModule } from '@angular/material';
+import { MatCardModule } from '@angular/material/card';
 import { RouterTestingModule } from '@angular/router/testing';
 describe('AppComponent', () => {
   beforeEach(async(() => {

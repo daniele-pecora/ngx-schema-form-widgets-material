@@ -1,5 +1,7 @@
 import {CustomZSchemaValidatorFactory} from './custom-zschema-validator-factory'
+import { Injectable } from "@angular/core";
 
+@Injectable()
 export class FixOptionalEmptyFieldsZSchemaValidatorFactory extends CustomZSchemaValidatorFactory {
   constructor() {
     super()

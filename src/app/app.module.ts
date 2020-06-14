@@ -18,7 +18,7 @@ import {
 } from '../../projects/ngx-schema-form-widgets-material/src/lib';
 // TODO change the above to this in production, the above allows hot-reload for development
 //} from 'ngx-schema-form-ui-material';
-import { MatCardModule } from '@angular/material';
+import { MatCardModule } from '@angular/material/card';
 import { ResizeComponent } from './view/resize/resize.component';
 import { ThemerComponent } from './view/themer/themer.component';
 

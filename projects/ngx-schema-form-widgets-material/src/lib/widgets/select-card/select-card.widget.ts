@@ -22,7 +22,7 @@ import { ButtonTypeTransformerService } from '../_converters/_button/button-type
 })
 export class SelectCardWidgetComponent extends AsyncSelectionWidgetComponent {
 
-  @ViewChild('cardSection', { static: false }) scrollHook: ElementRef
+  @ViewChild('cardSection') scrollHook: ElementRef
 
   constructor(protected schemaValidatorFactory: SchemaValidatorFactory
     , protected lookupService: WidgetComponentHttpApiService

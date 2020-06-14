@@ -1,5 +1,7 @@
 import {SeverityNameTransformerService} from './severity-name-transformer.service'
+import { Injectable } from "@angular/core";
 
+@Injectable()
 export class SeverityNameTransformerMaterialService extends SeverityNameTransformerService {
 
     transform(value: string): string {

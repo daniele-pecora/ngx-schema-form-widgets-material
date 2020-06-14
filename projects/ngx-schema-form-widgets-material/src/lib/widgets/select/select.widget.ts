@@ -20,7 +20,7 @@ export class SelectWidgetComponent extends AsyncSelectionWidgetComponent impleme
   // selectedOption: string;
 
   /** START: this will help to set the width of the dropdown */
-  @ViewChild('hiddenSizeHolder', { static: false })
+  @ViewChild('hiddenSizeHolder')
   hiddenSizeHolder: ElementRef;
   pDropdownStyle: any = {};
   hiddenSizeHolderClass = 'placeholderFieldInvisible';
