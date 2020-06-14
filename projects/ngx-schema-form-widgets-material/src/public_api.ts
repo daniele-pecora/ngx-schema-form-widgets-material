@@ -1,5 +1,5 @@
 /*
- * Public API Surface of ui-ngx-widgets-nsf-material
+ * Public API Surface of ngx-schema-form-widgets-material
  */
 
 export {

@@ -25,7 +25,7 @@
             ],
             "styles": [
               "src/styles.css",
-              "projects/ngx-schema-form-widgets-material/src/ui-ngx-widgets-nsf-material.css",
+              "projects/ngx-schema-form-widgets-material/src/ngx-schema-form-widgets-material.css",
               "projects/ngx-schema-form-widgets-material/src/primeng-ui-g.css",
               "node_modules/openlayers/dist/ol.css"
             ],
