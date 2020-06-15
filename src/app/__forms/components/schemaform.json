@@ -1285,7 +1285,8 @@
                 "previewWidth": 200,
                 "dataUriPrefix": true,
                 "deleteButtonLabel": "Delete",
-                "customUpload": true
+                "customUpload": true,
+                "previewTitle": "Preview of the uploaded image {filename} size {filesize}"
               }
             },
             "file-upload-2": {
@@ -1304,7 +1305,8 @@
                 "__no_label_icon_only__deleteButtonLabel": "Delete",
                 "customUpload": true,
                 "inlineLabel": false,
-                "showUploadInfo": true
+                "showUploadInfo": true,
+                "previewTitle": "Preview of the uploaded image {filename} size {filesize}"
               }
             }
           }
