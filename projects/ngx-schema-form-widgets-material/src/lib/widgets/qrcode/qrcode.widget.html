@@ -18,5 +18,5 @@ Element 'widget'
 <div *ngIf="schema.title || schema.name || schema.description">
   <span *ngIf="schema.description">{{schema.description}}</span>
 </div>
-<ngx-qrcode [qrc-element-type]="schema.widget.elementType||'url'" [(qrc-value)]="schema.widget.value">
+<ngx-qrcode [elementType]="schema.widget.elementType||'url'" [(value)]="schema.widget.value">
 </ngx-qrcode>

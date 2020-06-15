@@ -40,7 +40,7 @@ describe('ApplicationComponent', () => {
         , FormsModule
         , HttpClientModule
 
-        // Angular2 Schema Form
+        // ngx-schema-form
         , SchemaFormModule.forRoot()
         // ngx-schema-form-view
         , UIFormViewModule.forRoot()

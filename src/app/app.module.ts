@@ -7,9 +7,9 @@ import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {AppFormTemplateService} from './app.form-template-loader.service';
 import {ApplicationComponent} from './view/application/application.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
-import {SchemaFormModule, SchemaValidatorFactory, WidgetRegistry} from 'ngx-schema-form';
+import {SchemaFormModule, SchemaValidatorFactory, WidgetRegistry, ZSchemaValidatorFactory} from 'ngx-schema-form';
 import {UIFormViewModule} from 'ngx-schema-form-view';
 import {
   FixOptionalEmptyFieldsZSchemaValidatorFactory,
@@ -24,6 +24,15 @@ import { ThemerComponent } from './view/themer/themer.component';
 
 
 @NgModule({
+  providers: [{provide: LOCALE_ID, useValue: 'de-DE' /**required for the date format pipe*/},
+    {
+      provide: ErrorHandler,
+      useClass: AppErrorHandler
+    },
+    {provide: WidgetRegistry, useClass: WidgetRegistryMaterial},
+    {provide: SchemaValidatorFactory, useClass: FixOptionalEmptyFieldsZSchemaValidatorFactory},
+    AppFormTemplateService
+  ],
   declarations: [
     AppComponent,
     ApplicationComponent,
@@ -36,25 +45,17 @@ import { ThemerComponent } from './view/themer/themer.component';
 
     // App
     , FormsModule
+    , ReactiveFormsModule
     , HttpClientModule
 
-    // Angular2 Schema Form
+    // ngx-schema-form
     , SchemaFormModule.forRoot()
     // ngx-schema-form-view
     , UIFormViewModule.forRoot()
     // ngx-schema-form-ui-material
     , UIWidgetsMaterialModule
 
-    , MatCardModule
-  ],
-  providers: [{provide: LOCALE_ID, useValue: 'de-DE' /**required for the date format pipe*/},
-    {
-      provide: ErrorHandler,
-      useClass: AppErrorHandler
-    },
-    {provide: WidgetRegistry, useClass: WidgetRegistryMaterial},
-    {provide: SchemaValidatorFactory, useClass: FixOptionalEmptyFieldsZSchemaValidatorFactory},
-    AppFormTemplateService
+//    , MatCardModule
   ],
   bootstrap: [AppComponent]
 })

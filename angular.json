@@ -28,7 +28,7 @@
               "src/styles.css",
               "projects/ngx-schema-form-widgets-material/src/ngx-schema-form-widgets-material.css",
               "projects/ngx-schema-form-widgets-material/src/primeng-ui-g.css",
-              "node_modules/openlayers/dist/ol.css"
+              "node_modules/ol/ol.css"
             ],
             "scripts": [
               "node_modules/moment/moment.js"
@@ -149,9 +149,9 @@
           },
           "configurations": {
             "production": {
-              "project": "projects/ngx-schema-form-widgets-material/ng-package.prod.json"
-            ,              "tsConfig": "projects/ngx-schema-form-widgets-material/tsconfig.lib.prod.json"
-}
+              "project": "projects/ngx-schema-form-widgets-material/ng-package.prod.json",
+              "tsConfig": "projects/ngx-schema-form-widgets-material/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {

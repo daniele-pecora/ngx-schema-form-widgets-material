@@ -76,7 +76,6 @@ import { ExpressionCompiler } from '../_service/expression-complier.service';
  </pre>
  </code>
  */
-@Directive()
 export abstract class AsyncSelectionWidgetComponent extends ControlWidget implements OnInit, OnDestroy {
 
   selectOptions: Array<any>

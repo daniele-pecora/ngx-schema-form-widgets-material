@@ -18,7 +18,6 @@ import { buttonState, clickableDisabledState, clickableVisibilityState } from '.
  * </code>
  *
  */
-@Directive()
 export abstract class ActionObjectLayoutWidgetComponent extends ObjectLayoutWidget implements OnInit {
 
   widgetButtons = [];
