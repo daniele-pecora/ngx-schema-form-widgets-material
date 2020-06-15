@@ -4,6 +4,11 @@
     - deleteButtonLabel  : the title attribute of the delete button
     - deleteButtonIcon   : the icon of the delete button
     - showUploadInfo     : if <code>true</code> it shows the filename and size
+    - previewTitle       : will be used as attribute `title` and `alt` and may contain the placeholder for the file name 
+                             `{filename}`
+                             `{filesize}`
+                           if not set then the file name is used for both attributes.
+                             e.g `"previewTitle": "Preview of the uploaded image {filename} size {filesize}"`
 
   Element 'p-fileUpload' in 'widget' field do represent the same as in the primeng documentation
     - mode
@@ -217,6 +222,8 @@
         [attr.width]="schema.widget.previewWidth||null"
         [src]="file?.sanitizedURL"
         (load)="imageLoaded($event,file)"
+        [attr.title]="file?._previewTitle||createAltText(file)||file?.name"
+        [attr.alt]="file?._previewTitle||createAltText(file)||file?.name"
       >
       <object
       *ngIf="schema.widget?.previewWidth!==0 && !isImage(file)"
@@ -224,6 +231,8 @@
       [type]="file.type"
       [attr.width]="schema.widget.previewWidth||null"
       (load)="objectLoaded($event,file)"
+      [attr.title]="file?._previewTitle||createAltText(file)||file?.name"
+      [attr.alt]="file?._previewTitle||createAltText(file)||file?.name"
       >
       </object>
       <span *ngIf="schema.widget?.showUploadInfo" class="input-upload-file--infotext">{{file.name}} - {{bytesToSize(file.size).toUpperCase()}}</span>

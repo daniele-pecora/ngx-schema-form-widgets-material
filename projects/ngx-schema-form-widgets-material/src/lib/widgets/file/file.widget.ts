@@ -254,6 +254,20 @@ export class FileWidgetComponent extends ControlWidget implements OnInit {
   isImage(file: File): boolean {
     return /^image\//.test(file.type)
   }
+  
+  createAltText(file: File) {
+    if (file['__previewTitle']) {
+      return file['_previewTitle']
+    }
+    let previewTitle = this.schema.widget.previewTitle
+    if (previewTitle) {
+      previewTitle = previewTitle.replace(new RegExp('{filename}', 'ig'), file.name)
+      previewTitle = previewTitle.replace(new RegExp('{filesize}', 'ig'), this.bytesToSize(file.size).toUpperCase())
+      file['_previewTitle'] = previewTitle
+      return file['_previewTitle']
+    }
+    return null
+  }
 }
 
 
