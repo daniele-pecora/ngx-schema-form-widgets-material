@@ -1,8 +1,14 @@
 import { Converter, DataTransform } from './data-converter-registry.pipe';
 import { FormProperty } from 'ngx-schema-form';
-import simpleParser from '../../bbcode/simple-bbcode.parser'
+import simpleParser from '../../../widgets/bbcode/simple-bbcode.parser'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { SecurityContext } from '@angular/core'
+
+export const escapeHTMLInBBCode = (bbcodeValue: string | string[]): string => {
+    return (Array.isArray(bbcodeValue) ? bbcodeValue.join('') : bbcodeValue)
+        .replace(new RegExp('<', 'gi'), '&lt;')
+        .replace(new RegExp('>', 'gi'), '&gt;')
+}
 
 export class BBCodeTransform implements DataTransform {
     constructor(protected sanitizer: DomSanitizer) { }
@@ -16,8 +22,8 @@ export class BBCodeTransform implements DataTransform {
 
     getSaveContent(bbcodeValue: string): SafeHtml {
         if (bbcodeValue) {
-            const bbcode = Array.isArray(bbcodeValue) ? bbcodeValue.join('') : bbcodeValue
-            return simpleParser.parse(this.sanitizer.sanitize(SecurityContext.HTML,`${bbcode}`))
+            const bbcode = escapeHTMLInBBCode(bbcodeValue)
+            return simpleParser.parse(this.sanitizer.sanitize(SecurityContext.HTML, `${bbcode}`))
         }
     }
 }
