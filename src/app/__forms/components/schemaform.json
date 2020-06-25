@@ -1286,7 +1286,8 @@
                 "dataUriPrefix": true,
                 "deleteButtonLabel": "Delete",
                 "customUpload": true,
-                "previewTitle": "Preview of the uploaded image {filename} size {filesize}"
+                "previewTitle": "Preview of the uploaded image {filename} size {filesize}",
+                "noPreviewText": "No preview"
               }
             },
             "file-upload-2": {
@@ -1297,7 +1298,7 @@
                 "invalidFileSizeMessageDetail": "File too big. Max 10MB",
                 "invalidFileTypeMessageSummary": "Incompatible file type. Only Images or PDF allowed.",
                 "chooseLabel": "Upload",
-                "accept": "image/gif,image/jpeg,image/jpg,image/tiff,image/png,image/bmp,application/pdf",
+                "accept": "image/gif,image/jpeg,image/jpg,image/tif,image/tiff,image/png,image/bmp,application/pdf",
                 "auto": true,
                 "url": "https://www.no-real-url-necessary-here/datauri/index.php",
                 "previewWidth": 200,
@@ -1306,7 +1307,9 @@
                 "customUpload": true,
                 "inlineLabel": false,
                 "showUploadInfo": true,
-                "previewTitle": "Preview of the uploaded image {filename} size {filesize}"
+                "previewTitle": "Preview of the uploaded image {filename} size {filesize}",
+                "noPreviewText": "No preview",
+                "noPreviewIcon": "image"
               }
             }
           }
