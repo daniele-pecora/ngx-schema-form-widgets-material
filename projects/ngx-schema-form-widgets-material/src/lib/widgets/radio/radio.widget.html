@@ -29,6 +29,7 @@ Element 'schema':
     [value]="option.enum[0]"
     [disabled]="option.readOnly"
     class="ngx-ui-mat-radio-button"
+    [id]="createRadioId(option.enum[0])"
   >
     {{option.description || (schema.hasOwnProperty('title') ? schema.title :formProperty.path) + ' ' + option.enum[0]}}
   </mat-radio-button>
