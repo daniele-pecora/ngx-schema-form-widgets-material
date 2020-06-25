@@ -79,7 +79,7 @@
   <div class="mat-inputfield_upload">
 
 
-    <label [attr.for]="id">
+    <label [attr.for]="id" class="file-upload-label">
       {{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
       <ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
     </label>
@@ -218,7 +218,7 @@
         class="file-upload-image-no-preview"
       >
         <span *ngIf="!schema?.widget?.noPreviewIcon" class="material-icons file-upload-image-no-preview-icon">attach_file</span>
-        <span *ngIf="schema?.widget?.noPreviewIcon" class="material-icons file-upload-image-no-preview-icon">{{schema?.widget?.noPreviewIcon}}</span>
+        <span *ngIf="schema?.widget?.noPreviewIcon" class="material-icons file-upload-image-no-preview-icon">{{schema?.widget?.noPreviewIcon|IconName}}</span>
         <span *ngIf="schema?.widget?.noPreviewText" class="file-upload-image-no-preview-text">{{schema?.widget?.noPreviewText}}</span>
       </span>
 

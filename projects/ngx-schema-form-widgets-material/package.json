@@ -19,7 +19,7 @@
     "moment": "2.20.1",
     "ngx-openlayers": "^0.8.22",
     "ngx-qrcode2": "0.0.9",
-    "ngx-schema-form": "^2.4.1",
+    "ngx-schema-form": "^2.4.6",
     "openlayers": "^4.6.5",
     "primeflex": "^1.0.0-rc.1",
     "quill": "1.3.2",
