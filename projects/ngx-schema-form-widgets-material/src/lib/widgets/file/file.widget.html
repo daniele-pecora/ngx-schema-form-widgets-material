@@ -235,9 +235,6 @@
       [attr.alt]="file?._previewTitle||createAltText(file)||file?.name"
       >
       </object>
-<<<<<<< HEAD
-      <span *ngIf="schema.widget?.showUploadInfo" class="input-upload-file--infotext">{{file.name}} - {{bytesToSize(file.size).toUpperCase()}}</span>
-=======
 
       <span *ngIf="file.previewFailed" 
         [attr.aria-hidden]="true"
@@ -251,7 +248,6 @@
       </span>
 
       <span *ngIf="schema.widget?.showUploadInfo" class="input-upload-file--infotext">{{file.name}} - {{bytesToSize(file.size)}}</span>
->>>>>>> 1be3495... fix resolving icon name
         <button
           i18n-title
           [attr.title]="schema.widget?.deleteButtonLabel || null"
