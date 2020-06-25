@@ -281,6 +281,7 @@ export class ByteSizeFormatPipe implements PipeTransform {
 
   bytesToSize(val: any) {
     const f = (Math.floor(Math.log2(val) / 10))
-    return (val / (f * 1000)) + ' ' + ['Bytes', 'Kb', 'Mb', 'Gb', 'Tb'][f]
+    const v = (val > 1000 ? (val / (f * 1000)) : val)
+    return v + ' ' + ['Bytes', 'Kb', 'Mb', 'Gb', 'Tb'][f]
   }
 }
