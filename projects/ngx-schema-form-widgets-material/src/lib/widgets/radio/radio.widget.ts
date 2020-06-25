@@ -8,4 +8,7 @@ import {ControlWidget} from 'ngx-schema-form'
   styleUrls: ['./radio.widget.scss']
 })
 export class RadioWidgetComponent extends ControlWidget {
+  createRadioId(radioValue: any) {
+    return `${this.id}__${radioValue}`.replace(new RegExp('[\\s]+', 'ig'), '_')
+  }
 }
