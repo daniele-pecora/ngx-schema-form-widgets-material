@@ -10,7 +10,7 @@ import {
 import {DateFormatHelper} from './date-format-helper'
 import {DateValueToStringConverter} from './date-value.converter'
 import {DateValueConverter} from './date-value.converter'
-import { inputDateAutoComplete } from './date.autocomplete';
+import { inputDateAutoComplete } from './date.autocomplete'
 
 import * as moment_ from 'moment'
 const moment = moment_
