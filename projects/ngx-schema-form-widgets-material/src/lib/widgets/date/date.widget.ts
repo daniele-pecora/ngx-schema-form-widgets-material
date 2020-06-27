@@ -10,6 +10,7 @@ import {
 import {DateFormatHelper} from './date-format-helper'
 import {DateValueToStringConverter} from './date-value.converter'
 import {DateValueConverter} from './date-value.converter'
+import { inputDateAutoComplete } from './date.autocomplete';
 
 import * as moment_ from 'moment'
 const moment = moment_
@@ -200,6 +201,9 @@ export class DateWidgetComponent extends ControlWidget implements OnInit, AfterV
    * date objects instead to <code>null</code>
    */
   dateInput(eventType: string, event: any) {
+    if (false !== this.formProperty.schema.widget.formatFilter) {
+      inputDateAutoComplete(event.target, this.formProperty)
+    }
     const validDate = this.dateValueConverter.fromSourceFormat(event.target.value)
     if (validDate) {
       /**

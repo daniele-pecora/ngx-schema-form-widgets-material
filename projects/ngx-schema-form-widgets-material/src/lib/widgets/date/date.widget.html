@@ -79,7 +79,11 @@ Element 'widget':
                                 - today last year              : '-1:0:0'
                                 - today next year              : '1:0:0'
 
-todo: we need transformation of the date string from model to form and vice-versa
+        - formatFilter (boolean) : This feature is enabled by default.
+                                   Will filter the input so only valid characters are accepted.
+                                   It will restrict the lenght of the date-string to the `dateFormat` lenght.
+                                   It will autofill the `dateFormat`-separator character so they must not be typed at all.
+                                   e.g. Assuming the date-format is `dd.MM.yyyy` then typing the dot `.` is not required and will be autofilled.
 
 -->
 
