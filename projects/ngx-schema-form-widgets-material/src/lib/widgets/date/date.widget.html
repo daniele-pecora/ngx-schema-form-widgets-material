@@ -6,7 +6,7 @@ Element 'p-calendar'
 
 Element 'p-calendar' in 'widget' field do represent the same as in the primeng documentation
 
-           - dateFormat
+           - dateFormat Use a regular date format pattern (dd/MM/yyyy)
            - locale
            - showIcon
            - icon
@@ -33,9 +33,14 @@ Attribute 'locale'
     the locale can be also set as string type using 'de','en' and 'it'
 
 Element 'widget':
-        - prefix [ {icon, text }]
-        - suffix  [ {icon, text }]
+        - prefix [ {icon, text }] - see component <ngx-ui-widget-addon>
+        - suffix  [ {icon, text }] - see component <ngx-ui-widget-addon>
         - filled = filled background for the input section of the widget
+  - modelDateFormat The date format how to set into the model.
+                    This is helpful when the users input format differs from the format of the final json model
+                    e.g.:
+                    it may be set property 'dateFormat'  to 'dd.MM.yyyy'
+                    and 'modelDateFormat' to 'yyyy-MM-dd'
 
             - minAge          Set the min age to select in calendar.
                               May be also used in combination with its counterpart 'minAge' or 'minDate'
@@ -85,6 +90,12 @@ Element 'widget':
                                    It will autofill the `dateFormat`-separator character so they must not be typed at all.
                                    e.g. Assuming the date-format is `dd.MM.yyyy` then typing the dot `.` is not required and will be autofilled.
 
+-->
+<!--
+Element 'widget':
+  - size  = when not set the widget will be set to full width of available space
+            set this to 'default' to use defaults width
+            set to a positive number value to set a value like on input element
 -->
 
 <mat-form-field [appearance]="schema?.widget?.filled?'fill':'standard'"
