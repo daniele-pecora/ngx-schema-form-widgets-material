@@ -11,8 +11,11 @@ import {DateFormatHelper} from './date-format-helper'
 import {DateValueToStringConverter} from './date-value.converter'
 import {DateValueConverter} from './date-value.converter'
 import { inputDateAutoComplete } from './date.autocomplete'
+import {BindingRegistry} from 'ngx-schema-form'
+import {triggerBinding} from '../bindings-registry-helper'
 
 import * as moment_ from 'moment'
+import { typeSourceSpan } from '@angular/compiler';
 const moment = moment_
 
 export class DateWidgetComponentDateAdapter extends NativeDateAdapter {
@@ -190,7 +193,7 @@ export class DateWidgetComponent extends ControlWidget implements OnInit, AfterV
   /** testing only , see ngAfterInitView method ... **/
   disableTestDateValidation = true;
 
-  constructor(private dateAdapter: DateAdapter<Date>) {
+  constructor(private dateAdapter: DateAdapter<Date>, private bindingRegistry: BindingRegistry) {
     super();
     this.disableTestDateValidation = false
   }
@@ -200,7 +203,7 @@ export class DateWidgetComponent extends ControlWidget implements OnInit, AfterV
    * mat-datepicker converts invalid values still to
    * date objects instead to <code>null</code>
    */
-  dateInput(eventType: string, event: any) {
+  dateInput(eventType: string, event: any) {console.log('dateInput type:',eventType,'event:',event)
     if (false !== this.formProperty.schema.widget.formatFilter) {
       inputDateAutoComplete(event.target, this.formProperty, this.dateValueConverter.getSourceFormat())
     }
@@ -221,6 +224,14 @@ export class DateWidgetComponent extends ControlWidget implements OnInit, AfterV
          */
         event.target.value = ''
       }
+    }
+    if (eventType === 'dateChange') {
+      if (event instanceof Date || event.value instanceof Date) {
+      }
+      const _target = this.dateInputField.nativeElement
+      _target.value = this.formProperty.value
+      const _event = { srcElement: _target, target: _target }
+      triggerBinding(this, 'change', _event, this.bindingRegistry, this.formProperty)
     }
   }
 
