@@ -121,6 +121,7 @@ Element 'widget':
 
     [attr.required]="(formProperty|IsRequiredAttrString)"
     [attr.aria-required]="(formProperty|IsRequiredAttr)"
+    [id]="id"
   >
 
   <ngx-ui-widget-addon *ngIf="schema?.widget?.suffix" [addons]="schema.widget.suffix" [suffix]="true"></ngx-ui-widget-addon>

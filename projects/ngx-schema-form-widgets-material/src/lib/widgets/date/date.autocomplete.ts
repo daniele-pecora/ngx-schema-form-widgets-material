@@ -37,6 +37,9 @@ export const inputDateAutoComplete = (srcElement: any, formProperty: FormPropert
             separatorPositions.push(sMeta['index'])
         }
         const transformValue = (formProperty: FormProperty, srcElement: any) => {
+            if (!srcElement /** may be null if date-picker is used */) {
+                return srcElement
+            }
             if (srcElement.value &&
                 /** check type because it may be a 'Date' object that we don't care about */
                 typeof (srcElement.value) === 'string') {
@@ -110,5 +113,6 @@ export const inputDateAutoComplete = (srcElement: any, formProperty: FormPropert
         }
         formProperty['dateFormatSettings'] = dateFormatSettings
     }
-    formProperty['dateFormatSettings'].transformValue(formProperty, srcElement)
+    if (srcElement)
+        formProperty['dateFormatSettings'].transformValue(formProperty, srcElement)
 }
