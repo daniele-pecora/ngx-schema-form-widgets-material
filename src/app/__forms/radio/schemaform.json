@@ -1,0 +1,10 @@
+{
+  "type": "object",
+  "properties": {
+    "radio": {
+      "widget": {
+        "id": "radio"
+      }
+    }
+  }
+}

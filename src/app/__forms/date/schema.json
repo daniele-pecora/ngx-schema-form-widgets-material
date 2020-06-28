@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "properties": {
+    "date-picker": {
+      "type": "string",
+      "title": "date-picker",
+      "description": "Presentation of the component 'date-picker'.",
+      "widget": {
+        "id": "date-picker"
+      }
+    }
+  }
+}

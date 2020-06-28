@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "radio": {
+      "type": "string",
+      "title": "radio",
+      "description": "Presentation of the component 'radio'.",
+      "oneOf": [
+        {
+          "enum": [
+            "a"
+          ],
+          "description": "A"
+        },
+        {
+          "enum": [
+            "b"
+          ],
+          "description": "B",
+          "disabled": true
+        },
+        {
+          "enum": [
+            "c"
+          ],
+          "description": "C"
+        }
+      ]
+    }
+  }
+}
