@@ -4,8 +4,9 @@ import { FormProperty } from "ngx-schema-form"
  * Autocomplete date-format separator so they must not be typed.<br/>
  * @param srcElement
  * @param formProperty 
+ * @param defaultDateFormat `dd.MM.yyyy` default date-format
  */
-export const inputDateAutoComplete = (srcElement: any, formProperty: FormProperty) => {
+export const inputDateAutoComplete = (srcElement: any, formProperty: FormProperty, defaultDateFormat: string = 'dd.MM.yyyy') => {
     if (!formProperty['dateFormatSettings']
         /** check if 'dateFormat' property has changed */
         || (formProperty.schema.widget.dateFormat && formProperty.schema.widget.dateFormat !== formProperty['dateFormatSettings'].dateFormat)) {
@@ -25,7 +26,7 @@ export const inputDateAutoComplete = (srcElement: any, formProperty: FormPropert
             }
             return found
         }
-        const defaultDateFormat = 'dd.mm.yy'
+
         const dateFormat = formProperty.schema.widget.dateFormat || defaultDateFormat
         const formatMaxSize = dateFormat.length
         const separatorMeta = matchAll(dateFormat, new RegExp('[^YMDHSA]', 'gi'))

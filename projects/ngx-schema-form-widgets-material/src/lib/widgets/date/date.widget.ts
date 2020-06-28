@@ -201,7 +201,7 @@ export class DateWidgetComponent extends ControlWidget implements OnInit, AfterV
    */
   dateInput(eventType: string, event: any) {
     if (false !== this.formProperty.schema.widget.formatFilter) {
-      inputDateAutoComplete(event.target, this.formProperty)
+      inputDateAutoComplete(event.target, this.formProperty, this.dateValueConverter.getSourceFormat())
     }
     const validDate = this.dateValueConverter.fromSourceFormat(event.target.value)
     if (validDate) {

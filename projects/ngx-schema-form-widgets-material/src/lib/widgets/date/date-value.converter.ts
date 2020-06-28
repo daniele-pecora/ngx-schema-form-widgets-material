@@ -28,6 +28,14 @@ export abstract class BaseDateValueConverter<SourceType, TransformType> implemen
 
   }
 
+  getSourceFormat() {
+    return this.sourceFormat
+  }
+
+  getTargeFormat() {
+    return this.targetFormat
+  }
+
   toTargetFormat(date: Date): string {
     return BaseDateValueConverter.dateToString(date, this.targetFormat)
   }
