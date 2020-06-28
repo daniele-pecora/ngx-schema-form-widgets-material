@@ -1,0 +1,6 @@
+<ng-template #dialogContentTemplate>
+    <h3 *ngIf="header" mat-dialog-title>{{header}}</h3>
+    <div mat-dialog-content>
+        <ng-content></ng-content>
+    </div>
+</ng-template>

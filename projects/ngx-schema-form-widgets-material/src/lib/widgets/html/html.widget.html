@@ -1,0 +1,29 @@
+<!--
+Element 'schema'
+  - title = label
+
+Element 'widget'
+  - html      = Any HTML content to show. Will be wrapped into DIV HTML element.
+                The type may be a simple string or an array of strings (string|string[])
+  - url       = Any Url to open in IFRAME
+  - frame     = Any HTML content to show in IFRAME. Will not be wrapped into any other HTML element
+-->
+<div class="ui-g-12">
+  <label [attr.for]="id">{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark></label>
+  <iframe
+    *ngIf="this.schema.widget.url;else nonUrlContent"
+    [id]="id"
+    #contentFrame
+    sandbox="allow-same-origin"
+    onload="var obj=this;obj.style.height = 0;obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';"
+    frameBorder="0"
+    scrolling="no"
+    width="100%"
+    [src]="getUrl()||null"
+    [attr.srcDoc]="this.getFrameContent()||null"
+  >
+  </iframe>
+  <ng-template #nonUrlContent>
+    <div [innerHTML]="this.htmlContent"></div>
+  </ng-template>
+</div>

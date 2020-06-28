@@ -1,0 +1,175 @@
+<!--
+Element 'p-dropdown'
+  - title = label
+
+Element 'p-dropdown' in 'widget' field do represent the same as in the primeng documentation
+  - delay
+  - dropdown TODO implement onDropdownClick handler (has to be done with the bindings (select))
+  - immutable
+  - emptyMessage
+  - autoHighlight
+  - readonly
+  - size
+  - minLength
+  - field
+  - dataKey
+  - scrollHeight
+  - forceSelection
+
+Element 'p-dropdown' in 'widget'
+  - width            = Set style width (any css value), will be set on 'md-autocomplete', 'ui-autocomplete' and 'input'
+                       This is helpful for create a screen wide input element that is responsive also for mobiles.
+                       Disables the property 'size'.
+  - serviceUrl       = The url of the service to make the ajax request to.
+                       May contain a reference to the query and any other paths of the model.
+                       This placeholder will be replaced globally in the complete url string.
+                       The query may be set as placeholder '{__ac_query__}'.
+                       e.g. https://myservice.com?q={__ac_query__}
+                       e.g. https://myservice.com?q={__ac_query__}&email={mymodel.email}&name={mymodel.name}
+  - resultExpression = Must name the object in result that contains the array of result elements.
+                       An object 'data' is passed which is the json result from request.
+                       e.g. "data.entries"
+  - labelExpression  = Must create a string value as the label to show in the dropdown.
+                       An object 'item' is passed for every element of the result.
+                       e.g. "item.name + ' ' + item.age"
+  - valueExpression  = Defines the value to set from the autocompletion list.
+                       An object 'item' is passed for every element of the result.
+                       e.g. "item.name + ' ' + item.age"
+                       If not defined the item itself will be passed as value.
+  - precheckExpressions = Set to <code>true</code> will check the syntax of
+                          the <code>labelExpression</code>, <code>valueExpression</code> and <code>resultExpression</code>
+                          and show resulting errors in console.
+                          Keep in mind to NOT USE IN PRODUCTION!!!
+                          Since it make vulnerable to access global variables.
+  - serviceOptions     This service configuration allows to submit a POST for an autocompletion.
+                       and will be ignored if serviceUrl is set.
+
+                       Reference is HttpApiServiceOptions
+                        {
+                            headers?: HttpHeaders | {[header: string]: string | string[]}
+                            params?: HttpParams | {[param: string]: string | string[]}
+                            withCredentials?: boolean
+                            body?: any
+                            method?: 'GET' | 'get' | 'POST' | 'post'
+                        }
+
+         example:
+         <pre>
+              "serviceOptions": {
+                "method": "POST",
+                "headers": {
+                  "X-ApiKey": "dollar{apiKey}",
+                  "content-type":"application/json",
+                  "accept":"application/json",
+                  "X-MyHeader": "{mymodel.userId}"
+                },
+                "params": {
+                  "q": "{__ac_query__}",
+                  "city": "{mymodel.city}",
+                  "country":"{mymodel.country}"
+                },
+                "withCredentials": true,
+                "body": {
+                          "q": "{__ac_query__}",
+                          "email": "{mymodel.email}",
+                          "name": "{mymodel.name}"
+                        }
+              }
+         </pre>
+
+   - targets      an arrays of assignments of address parts to fields
+                  this allows to assign a part of the address to a specific field
+                  - key          : an array or a single value of keys of the result object in priority order.
+                                   the first existing value wins.
+
+                                   This may also be an expression.
+                                   Accessing any value of the result object is allowed.
+                                   e.g.:
+                                   <code>{ "key": "address.street + ' ' + address.house_number" }</code>
+                  - destination   : an array of paths pointing to formProperties fields to set the value
+
+                  e.g.
+                      <code>[{ 'key' : ['street','road'], 'destination' : ['form1/street_field', 'form3/street']}]</code>
+                  another example:
+                  <code>
+                        "targets": [
+                          {
+                            "key": "address.street",
+                            "destination": "street_field"
+                          },
+                          {
+                            "key": [
+                              "address.street",
+                              "address.road",
+                              "address.footway",
+                              "address.pedestrian"
+                            ],
+                            "destination": ["street_field", "another_street_field"]
+                          },
+                          {
+                            "key": "address.house_number",
+                            "destination": "housenumber_field"
+                          },
+                          {
+                            "key": "address.city",
+                            "destination": "city_field"
+                          },
+                          {
+                            "key": "address.display_name",
+                            "destination": "fulladdress_field"
+                          }
+                        ]
+                  </code>
+
+Element 'widget':
+  - prefix [ {icon, text, ligature }] - see component <ngx-ui-widget-addon>
+  - suffix  [ {icon, text, ligature }] - see component <ngx-ui-widget-addon>
+  - filled = filled background for the input section of the widget
+-->
+<!--
+Element 'widget':
+  - size  = when not set the widget will be set to full width of available space
+            set this to 'default' to use defaults width
+            set to a positive number value to set a value like on input element
+-->
+
+<!-- due to a misconcetion in ReactiveForm setting '[disabled]' doesn't visualize the 'disabled' state, so also '[attr.disabled]' must be set -->
+<mat-form-field [appearance]="schema?.widget?.filled?'fill':'standard'"
+  [class.ngx-ui-widget-full-width]="!schema.widget?.size"
+>
+  <mat-label>{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark></mat-label>
+  <ngx-ui-widget-addon *ngIf="schema?.widget?.prefix" [addons]="schema.widget.prefix"></ngx-ui-widget-addon>
+  <input
+    #autoInput
+    matInput
+    type="text"
+
+    [attr.id]="id"
+    [attr.name]="name"
+
+    [disabled]="schema.readOnly"
+    [attr.disabled]="schema.readOnly?'disabled':null"
+
+    [formControl]="control"
+    [matAutocomplete]="'auto'"
+
+    [readonly]="schema.widget.readonly && (schema.widget.readonly===false || schema.widget.readonly===true)? schema.widget.readonly : false"
+
+    [attr.required]="(formProperty|IsRequiredAttrString)"
+    [attr.aria-required]="(formProperty|IsRequiredAttr)"
+  >
+  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" *ngIf="!schema.readOnly">
+    <mat-option *ngIf="isLoading" class="is-loading"><mat-spinner diameter="30"></mat-spinner></mat-option>
+    <mat-option (onSelectionChange)="onSelect(result)" *ngFor="let result of filteredOptions | async" [value]="result">
+      {{result}}
+    </mat-option>
+  </mat-autocomplete>
+  <ngx-ui-widget-addon *ngIf="schema?.widget?.suffix" [addons]="schema.widget.suffix" [suffix]="true"></ngx-ui-widget-addon>
+  <mat-hint *ngIf="schema.description">{{schema.description}}</mat-hint>
+  <mat-error *ngIf="control?.errors">
+    <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
+  </mat-error>
+
+</mat-form-field>
+
+<input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="control">

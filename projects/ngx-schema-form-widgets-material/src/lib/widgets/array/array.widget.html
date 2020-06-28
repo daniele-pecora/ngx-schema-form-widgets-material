@@ -1,0 +1,284 @@
+<!--
+Element 'array' in json schema
+  - title = label
+  - description
+  - minItems
+  - maxItems
+
+Element 'array' in 'widget'
+  - style     = set to 'tabview' to show as tabview panels
+                set to 'accordion' to show as accordion
+                leave empty to use default style (uses standard ui-widget for objects or simple types)
+  - itemTitle = Any string that represents the label of the array item.
+              If not set then the parent title will be used.
+              eg. 'Simple Item'
+  - itemNumeration = Prepends a numeric before title.
+                   eg. '1. Simple Item'
+                   default is <code>true</code>
+
+  - buttonAdd
+  - buttonRemove
+      Element for each button
+      - position    = bottom (default) | top  , set the position where button should appear: before of after the rendered element
+      - icon        = Button icon
+      - iconPos     = Button icon position
+      - label       = Button text
+      - description = Tooltip
+      - severity    = Button severity
+      - styleClass  = Button style class
+      - styleId     = Button style id
+
+        - showErrors : true|false
+                       or object of type:
+                                        {
+                                            position  : top|bottom, (default:top)   // shows the messages at top or at the bottom
+                                            all       : true|false, (default:false) // show also children's error messages
+                                            firstOnly : true|false, (default:false) // show only the first error message
+                                            codes     : string[],   ([])            // show only error messages that match any of this error codes, leave empty to show all errors
+                                         }
+
+  -->
+<ngx-ui-validation-messages *ngIf="formProperty.schema.widget?.showErrors && formProperty.schema.widget?.showErrors?.position!=='bottom'" [formComponent]="this"></ngx-ui-validation-messages>
+
+<div class="widget form-group">
+  <label *ngIf="schema.title && formProperty.schema.items.type==='object'" [attr.for]="id" class="horizontal control-label">
+    {{ schema.title }}
+  </label>
+  <div *ngIf="schema.title && formProperty.schema.items.type!=='object'">
+  <label [attr.for]="id" class="horizontal control-label">
+    {{ schema.title }}
+  </label>
+  </div>
+  <h5 *ngIf="schema.description">{{schema.description}}</h5>
+
+  <!-- <ng-container *ngIf="schema.widget.style==='tabview';else defaultStyleTemplate">
+    <ng-container [ngTemplateOutlet]="tabviewStyleTemplate"></ng-container>
+  </ng-container> -->
+  <ng-container [ngSwitch]="schema?.widget?.style">
+    <ng-container *ngSwitchCase="'tabview'" [ngTemplateOutlet]="tabviewStyleTemplate"></ng-container>
+    <ng-container *ngSwitchCase="'accordion'" [ngTemplateOutlet]="accordionStyleTemplate"></ng-container>
+    <ng-container *ngSwitchDefault [ngTemplateOutlet]="defaultStyleTemplate"></ng-container>
+  </ng-container>
+
+  <!-- ### Style Accordion -->
+  <ng-template #accordionStyleTemplate>
+      <ng-container [ngTemplateOutlet]="buttonTemplate" [ngTemplateOutletContext]="{
+        button: schema.widget.buttonAdd,
+        onClickHandler: addItemUpdateIndex.bind(this),
+        isDisabledHandler: isAddButtonDisabled.bind(this)
+      }"></ng-container>
+
+    <mat-accordion [togglePosition]="'before'">
+        <ng-container
+        *ngFor="let itemProperty of formProperty.properties; let i=index"
+        >
+      <mat-expansion-panel
+        [expanded]="currentPage===i" (opened)="onTabOpen_Accordion({originaEvent:null, index:i})" (closed)="onTabClose_Accordion({originalEvent:null, index:i})"
+        *ngIf="itemProperty?.visible"
+      >
+        <mat-expansion-panel-header>
+
+          <!--
+          <mat-panel-description>
+              No support for description now
+          </mat-panel-description>
+          -->
+          <span
+          class="ui-accordion-icon-close mat-expansion-panel-header-description"
+          (click)="removeItem(i)"
+          (keyup.enter)="removeItem(i)"
+          [attr.title]="schema.widget.buttonRemove?.description||schema.widget.buttonRemove?.label||null"
+          [matTooltip]="schema.widget.buttonRemove?.description||null"
+          [attr.tabindex]="0"
+          role="button"
+          *ngIf="((schema.minItems || 0) < this.formProperty.properties.length) && schema.minItems !== schema.maxItems"
+          ><mat-icon>close</mat-icon></span>
+
+          <mat-panel-title>
+              <span i18n>{{formProperty.schema.items.type==='object'?(itemProperty.schema.title || itemProperty._path):null}}</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>
+          <sf-form-element [formProperty]="itemProperty"></sf-form-element>
+        </div>
+      </mat-expansion-panel>
+    </ng-container>
+    </mat-accordion>
+  </ng-template>
+
+  <!-- ### Style TABS -->
+  <ng-template #tabviewStyleTemplate>
+      <ng-container [ngTemplateOutlet]="buttonTemplate" [ngTemplateOutletContext]="{
+        button: schema.widget.buttonAdd,
+        onClickHandler: addItemUpdateIndex.bind(this),
+        isDisabledHandler: isAddButtonDisabled.bind(this)
+      }"></ng-container>
+
+    <mat-tab-group
+    [selectedIndex]="tabActiveIndex"
+    (selectedIndexChange)="handleOnChange({ originalEvent: null, index: $event })"
+    >
+      <ng-container *ngFor="let itemProperty of formProperty.properties; let i=index" >
+        <mat-tab
+          i18n-label
+          [label]="formProperty.schema.items.type==='object'?(itemProperty.schema.title || itemProperty._path):null"
+        >
+          <ng-template mat-tab-label>
+            <span class="mat-tab-label--text" i18n>{{formProperty.schema.items.type==='object'?(itemProperty.schema.title || itemProperty._path):null}}</span>
+            <button
+              mat-flat-button
+              [attr.title]="schema.widget?.buttonRemove?.description||schema.widget?.buttonRemove?.label||null"
+              [matTooltip]="schema.widget?.buttonRemove?.description||null"
+              (click)="removeItem(i)"
+              class="mat-tab-label--button-close"
+            >
+            <mat-icon class="mat-tab-label--icon-close">close</mat-icon>
+          </button>
+          </ng-template>
+          <div>
+            <sf-form-element [formProperty]="itemProperty"></sf-form-element>
+          </div>
+        </mat-tab>
+      </ng-container>
+    </mat-tab-group>
+  </ng-template>
+
+  <!-- ### Style DEFAULT -->
+  <ng-template #defaultStyleTemplate>
+    <ng-template #buttonAdd>
+      <ng-container [ngTemplateOutlet]="buttonTemplate" [ngTemplateOutletContext]="{
+        button: schema.widget.buttonAdd,
+        onClickHandler: addItem.bind(this),
+        isDisabledHandler: isAddButtonDisabled.bind(this)
+      }"></ng-container>
+    </ng-template>
+
+    <ng-container *ngIf="schema?.widget?.buttonAdd?.position==='top'">
+      <ng-container *ngTemplateOutlet="buttonAdd"></ng-container>
+    </ng-container>
+    <div *ngFor="let itemProperty of formProperty.properties; let i=index">
+          <span
+            *ngIf="formProperty.schema.items.type==='object'">{{itemProperty.schema.title || itemProperty._path}}</span>
+      <ng-template #buttonRemove>
+          <ng-container [ngTemplateOutlet]="buttonRemoveTemplate" [ngTemplateOutletContext]="{
+            button: schema.widget.buttonRemove,
+            onClickHandler: removeItem.bind(this),
+            isDisabledHandler: isRemoveButtonDisabled.bind(this),
+            itemPosition: i
+          }"></ng-container>
+      </ng-template>
+
+      <ng-container *ngIf="schema?.widget?.buttonRemove?.position==='top'">
+        <ng-container *ngTemplateOutlet="buttonRemove"></ng-container>
+      </ng-container>
+      <sf-form-element [formProperty]="itemProperty"></sf-form-element>
+      <ng-container *ngIf="schema?.widget?.buttonRemove?.position!=='top'">
+        <ng-container *ngTemplateOutlet="buttonRemove"></ng-container>
+      </ng-container>
+    </div>
+    <ng-container *ngIf="schema?.widget?.buttonAdd?.position!=='top'">
+      <ng-container *ngTemplateOutlet="buttonAdd"></ng-container>
+    </ng-container>
+  </ng-template>
+</div>
+
+<ngx-ui-validation-messages *ngIf="formProperty.schema.widget?.showErrors && formProperty.schema.widget?.showErrors?.position==='bottom'" [formComponent]="this"></ngx-ui-validation-messages>
+
+<!-- button templates -->
+<ng-template #buttonTemplate let-button="button" let-onClickHandler="onClickHandler" let-isDisabledHandler="isDisabledHandler">
+    <ng-container *ngIf="button?.label">
+    <button
+      mat-raised-button
+      [attr.id]="button?.styleId||null"
+      i18n-label
+      [attr.title]="button?.description||button?.label||null"
+      [disabled]="isDisabledHandler(button)"
+      (click)="onClickHandler()"
+      type="button"
+      [matTooltip]="button?.description||null"
+      *ngIf="!(schema.hasOwnProperty('minItems') && schema.hasOwnProperty('maxItems') && schema.minItems === schema.maxItems)"
+      [ngClass]="['ngx-ui-widget-button', ''+getButtonType(button), 'ui-button-'+(getSeverity(button?.severity)||'primary'), (button?.styleClass||'')]"
+      [color]="button?.severity?getSeverity(button?.severity):'primary'"
+    >
+    <mat-icon *ngIf="button?.iconPos==='left'" class="mat-24" aria-label="">
+      {{(button?.icon||'ui-icon-add')|IconName}}
+    </mat-icon>
+    <ng-container *ngIf="button?.label" i18n>{{button?.label}}</ng-container>
+    <mat-icon *ngIf="button?.iconPos!=='left'" class="mat-24" aria-label="">
+      {{(button?.icon||'ui-icon-add')|IconName}}
+    </mat-icon>
+  </button>
+  </ng-container>
+  <ng-container *ngIf="!button?.label">
+  <button
+      mat-mini-fab
+      [attr.id]="button?.styleId||null"
+      i18n-label
+      [attr.title]="button?.description||button?.label||null"
+      [disabled]="isDisabledHandler(button)"
+      (click)="onClickHandler()"
+      type="button"
+      [matTooltip]="button?.description||null"
+      *ngIf="!(schema.hasOwnProperty('minItems') && schema.hasOwnProperty('maxItems') && schema.minItems === schema.maxItems)"
+      [ngClass]="['ngx-ui-widget-button', ''+getButtonType(button), 'ui-button-'+(getSeverity(button?.severity)||'primary'), (button?.styleClass||'')]"
+      [color]="button?.severity?getSeverity(button?.severity):'primary'"
+    >
+    <mat-icon *ngIf="button?.iconPos==='left'" class="mat-24" aria-label="">
+      {{(button?.icon||'ui-icon-add')|IconName}}
+    </mat-icon>
+    <ng-container *ngIf="button?.label" i18n>{{button?.label}}</ng-container>
+    <mat-icon *ngIf="button?.iconPos!=='left'" class="mat-24" aria-label="">
+      {{(button?.icon||'ui-icon-add')|IconName}}
+    </mat-icon>
+  </button>
+  </ng-container>
+</ng-template>
+
+<ng-template #buttonRemoveTemplate let-button="button" let-onClickHandler="onClickHandler" let-isDisabledHandler="isDisabledHandler" let-itemPosition="itemPosition">
+  <ng-container *ngIf="button?.label">
+  <button
+    mat-raised-button
+    [attr.id]="button?.styleId||null"
+    i18n-label
+    [attr.title]="button?.description||button?.label||null"
+    [disabled]="isDisabledHandler(button)"
+    (click)="onClickHandler(itemPosition)"
+    type="button"
+    [matTooltip]="button?.description||null"
+    *ngIf="!(schema.hasOwnProperty('minItems') && schema.hasOwnProperty('maxItems') && schema.minItems === schema.maxItems)"
+    [ngClass]="['ngx-ui-widget-button', ''+getButtonType(button), 'ui-button-'+getSeverity(button?.severity||'secondary'), (button?.styleClass||'')]"
+    [color]="button?.severity?getSeverity(button?.severity):'secondary'"
+  >
+      <mat-icon *ngIf="button?.iconPos==='left'" class="mat-24" aria-label="">
+        {{(button?.icon||'ui-icon-close')|IconName}}
+      </mat-icon>
+      <ng-container *ngIf="button?.label" i18n>{{button?.label}}</ng-container>
+      <mat-icon *ngIf="button?.iconPos!=='left'" class="mat-24" aria-label="">
+        {{(button?.icon||'ui-icon-close')|IconName}}
+      </mat-icon>
+  </button>
+  </ng-container>
+  <ng-container *ngIf="!button?.label">
+  <button
+      mat-mini-fab
+      [attr.id]="button?.styleId||null"
+      i18n-label
+      [attr.title]="button?.description||button?.label||null"
+      [disabled]="isDisabledHandler(button)"
+      (click)="onClickHandler(itemPosition)"
+      type="button"
+      [matTooltip]="button?.description||null"
+      *ngIf="!(schema.hasOwnProperty('minItems') && schema.hasOwnProperty('maxItems') && schema.minItems === schema.maxItems)"
+      [ngClass]="['ngx-ui-widget-button', ''+getButtonType(button), 'ui-button-'+getSeverity(button?.severity||'secondary'), (button?.styleClass||'')]"
+      [color]="button?.severity?getSeverity(button?.severity):'secondary'"
+    >
+        <mat-icon *ngIf="button?.iconPos==='left'" class="mat-24" aria-label="">
+          {{(button?.icon||'ui-icon-close')|IconName}}
+        </mat-icon>
+        <ng-container *ngIf="button?.label" i18n>{{button?.label}}</ng-container>
+        <mat-icon *ngIf="button?.iconPos!=='left'" class="mat-24" aria-label="">
+          {{(button?.icon||'ui-icon-close')|IconName}}
+        </mat-icon>
+    </button>
+  </ng-container>
+</ng-template>

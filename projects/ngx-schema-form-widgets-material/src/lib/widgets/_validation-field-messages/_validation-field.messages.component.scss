@@ -1,0 +1,10 @@
+/** Keep space between widgets when no description (helper text) is set */
+/** 
+This is not required with "Angular Material", since there is a spacing between the widgets
+when no helper text is shown.
+
+:host(:empty) {
+  padding: 0.75em;
+  display: block;
+}
+*/

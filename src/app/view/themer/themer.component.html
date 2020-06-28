@@ -1,0 +1,13 @@
+<div class="md-select_button">
+  <label for="">Theme</label>
+  <ul class="themer-list">
+    <li *ngFor="let item of availableThemes" [attr.title]="item.label">
+      <span class="theme-bullet clickable" (click)="changeTheme(item.value)"
+        [class.selected-theme]="item.value===selectedTheme">
+        <span class="theme-bullet-top" [style.background-color]="item.accentColor"></span>
+        <span class="theme-bullet-bottom" [style.background-color]="item.primaryColor"></span>
+      </span>
+      <!-- <span *ngIf="item.value===selectedTheme">{{item.label}}</span> -->
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,48 @@
+<!--
+    In 'schema'
+        - title       : Will be used as header if <code>widget.header</code> is not defined
+        - description : Will be used as dialog content if the widget is defined as a simple type (e.g. 'string', 'number' etc...)
+        - visibleIf   : There is also support for <code>visibleIf</code> conditions.
+                        Any <code>visibleIf</code> condition will be priorized over
+                        the property <code>widget.show</code> set to <code>true</code>.
+                        The property <code>widget.show</code> must be set to <code>true</code>
+                        to make <code>visibleIf</code> work.
+    In 'widget'
+        - header      : The header to show.
+                        If not set <code>schema.title</code> will be used
+        - show        : <code>true</code> will show up the dialog.
+                        The current visibility state is also kept in the property <code>widget.show</code>.
+        - closable    : <code>true</code> if the user should be able to close the dialog
+        - contentType : Defines the type of widget that the dialog content should be rendered.
+                        e.g. 'wizard', 'form', 'object' etc...
+                        Will not work on simple types.
+        - buttons     : Defines the action buttons for the dialog
+                        Since the buttons defined at level <code>schema.buttons</code> will be rendered twice
+                        they must be defined in level <code>schema.widget.buttons</code>
+-->
+
+<ngx-ui-mat-dialog
+    [(visible)]="schema.widget.show"
+    [closable]="schema.widget.closable"
+    [closeOnEscape]="schema.widget.closable"
+    [header]="schema.widget.header || schema.title"
+    (onShow)="onShow($event)"
+    (onHide)="onHide($event)"
+    [responsive]="true"
+    [transitionOptions]="'100ms'"
+    [attr.id]="id"
+    [modal]="true"
+    >
+
+    <ng-container *ngIf="formProperty?.schema?.fieldsets?.length && schema.widget.contentType; else noContent">
+        <ngx-ui-dialog-form-component [formProperty]="formProperty"></ngx-ui-dialog-form-component>
+    </ng-container>
+    <ng-template #noContent>
+            <div>{{schema.description}}</div>
+    </ng-template>
+
+    <ngx-ui-validation-messages
+    *ngIf="formProperty.schema.widget?.showErrors && formProperty.schema.widget?.showErrors?.position==='bottom'"
+    [formComponent]="this"></ngx-ui-validation-messages>
+
+</ngx-ui-mat-dialog>

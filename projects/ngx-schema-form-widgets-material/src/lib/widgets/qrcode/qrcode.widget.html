@@ -1,0 +1,19 @@
+<!--
+Element 'schema':
+        - title Label positioned above the QRCode
+        - description Some descriptive text positioned above the QRCode
+Element 'widget'
+        - id
+        - value Value represented as QRCode
+        - elementType set qrcode type
+                      - url , render an url as IMG TAG QRcode (default)
+                      - img , render into an image IMG Element
+                      - canvas, render into a canvas HTMl Element
+                      for more info head to modules source at https://github.com/techiediaries/ngx-qrcode/blob/master/src/ngx-qrcode.component.ts
+-->
+<label [attr.for]="id">{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark></label>
+<div *ngIf="schema.title || schema.name || schema.description">
+  <span *ngIf="schema.description">{{schema.description}}</span>
+</div>
+<ngx-qrcode [qrc-element-type]="schema.widget.elementType||'url'" [(qrc-value)]="schema.widget.value">
+</ngx-qrcode>

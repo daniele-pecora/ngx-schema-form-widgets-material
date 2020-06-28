@@ -1,0 +1,84 @@
+<!--
+Prerequisites:
+        Requires to add this css in angular.json : "node_modules/openlayers/dist/ol.css"
+
+
+Element 'schema':
+        - description
+        - title Label positioned above the OSM widget
+Element 'widget'
+        - id
+
+        - width: string                 any css string for width (e.g. 500px, 100%)
+        - height: string                any css string for height (e.g. 500px, 100%)
+        - latitude = 52.520008          latitude in floating number for the map center - default is berlin
+        - longitude = 13.404954         longitude in floating number for the map center - default is berlin
+        - latitudePointer = 52.520008   latitude in floating number for the pointer on map - default is berlin
+        - longitudePointer = 13.404954  longitude in floating number for the pointer on map - default is berlin
+        - showControlsZoom: boolean     show the controls for changing the zoom - default is false
+        - showDebugInfo: boolean        show some debug info - default is false
+        - showControlsCurrentLocation: boolean  show the control to get the current location
+        - opacity = 1                   set the initial value for opacity as decimal - default is 1
+        - zoom = 14                     set the initial value for zoom - default is 14
+        - titleZoomIn = 'Zoom in'
+        - titleZoomOut = 'Zoom out'
+        - titleCurrentLocation = 'Current location'
+
+
+        - geoReverseService = 'https://nominatim.openstreetmap.org/reverse?key=iTzWSiYpGxDvhATNtSrqx5gDcnMOkntL&format=json&addressdetails=1&lat={lat}&lon={lon}'
+                                        the url to the geo reverse service
+                                        the url should contain the
+                                        the placeholders '{lon}' and '{lat}'
+                                        which will be replaced with the corresponding values from the map.
+                                        leave empty to use default
+
+        - addressTarget                 set the xpath to a field that should get the value set
+                                        if set no value will be hold in its own property
+        - addressTargets                an arrays of assignments of address parts to fields
+                                        this allows to assign a part of the address to a specific field
+                                        e.g.
+                                            <code>[{ 'key' : 'street', 'destination' : 'form1/street_field'}]</code>
+                                            this will assign the part 'street' to the field in property 'form1.street_field'
+
+                                            This is a full list of available address parts:
+                                          - display: the complete address string. eg. 'Mall Berlin, 1234 Berlin Schreberstrasse 1'
+                                          - original: the original object from osm reverse search
+                                          - street: string
+                                          - zip: string
+                                          - city: string
+                                          - building: string
+                                          - house: string
+                                          - lat: string
+                                          - lon: string
+                                          - country: string
+                                          - country_code: string
+
+
+                      for more info head to modules source at https://github.com/quentin-ol/ngx-openlayers
+        - noSpacer       =  Does not add a spacer at bottom.
+                            When a text field is set at the bottom of the map the label will overlap the map.
+-->
+<label [attr.for]="id">{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark></label>
+<div *ngIf="schema.title || schema.name || schema.description">
+  <span *ngIf="schema.description">{{schema.description}}</span>
+</div>
+<span *ngIf="!schema.title && !schema.description">{{noResizeHelper}}</span>
+
+<ngx-ui-osm-view
+  [height]="schema?.widget?.height"
+  [width]="schema?.widget?.width"
+  [latitude]="schema?.widget?.latitude"
+  [longitude]="schema?.widget?.longitude"
+  [latitudePointer]="schema?.widget?.latitudePointer"
+  [longitudePointer]="schema?.widget?.longitudePointer"
+  [showControlsZoom]="schema?.widget?.showControlsZoom"
+  [showControlsCurrentLocation]="schema?.widget?.showControlsCurrentLocation"
+  [showDebugInfo]="schema?.widget?.showDebugInfo"
+  [geoReverseService]="schema?.widget?.geoReverseService"
+  [titleCurrentLocation]="schema?.widget?.titleCurrentLocation"
+  [titleZoomIn]="schema?.widget?.titleZoomIn"
+  [titleZoomOut]="schema?.widget?.titleZoomOut"
+  (addressChanged)="onAddressChange($event)"
+></ngx-ui-osm-view>
+
+<div *ngIf="true !== schema?.widget?.noSpacer" style="margin-bottom:1em"></div>

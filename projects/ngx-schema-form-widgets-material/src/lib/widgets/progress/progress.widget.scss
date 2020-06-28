@@ -1,0 +1,8 @@
+/** fix: progress-spinner not centred */
+::ng-deep .mat-progress-spinner {
+  margin: auto;
+}
+
+.center-text {
+  text-align: center;
+}

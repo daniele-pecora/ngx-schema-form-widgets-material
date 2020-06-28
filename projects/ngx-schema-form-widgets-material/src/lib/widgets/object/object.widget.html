@@ -1,0 +1,35 @@
+<!--
+Element 'object'
+  - asCard             : true|false (default:false) = show or don't show card layout
+  - showErrors         : true|false
+                         or object of type:
+                                  {
+                                      position  : top|bottom, (default:top)   // shows the messages at top or at the bottom
+                                      all       : true|false, (default:false) // show also children's error messages
+                                      firstOnly : true|false, (default:false) // show only the first error message
+                                      codes     : string[],   ([])            // show only error messages that match any of this error codes, leave empty to show all errors
+                                   }
+  - nopad            : When <code>true</code> the padding for the first level children will be removed
+
+
+-->
+<div class="ui-g ui-g-12"
+[class.ui-g-nopad]="schema?.widget?.nopad"
+>
+  <ngx-ui-validation-messages *ngIf="formProperty.schema.widget?.showErrors && formProperty.schema.widget?.showErrors?.position!=='bottom'" [formComponent]="this"></ngx-ui-validation-messages>
+
+  <div class="{{formProperty.schema?.widget?.asCard?'card card-w-title':''}}" *ngFor="let fieldset of formProperty.schema.fieldsets">
+
+    <h3 *ngIf="fieldset.title || fieldset.name">{{fieldset.title || fieldset.name}}
+      <ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+    </h3>
+    <h5 *ngIf="fieldset.description">{{fieldset.description}}</h5>
+
+    <div *ngFor="let fieldId of fieldset.fields">
+      <sf-form-element [formProperty]="formProperty.getProperty(fieldId)"></sf-form-element>
+    </div>
+
+  </div>
+
+  <ngx-ui-validation-messages *ngIf="formProperty.schema.widget?.showErrors && formProperty.schema.widget?.showErrors?.position==='bottom'" [formComponent]="this"></ngx-ui-validation-messages>
+</div>

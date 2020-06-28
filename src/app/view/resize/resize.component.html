@@ -1,0 +1,9 @@
+<ui-form-view
+*ngIf="uiInitialFormViewModel"
+[attr.xnoCard]="uiInitialFormViewModel?.formModelObject?.widget?.asCard || uiInitialFormViewModel?.formModelObject?.widget?.noCard"
+[noCard]="true"
+[uiInitialFormViewModel]="uiInitialFormViewModel"
+(onLoaded)="onFormViewLoaded($event)"
+(onModelChange)="onModelChanged($event)"
+(onModelChangeFinal)="actionTrigger($event)"
+></ui-form-view>

@@ -1,0 +1,54 @@
+<!--
+Element :
+    - title
+    - description
+    - readOnly
+    - minimum
+    - maximum
+
+Element 'p-slider' all from primeng documentation (except 'disable')
+
+-->
+<mat-form-field class="ngx-ui-mat-form-field"
+  [class.ngx-ui-widget-full-width]="!schema.widget?.size"
+>
+
+  <!-- Placeholder input required for usage of mat-form-field to format the mat-hint right -->
+  <input matInput data-hidden="placeholder" aria-hidden="true" class="ngx-ui-mat-form-field-placeholder" style="display:none" tabindex="-1"
+  [attr.required]="(formProperty|IsRequiredAttrString)"
+  [attr.aria-required]="(formProperty|IsRequiredAttr)"
+  >
+
+  <mat-slider
+    [class.ngx-ui-widget-full-width]="!schema.widget?.size"
+
+    [thumbLabel]="schema.widget.thumbLabel||null"
+    [tickInterval]="schema.widget.tickInterval||null"
+    [attr.data-value]="formProperty.value"
+    [invert]="schema.widget.invert||null"
+
+
+    [disabled]="schema.readOnly||null"
+    [min]="schema.minimum"
+    [max]="schema.maximum"
+    [step]="schema.widget.step||1"
+    [attr.data-range]="schema.widget.range||false"
+    [style]="schema.widget.style||null"
+    [ngClass]="schema.widget.styleClass||null"
+    [vertical]="schema.widget.orientation||null"
+    [formControl]="control"
+    [id]="id"
+  >
+  </mat-slider>
+
+  <mat-label>{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
+    {{formProperty|IsRequiredAsterisk}}
+  </mat-label>
+
+  <mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>
+  <mat-error *ngIf="control?.errors">
+    <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
+  </mat-error>
+
+</mat-form-field>
+
