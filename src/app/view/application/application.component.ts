@@ -38,7 +38,7 @@ export class ApplicationComponent {
   onChangeFormViewModel: UIFormViewModel;
   finalModelObject: object;
 
-  preferredSize = 8
+  preferredSize = 10
   preferredSizeSpacer = 2
 
   constructor(private templateService: AppFormTemplateService) {
