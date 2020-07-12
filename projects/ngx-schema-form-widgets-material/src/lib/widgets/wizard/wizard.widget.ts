@@ -184,11 +184,12 @@ export class WizardWidgetComponent extends ActionObjectLayoutWidgetComponent imp
     if (scrollDisabled)
       return
     const scrollOptions = { behavior: 'smooth', inline: 'start', block: 'start' }
-    if (this.scrollHook.nativeElement.scrollIntoViewIfNeeded) {
-      this.scrollHook.nativeElement.scrollIntoViewIfNeeded()
-    } else {
-      this.scrollHook.nativeElement.scrollIntoView(scrollOptions)
-    }
+    if(this.scrollHook && this.scrollHook.nativeElement)
+      if (this.scrollHook.nativeElement.scrollIntoViewIfNeeded) {
+        this.scrollHook.nativeElement.scrollIntoViewIfNeeded()
+      } else {
+        this.scrollHook.nativeElement.scrollIntoView(scrollOptions)
+      }
   }
 
   filterHiddenItems(items): object[] {
