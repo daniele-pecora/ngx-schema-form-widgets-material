@@ -4,9 +4,6 @@ import {OnDestroy} from '@angular/core'
 import {FormProperty} from 'ngx-schema-form/lib/model/formproperty'
 import { ExpressionCompiler } from '../_service/expression-complier.service'
 
-// TODO: Add Angular decorator.
-// TODO: Add Angular decorator.
-// TODO: Add Angular decorator.
 export class AutocompleteAsyncHelper implements OnDestroy {
 
   constructor(private name, private formProperty, private schema, private lookupService: WidgetComponentHttpApiService
@@ -26,7 +23,7 @@ export class AutocompleteAsyncHelper implements OnDestroy {
 
   private createErrorLog(propertyName, actionName, expressionString, result, err): any[] {
     return [
-      `Failed to ${actionName} expression property "${propertyName}" in 'selection.widget' 
+      `Failed to ${actionName} expression property "${propertyName}" in 'selection.widget'
     for path ${this.formProperty.path} in field ${this.name}`
       , '\n'
       , `Expression: ${expressionString}`, '\n'

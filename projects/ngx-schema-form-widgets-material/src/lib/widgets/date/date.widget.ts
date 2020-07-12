@@ -4,7 +4,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild, ElementRef, Injectable } from '@angular/core'
 import {ControlWidget} from 'ngx-schema-form';
 import { DateAdapter, MAT_DATE_FORMATS, NativeDateAdapter } from '@angular/material/core';
-import { MatDatepicker, MatDatepickerInputEvent, MatDatepickerIntl } from '@angular/material/datepicker';
+import { MatDatepicker } from '@angular/material/datepicker';
 import {DateFormatHelper} from './date-format-helper'
 import {DateValueToStringConverter} from './date-value.converter'
 import {DateValueConverter} from './date-value.converter'
