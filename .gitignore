@@ -47,3 +47,5 @@ src/assets/*.css
 src/assets/*/*.css
 
 package-lock.json
+
+!libs/*
