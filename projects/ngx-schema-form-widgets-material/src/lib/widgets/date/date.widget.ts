@@ -1,23 +1,19 @@
 /**
  * Created by daniele on 27.09.17
  */
-import {AfterViewInit, Component, OnInit, ViewChild, ElementRef} from '@angular/core'
+import { AfterViewInit, Component, OnInit, ViewChild, ElementRef, Injectable } from '@angular/core'
 import {ControlWidget} from 'ngx-schema-form';
-import {
-  DateAdapter, MAT_DATE_FORMATS, MatDatepicker, MatDatepickerInputEvent, MatDatepickerIntl,
-  NativeDateAdapter
-} from '@angular/material'
+import { DateAdapter, MAT_DATE_FORMATS, NativeDateAdapter } from '@angular/material/core';
+import { MatDatepicker, MatDatepickerInputEvent, MatDatepickerIntl } from '@angular/material/datepicker';
 import {DateFormatHelper} from './date-format-helper'
 import {DateValueToStringConverter} from './date-value.converter'
 import {DateValueConverter} from './date-value.converter'
 import { inputDateAutoComplete } from './date.autocomplete'
-import {BindingRegistry} from 'ngx-schema-form'
-import {triggerBinding} from '../bindings-registry-helper'
 
 import * as moment_ from 'moment'
-import { typeSourceSpan } from '@angular/compiler';
 const moment = moment_
 
+@Injectable()
 export class DateWidgetComponentDateAdapter extends NativeDateAdapter {
   static DATE_FORMATS = {
     parse: {
@@ -189,11 +185,11 @@ export class DateWidgetComponent extends ControlWidget implements OnInit, AfterV
 
   dateValueConverter: DateValueToStringConverter = null;
 
-  @ViewChild('dateInputField', { static: false }) dateInputField: ElementRef
+  @ViewChild('dateInputField') dateInputField: ElementRef
   /** testing only , see ngAfterInitView method ... **/
   disableTestDateValidation = true;
 
-  constructor(private dateAdapter: DateAdapter<Date>, private bindingRegistry: BindingRegistry) {
+  constructor(private dateAdapter: DateAdapter<Date>) {
     super();
     this.disableTestDateValidation = false
   }
@@ -203,7 +199,7 @@ export class DateWidgetComponent extends ControlWidget implements OnInit, AfterV
    * mat-datepicker converts invalid values still to
    * date objects instead to <code>null</code>
    */
-  dateInput(eventType: string, event: any) {console.log('dateInput type:',eventType,'event:',event)
+  dateInput(eventType: string, event: any) {
     if (false !== this.formProperty.schema.widget.formatFilter) {
       inputDateAutoComplete(event.target, this.formProperty, this.dateValueConverter.getSourceFormat())
     }
@@ -224,14 +220,6 @@ export class DateWidgetComponent extends ControlWidget implements OnInit, AfterV
          */
         event.target.value = ''
       }
-    }
-    if (eventType === 'dateChange') {
-      if (event instanceof Date || event.value instanceof Date) {
-      }
-      const _target = this.dateInputField.nativeElement
-      _target.value = this.formProperty.value
-      const _event = { srcElement: _target, target: _target }
-      triggerBinding(this, 'change', _event, this.bindingRegistry, this.formProperty)
     }
   }
 

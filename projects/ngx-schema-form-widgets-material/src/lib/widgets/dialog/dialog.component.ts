@@ -54,7 +54,7 @@ export class DialogComponent implements OnChanges {
 
     dialogRef: MatDialogRef<any> | null
 
-    @ViewChild(TemplateRef, { static: false }) dialogContentTemplate: TemplateRef<any>
+    @ViewChild(TemplateRef) dialogContentTemplate: TemplateRef<any>
 
     constructor(public dialog: MatDialog) {
 

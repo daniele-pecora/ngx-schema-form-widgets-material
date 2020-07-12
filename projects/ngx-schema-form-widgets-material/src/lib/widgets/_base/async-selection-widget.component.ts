@@ -1,5 +1,5 @@
 import { ControlWidget, SchemaValidatorFactory } from 'ngx-schema-form'
-import { OnDestroy, OnInit } from "@angular/core"
+import { OnDestroy, OnInit, Directive } from "@angular/core"
 import { AutocompleteAsyncHelper, KeyValuePair } from "./autocomplete-async-helper"
 import { WidgetComponentHttpApiService } from "../index"
 import { FormProperty } from "ngx-schema-form/lib/model/formproperty"

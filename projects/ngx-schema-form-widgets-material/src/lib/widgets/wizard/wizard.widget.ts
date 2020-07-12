@@ -4,7 +4,7 @@ import {MenuItem} from '../_domain/menuitem'
 import {SeverityNameConverterPipe} from '../_converters/_severity/SeverityNames'
 import {IconNameConverterPipe} from '../_converters/_icon/IconNames'
 import { ButtonTypeTransformerService } from '../_converters/_button/button-type-transformer.service'
-import {MatStepper} from '@angular/material'
+import { MatStepper } from '@angular/material/stepper';
 import {ActionRegistry} from 'ngx-schema-form'
 import {FormProperty} from 'ngx-schema-form/lib/model/formproperty'
 import {Action} from 'ngx-schema-form/lib/model/action'
@@ -26,8 +26,8 @@ export class WizardWidgetComponent extends ActionObjectLayoutWidgetComponent imp
   readOnly: boolean
 
 
-  @ViewChild('wizardStepper', { static: false }) wizardStepper: MatStepper
-  @ViewChild('scrollHook', { static: false }) scrollHook: ElementRef
+  @ViewChild('wizardStepper') wizardStepper: MatStepper
+  @ViewChild('scrollHook') scrollHook: ElementRef
 
   constructor(private this_actionRegistry: ActionRegistry
     , iconNameConverter: IconNameConverterPipe

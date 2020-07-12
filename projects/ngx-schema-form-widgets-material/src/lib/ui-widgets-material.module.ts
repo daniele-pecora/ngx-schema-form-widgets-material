@@ -319,7 +319,7 @@ const moduleProviders = [
   ]
 })
 export class UIWidgetsMaterialModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<UIWidgetsMaterialModule> {
     return {
       ngModule: UIWidgetsMaterialModule,
       providers: [...moduleProviders]

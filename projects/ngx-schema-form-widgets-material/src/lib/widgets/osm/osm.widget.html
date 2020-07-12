@@ -1,6 +1,6 @@
 <!--
 Prerequisites:
-        Requires to add this css in angular.json : "node_modules/openlayers/dist/ol.css"
+        Requires to add this css in angular.json : "node_modules/ol/ol.css"
 
 
 Element 'schema':
@@ -58,7 +58,10 @@ Element 'widget'
         - noSpacer       =  Does not add a spacer at bottom.
                             When a text field is set at the bottom of the map the label will overlap the map.
 -->
-<label [attr.for]="id">{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark></label>
+<label [attr.for]="id">
+  {{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
+  <ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+</label>
 <div *ngIf="schema.title || schema.name || schema.description">
   <span *ngIf="schema.description">{{schema.description}}</span>
 </div>

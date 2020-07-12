@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core'
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser'
-import {MatDialog} from '@angular/material'
+import { MatDialog } from '@angular/material/dialog';
 import {WidgetLinkOverlayComponent} from './widget-link-overlay.component'
 
 @Component({

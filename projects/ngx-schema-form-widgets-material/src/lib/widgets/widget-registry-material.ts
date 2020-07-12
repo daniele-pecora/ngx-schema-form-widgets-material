@@ -32,7 +32,9 @@ import { TableWidgetComponent } from './table/table.widget'
 import { BbcodeWidgetComponent } from './bbcode/bbcode.widget'
 import { SelectCardWidgetComponent } from './select-card/select-card.widget'
 import { DialogWidgetComponent } from './dialog/dialog.widget'
+import { Injectable } from "@angular/core";
 
+@Injectable()
 export class WidgetRegistryMaterial extends WidgetRegistry {
   constructor() {
     super()

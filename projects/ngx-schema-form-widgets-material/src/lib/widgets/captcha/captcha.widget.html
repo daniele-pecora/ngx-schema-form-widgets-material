@@ -13,7 +13,10 @@ Element 'ngx-recaptcha' in 'widget'
 <div class="ui-g-12">
   <div class="mat-checkbox">
 
-    <label *ngIf="schema.widget.size!=='invisible'" [attr.for]="id">{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark></label>
+    <label *ngIf="schema.widget.size!=='invisible'" [attr.for]="id">
+      {{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
+      <ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+    </label>
     <ngx-recaptcha
       id="{{captchaNameId}}"
       (captchaResponse)="showResponse($event)"

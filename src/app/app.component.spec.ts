@@ -17,7 +17,7 @@ import {
   UIWidgetsMaterialModule,
   WidgetRegistryMaterial
 } from '../../projects/ngx-schema-form-widgets-material/src/lib';
-import { MatCardModule } from '@angular/material';
+import { MatCardModule } from '@angular/material/card';
 import { RouterTestingModule } from '@angular/router/testing';
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -35,7 +35,7 @@ describe('AppComponent', () => {
         , FormsModule
         , HttpClientModule
 
-        // Angular2 Schema Form
+        // ngx-schema-form
         , SchemaFormModule.forRoot()
         // ngx-schema-form-view
         , UIFormViewModule.forRoot()

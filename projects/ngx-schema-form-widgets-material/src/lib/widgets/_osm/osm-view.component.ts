@@ -1,6 +1,6 @@
 import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core'
 import {marker} from './marker.image'
-import {proj} from 'openlayers'
+import {transform as proj_transform} from 'ol/proj'
 import {HttpClient} from '@angular/common/http'
 import {Subscription} from 'rxjs'
 import {GeoLocationService} from './geo-location.service'
@@ -82,7 +82,7 @@ export class OsmViewComponent implements OnInit, OnDestroy {
   }
 
   onSingleClick(event) {
-    const lonlat = proj.transform(event.coordinate, 'EPSG:3857', 'EPSG:4326')
+    const lonlat = proj_transform(event.coordinate, 'EPSG:3857', 'EPSG:4326')
     this.longitudePointer = lonlat[0]
     this.latitudePointer = lonlat[1]
     this.reverseGeo()

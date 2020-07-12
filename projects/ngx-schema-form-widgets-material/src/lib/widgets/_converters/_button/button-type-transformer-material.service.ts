@@ -1,8 +1,10 @@
 import { ButtonTypeTransformerService } from './button-type-transformer.service'
+import { Injectable } from "@angular/core";
 
 /**
  * Converts button types to Angular Material button types directive names<br/>
  */
+@Injectable()
 export class ButtonTypeTransformerMaterialService extends ButtonTypeTransformerService {
   types = {
     'mini-fab': 'mat-mini-fab',
