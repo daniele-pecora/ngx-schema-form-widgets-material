@@ -9,6 +9,13 @@
                              `{filesize}`
                            if not set then the file name is used for both attributes.
                              e.g `"previewTitle": "Preview of the uploaded image {filename} size {filesize}"`
+<<<<<<< HEAD
+=======
+    - noPreviewText: any text to show a short message when the uploaded file doesn't support beeing previewed (e.g. TIFF)
+                      when not set no text will be shown.
+                      keep this text short as possible.
+    - noPreviewIcon: an icon to show instead of the default icon 'attach_file' when the uploaded file doesn't support beeing previewed (e.g. TIFF)
+>>>>>>> master
 
   Element 'p-fileUpload' in 'widget' field do represent the same as in the primeng documentation
     - mode
@@ -128,61 +135,18 @@
     >
     </ngx-ui-mat-fileUpload>
 
-<!--
-    <p-fileUpload
-      *ngIf="schema.widget.multiple || !control.value"
-
-      (onError)="onError($event)"
-      (onClear)="onClear($event)"
-      (onRemove)="onRemove($event)"
-      (onSelect)="onSelect($event)"
-      (onProgress)="onProgress($event)"
-
-      (uploadHandler)="onUploadWithCustomHandler($event)"
-      (onUpload)="onUpload($event)"
-      (onBeforeSend)="onBeforeSend($event)"
+<!--    
+    <mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>
+    <mat-error *ngIf="control?.errors">
+    <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
 
 
-      [mode]="schema.widget.mode||'basic'"
-      [name]="schema.widget.name||name"
-      [url]="schema.widget.url||null"
-      [method]="schema.widget.method||'POST'"
-      [multiple]="schema.widget.multiple==='multiple'||null"
-      [accept]="schema.widget.accept||null"
-      [maxFileSize]="schema.widget.maxFileSize||null"
-      [auto]="isBoolean(schema.widget.auto)?schema.widget.auto:true"
-      [withCredentials]="schema.widget.withCredentials||null"
-      [invalidFileSizeMessageSummary]="schema.widget.invalidFileSizeMessageSummary||null"
-      [invalidFileSizeMessageDetail]="schema.widget.invalidFileSizeMessageDetail||null"
-      [invalidFileTypeMessageSummary]="schema.widget.invalidFileTypeMessageSummary||null"
-      [invalidFileTypeMessageDetail]="schema.widget.invalidFileTypeMessageDetail||null"
-      [previewWidth]="schema.widget.previewWidth||50"
-      [chooseLabel]="schema.widget.chooseLabel||null"
-      [uploadLabel]="schema.widget.uploadLabel||null"
-      [cancelLabel]="schema.widget.cancelLabel||null"
-      [customUpload]="isBoolean(schema.widget.customUpload)?schema.widget.customUpload:true"
-      [showUploadButton]="(schema.widget.showUploadButton && !schema.widget.auto && !schema.widget.customUpload)||null"
-      [showCancelButton]="schema.widget.showCancelButton||null"
-      [files]="files"
 
 
-      [attr.id]="id"
-      [attr.formControl]="control"
-      [disabled]="schema.widget.disabled||(schema.readOnly?true:null)"
-    >
-    </p-fileUpload>
+
+    </mat-error>
 -->
-<!--
-    <ngx-ui-field-validation-messages
-      [formComponent]="this"
-      [validationErrors]="control.errors"
-    >
-      <div class="ui-message ui-messages-info"
-           *ngIf="schema.description">
-        {{schema.description}}
-      </div>
-    </ngx-ui-field-validation-messages>
--->
+
     <ng-container *ngIf="schema.widget?.mode==='advanced' || schema.widget?.multiple==='multiple'">
       <div style="background: grey;color:white;padding:1em">
         <h3 *ngIf="schema.widget?.mode==='advanced'">Fileupload Widget - Advanced Mode is not fully supported yet!</h3>
@@ -203,36 +167,50 @@
 
     <ng-template #previewImageTemplate>
       <ng-container *ngIf="uploadedFiles.length">
-        <ng-container *ngIf="uploadedFiles.length === 1;multipleFiles" [ngTemplateOutlet]="previewFileTemplate" [ngTemplateOutletContext]="{file:uploadedFiles[0]}">
+        <ng-container *ngIf="uploadedFiles.length === 1;multipleFiles" [ngTemplateOutlet]="previewFileTemplate" [ngTemplateOutletContext]="{file:uploadedFiles[0], isImage: isImage(uploadedFiles[0])}">
         </ng-container>
         <ng-template #multipleFiles>
           <ul *ngIf="uploadedFiles.length > 1">
             <li *ngFor="let file of uploadedFiles">
-              <ng-container [ngTemplateOutlet]="previewFileTemplate" [ngTemplateOutletContext]="{file:file}"></ng-container>
+              <ng-container [ngTemplateOutlet]="previewFileTemplate" [ngTemplateOutletContext]="{file:file, isImage: isImage(file)}"></ng-container>
             </li>
           </ul>
         </ng-template>
       </ng-container>
     </ng-template>
 
-    <ng-template #previewFileTemplate let-file="file">
+    <ng-template #previewFileTemplate let-file="file" let-isImage="isImage">
       <img
         class="input-upload-file--preview"
-        *ngIf="schema.widget?.previewWidth!==0 && isImage(file)"
+        *ngIf="!file.previewFailed && schema.widget?.previewWidth!==0 && isImage"
         [attr.width]="schema.widget.previewWidth||null"
         [src]="file?.sanitizedURL"
         (load)="imageLoaded($event,file)"
+        (error)="imageLoadingFailed($event,file)"
         [attr.title]="file?._previewTitle||createAltText(file)||file?.name"
         [attr.alt]="file?._previewTitle||createAltText(file)||file?.name"
+        [attr.aria-hidden]="true"
       >
-      <object
-      *ngIf="schema.widget?.previewWidth!==0 && !isImage(file)"
-      [data]="file?.sanitizedURL"
-      [type]="file.type"
+      <object 
+      *ngIf="!file.previewFailed && schema.widget?.previewWidth!==0 && !isImage"
+      [data]="file?.sanitizedURL" 
+      [type]="file.type" 
       [attr.width]="schema.widget.previewWidth||null"
       (load)="objectLoaded($event,file)"
+      (error)="objectLoadingFailed($event,file)"
       [attr.title]="file?._previewTitle||createAltText(file)||file?.name"
       [attr.alt]="file?._previewTitle||createAltText(file)||file?.name"
+      [attr.aria-hidden]="true"
+      >
+      <embed 
+      [src]="file?.sanitizedURL" 
+      [type]="file.type" 
+      (load)="objectLoaded($event,file)"
+      (error)="objectLoadingFailed($event,file)"
+      [attr.width]="schema.widget.previewWidth||null"
+      [attr.title]="file?._previewTitle||createAltText(file)||file?.name"
+      [attr.alt]="file?._previewTitle||createAltText(file)||file?.name"
+      [attr.aria-hidden]="true"
       >
       </object>
 
@@ -270,7 +248,6 @@
           {{schema.widget?.deleteButtonLabel}}
         </button></ng-template>
     </ng-template>
-
     <input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="control">
   </div>
 </div>

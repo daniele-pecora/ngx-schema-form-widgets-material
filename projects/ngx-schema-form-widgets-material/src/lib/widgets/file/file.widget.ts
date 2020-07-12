@@ -1,4 +1,4 @@
-import { Component, OnInit, Pipe, PipeTransform, Renderer2 } from '@angular/core'
+import { Component, OnInit, Pipe, PipeTransform, Renderer2, AfterViewInit } from '@angular/core'
 import { ControlWidget } from 'ngx-schema-form'
 import {Message} from '../_domain/message'
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
@@ -8,7 +8,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
   templateUrl: './file.widget.html',
   styleUrls: ['./file.widget.scss']
 })
-export class FileWidgetComponent extends ControlWidget implements OnInit {
+export class FileWidgetComponent extends ControlWidget implements OnInit, AfterViewInit {
   msgs: Message[]
 
   uploadedFiles: any[] = []
@@ -33,6 +33,10 @@ export class FileWidgetComponent extends ControlWidget implements OnInit {
     if (!this.formProperty['_____uploadedFiles']) {
       this.restoreFromValue()
     }
+  }
+
+  ngAfterViewInit() {
+    super.ngAfterViewInit()
   }
 
   private updateFromPropertyUploadedFiles() {
@@ -104,8 +108,16 @@ export class FileWidgetComponent extends ControlWidget implements OnInit {
   imageLoaded(event, file) {
     this.setImageDataValue(event.target, file)
   }
-
+  imageLoadingFailed(event, file){
+    file.previewFailed = true
+    /** if it can't be red as image it must be red as object */
+    this.setObjectDataValue(file)
+  }
   objectLoaded(event, file) {
+    this.setObjectDataValue(file)
+  }
+  objectLoadingFailed(event, file){
+    file.previewFailed = true
     this.setObjectDataValue(file)
   }
 
@@ -123,20 +135,20 @@ export class FileWidgetComponent extends ControlWidget implements OnInit {
       let img = this.renderer2.createElement('img')
       let file = this.uploadedFiles[0]
       img.onload = () => {
-         const c = document.createElement('canvas')
-         const ctx = c.getContext('2d')
-         /**
-          * Since the width and height of the image tag are only available
-          * after the image is loaded, they must be requested here
-          * after the onload event.
-          */
-         c.width = img.width
-         c.height = img.height
-         ctx.drawImage(img, 0, 0)
-         let base64String = c.toDataURL(file.type)
-         file.base64String = base64String
+        const c = document.createElement('canvas')
+        const ctx = c.getContext('2d')
+        /**
+         * Since the width and height of the image tag are only available 
+         * after the image is loaded, they must be requested here
+         * after the onload event.
+         */
+        c.width = img.width
+        c.height = img.height
+        ctx.drawImage(img, 0, 0)
+        let base64String = c.toDataURL(file.type)
+        file.base64String = base64String
 
-         this.updateControlValue(base64String)
+        this.updateControlValue(base64String)
       }
       img.src = file.sanitizedURL.changingThisBreaksApplicationSecurity
     }
@@ -252,11 +264,14 @@ export class FileWidgetComponent extends ControlWidget implements OnInit {
   }
 
   isImage(file: File): boolean {
-    return /^image\//.test(file.type)
+    if (file.hasOwnProperty('___isImage')) {
+      return file['___isImage']
+    }
+    return file['___isImage'] = /^image\//.test(file.type)
   }
-  
+
   createAltText(file: File) {
-    if (file['__previewTitle']) {
+    if (file['_previewTitle']) {
       return file['_previewTitle']
     }
     let previewTitle = this.schema.widget.previewTitle
@@ -268,6 +283,7 @@ export class FileWidgetComponent extends ControlWidget implements OnInit {
     }
     return null
   }
+
 }
 
 
@@ -279,9 +295,12 @@ export class ByteSizeFormatPipe implements PipeTransform {
     return this.bytesToSize(value)
   }
 
-  bytesToSize(val: any) {
-    const f = (Math.floor(Math.log2(val) / 10))
-    const v = (val > 1000 ? (val / (f * 1000)) : val)
-    return v + ' ' + ['Bytes', 'Kb', 'Mb', 'Gb', 'Tb'][f]
+  bytesToSize(bytes: any) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const dm = 2;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 }
