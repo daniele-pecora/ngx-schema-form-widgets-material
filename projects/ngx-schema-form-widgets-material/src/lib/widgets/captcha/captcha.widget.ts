@@ -12,7 +12,7 @@ import { NgxRecaptchaComponent } from 'ngx-recaptcha-easy'
 export class CaptchaWidgetComponent extends ControlWidget implements OnInit {
 
   captchaloaded: boolean
-  @ViewChild(NgxRecaptchaComponent, { static: false }) captcha: NgxRecaptchaComponent
+  @ViewChild(NgxRecaptchaComponent) captcha: NgxRecaptchaComponent
 
   captchaNameId = this.id
   initCallback

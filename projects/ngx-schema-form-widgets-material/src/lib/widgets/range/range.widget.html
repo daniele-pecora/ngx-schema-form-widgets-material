@@ -35,7 +35,7 @@ Element 'p-slider' all from primeng documentation (except 'disable')
     [attr.data-range]="schema.widget.range||false"
     [style]="schema.widget.style||null"
     [ngClass]="schema.widget.styleClass||null"
-    [vertical]="schema.widget.orientation||null"
+    [vertical]="schema.widget?.orientation === 'vertical'||null"
     [formControl]="control"
     [id]="id"
   >

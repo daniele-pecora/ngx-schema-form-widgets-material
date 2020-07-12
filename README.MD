@@ -16,8 +16,6 @@ A tiny impression of a preview.
 
 
 ## DEMO
-A tiny impression of a preview.
-[Visit the LIVE DEMO](https://ngx-schema-form-material.web.app/) for more.
 
 ## Usage
 

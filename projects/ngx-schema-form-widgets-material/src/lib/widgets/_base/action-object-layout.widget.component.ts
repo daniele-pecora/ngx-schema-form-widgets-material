@@ -1,5 +1,5 @@
 import {ObjectLayoutWidget} from 'ngx-schema-form'
-import {OnInit} from '@angular/core'
+import { OnInit, Directive } from '@angular/core'
 import {ActionRegistry} from 'ngx-schema-form'
 import { IconNameConverterPipe } from '../_converters/_icon/IconNames'
 import { SeverityNameConverterPipe } from '../_converters/_severity/SeverityNames'

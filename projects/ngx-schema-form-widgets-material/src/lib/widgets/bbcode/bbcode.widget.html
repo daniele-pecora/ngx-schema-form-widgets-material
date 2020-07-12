@@ -87,6 +87,9 @@ BBCode                                               | HTML
 
 -->
 <div class="ui-g-12">
-  <label [attr.for]="id">{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark></label>
+  <label [attr.for]="id">
+    {{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
+    <ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+  </label>
     <div [innerHTML]="this.htmlContent"></div>
 </div>

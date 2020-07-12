@@ -4,6 +4,9 @@ import {OnDestroy} from '@angular/core'
 import {FormProperty} from 'ngx-schema-form/lib/model/formproperty'
 import { ExpressionCompiler } from '../_service/expression-complier.service'
 
+// TODO: Add Angular decorator.
+// TODO: Add Angular decorator.
+// TODO: Add Angular decorator.
 export class AutocompleteAsyncHelper implements OnDestroy {
 
   constructor(private name, private formProperty, private schema, private lookupService: WidgetComponentHttpApiService
