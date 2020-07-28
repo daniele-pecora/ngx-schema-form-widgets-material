@@ -148,7 +148,7 @@ export class AutocompleteAsyncHelper implements OnDestroy {
         }
         if (this.schema.widget.valueExpression) {
           try {
-            valueValue = this.expressionCompiler.evaluate(this.schema.widget.labelExpression, { item: _item })
+            valueValue = this.expressionCompiler.evaluate(this.schema.widget.valueExpression, { item: _item })
           } catch (err) {
             this.logExpressionError('valueExpression', 'execute', this.schema.widget.valueExpression, _item, err)
             throw new Error('Failed to execute expression property \'valueExpression\' in \'selection.widget\'')
