@@ -1,0 +1,112 @@
+<!--
+Element 'dropdown' in 'widget':
+
+  - append           = When loading the option via ajax by the subsequent settings
+                       then this will set if any already existing option will
+                       replaced by the loaded options from ajax call or if
+                       they just get added at the end of the options list.
+                       This will only work when loading options asyc via ajax
+                       by setting min. a value for "serviceUrl"
+  - serviceUrl       = The url of the service to make the ajax request to.
+                       May contain a reference to the query and any other paths of the model.
+                       This placeholder will be replaced globally in the complete url string.
+                       e.g. https://myservice.com?q=Berlin&email={mymodel.email}&name={mymodel.name}
+  - resultExpression = Must name the object in result that contains the array of result elements.
+                       An object 'data' is passed which is the json result from request.
+                       e.g. "data.entries"
+  - labelExpression  = Must create a string value as the label to show in the dropdown.
+                       An object 'item' is passed for every element of the result.
+                       e.g. "item.name + ' ' + item.age"
+  - valueExpression  = Must create a string value as the value to be set when an option is selected from the dropdown.
+                       An object 'item' is passed for every element of the result.
+                        e.g. "item.id + ' ' + item.name"
+  - precheckExpressions = Set to <code>true</code> will check the syntax of
+                          the <code>labelExpression</code>, <code>valueExpression</code> and <code>resultExpression</code>
+                          and show resulting errors in console.
+                          Keep in mind to NOT USE IN PRODUCTION!!!
+                          Since it make vulnerable to access global variables.
+  - serviceOptions     This service configuration allows to submit a POST for an autocompletion.
+                       and will be ignored if serviceUrl is set.
+
+                       Reference is HttpApiServiceOptions
+                        {
+                            headers?: HttpHeaders | {[header: string]: string | string[]}
+                            params?: HttpParams | {[param: string]: string | string[]}
+                            withCredentials?: boolean
+                            body?: any
+                            method?: 'GET' | 'get' | 'POST' | 'post'
+                        }
+
+         example:
+         <pre>
+              "serviceOptions": {
+                "method": "POST",
+                "headers": {
+                  "X-ApiKey": "dollar{apiKey}",
+                  "content-type":"application/json",
+                  "accept":"application/json",
+                  "X-MyHeader": "{mymodel.userId}"
+                },
+                "params": {
+                  "q": "{__ac_query__}",
+                  "city": "{mymodel.city}",
+                  "country":"{mymodel.country}"
+                },
+                "withCredentials": true,
+                "body": {
+                          "q": "{__ac_query__}",
+                          "email": "{mymodel.email}",
+                          "name": "{mymodel.name}"
+                        }
+              }
+         </pre>
+
+
+Element 'widget':
+        - prefix [ {icon, text, ligature }] - see component <ngx-ui-widget-addon>
+        - suffix  [ {icon, text, ligature }] - see component <ngx-ui-widget-addon>
+        - size   = set the width in characters, just like you would it set on an input field
+                   set to 'auto' or don't set the property 'size' at all to use primeng 'autoWidth'.
+                   leave property 'size' an empty string or 0 to not use 'autoWidth'
+                   see also primeng docu
+
+-->
+<mat-form-field
+[class.ngx-ui-widget-full-width]="!schema.widget?.size"
+>
+  <ngx-ui-widget-addon *ngIf="schema?.widget?.prefix" [addons]="schema.widget.prefix"></ngx-ui-widget-addon>
+<mat-select
+  [attr.id]="id"
+  [attr.name]="name"
+
+  [disabled]="schema.readOnly"
+
+  [formControl]="control"
+
+  placeholder="{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }} {{formProperty|IsRequiredAsterisk}}"
+  floatPlaceholder="auto"
+
+  [required]="(formProperty|IsRequiredAttr)"
+>
+  <mat-option
+    *ngFor="let option of createOptionsModel"
+    [value]="option.value"
+    [disabled]="option.readOnly"
+    >
+    {{ option.label }}
+  </mat-option>
+</mat-select>
+  <ngx-ui-widget-addon *ngIf="schema?.widget?.suffix" [addons]="schema.widget.suffix" [suffix]="true"></ngx-ui-widget-addon>
+<mat-hint *ngIf="schema.description">{{schema.description}}</mat-hint>
+  <!-- this field is only used to render the width for the dropdown -->
+  <input #hiddenSizeHolder
+         *ngIf="!autoWidth || ((this.schema.widget || {}).size && 'auto'!==(this.schema.widget || {}).size)"
+         type="text"
+         pInputText
+         placeholder="HiddenSizeHolder" [attr.size]="sizeFieldControlValue||null"
+         [ngClass]="hiddenSizeHolderClass" tabindex="-1" aria-hidden="true">
+<mat-error *ngIf="control?.errors">
+  <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
+</mat-error>
+<input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="control">
+</mat-form-field>

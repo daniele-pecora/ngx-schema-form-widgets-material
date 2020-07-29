@@ -1,0 +1,31 @@
+<!--
+Element 'schema':
+        - title
+        - name
+        - description
+Element 'widget'
+        - severity = primary|accent|warn
+        - labelPlacement = before|after
+-->
+
+
+<mat-slide-toggle
+  [id]="id"
+  [attr.name]="name"
+  [color]="schema.severity||null"
+  [attr.data-checked]="'data-checked'"
+  [formControl]="control"
+  [disabled]="schema.readOnly"
+  [labelPosition]="schema?.widget?.labelPlacement"
+
+  [required]="(formProperty|IsRequiredAttr)"
+>
+  {{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
+  {{formProperty|IsRequiredAsterisk}}
+</mat-slide-toggle>
+
+<mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>
+<mat-error *ngIf="control?.errors">
+  <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
+</mat-error>
+<input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="control">

@@ -1,0 +1,30 @@
+<!--
+    In Element 'widget'
+                - severity    = the severity
+                - text        = the text to set as message content
+-->
+
+
+<!-- <p-message *ngIf="schema.widget?.text"
+           [severity]="getSeverity(schema.widget?.severity)"
+           [text]="schema.widget.text"></p-message> -->
+
+<div
+    *ngIf="schema.widget?.text"
+    aria-live="polite" 
+    class="ui-message ui-widget ui-corner-all ui-message-{{schema?.widget?.severity}} mat-toolbar"
+    [class.mat-warn]="schema.widget?.severity==='error'"
+    [class.mat-accent]="schema.widget?.severity==='success'"
+    [class.mat-primary]="schema.widget?.severity==='info'"
+    [class.mat-secondary]="schema.widget?.severity==='warn'"
+    [class.mat-toolbar]="true"
+>
+    <span class="ui-message-icon" [ngSwitch]="schema?.widget?.severity">
+            <mat-icon *ngSwitchCase="'info'">info</mat-icon>
+            <mat-icon *ngSwitchCase="'success'">check_circle</mat-icon>
+            <mat-icon *ngSwitchCase="'warn'">warning</mat-icon>
+            <mat-icon *ngSwitchCase="'error'">error</mat-icon>
+            <mat-icon *ngSwitchDefault>info</mat-icon>
+    </span>
+    <span class="ui-message-text">{{schema?.widget?.text}}</span>
+</div>

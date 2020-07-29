@@ -1,0 +1,26 @@
+:host :ng-deep {
+  .mat-expansion-panel .mat-expansion-panel-header-title {
+    /**
+         * Keep the icons in accordion header vertical aligned
+         */
+    .mat-icon,
+    .mat-icon-left-icon,
+    .mat-icon-right-icon {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 0.25em;
+      margin-right: 0.25em;
+    }
+  }
+
+  .mat-tab-group .mat-tab-header .mat-tab-label-content {
+    .mat-icon,
+    .mat-icon-left-icon,
+    .mat-icon-right-icon {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 0.25em;
+      margin-right: 0.25em;
+    }
+  }
+}

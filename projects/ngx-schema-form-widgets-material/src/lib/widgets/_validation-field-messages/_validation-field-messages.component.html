@@ -1,0 +1,29 @@
+<!--
+      Element property 'widget'
+        - validationMessage  : any text to show when field is invalid
+                               - if set not other validation message will be shown
+                               - if not set then the messages from
+                                 json schema validator will be shown
+                               - if empty no message will be shown at all
+        - validationMessages : customization of validation messages
+                               of every error code that is known 
+                               by the schema validator or any other.
+                               user defined error code.
+                               eg for Z-Schema:
+                                <code>
+                                    {
+                                        "widget": { 
+                                               "validationMessages" : { 
+                                                    "PATTERN" : "Pattern match error!",
+                                                    "OBJECT_MISSING_REQUIRED_PROPERTY" : "You must set this field!" 
+                                                }
+                                            }
+                                     }
+                                </code>                                      
+    -->
+
+<ng-content *ngIf="!validationMessages.length"></ng-content>
+  <div role="alert" class="ui-message ui-messages-error ui-corner-all"
+    *ngFor="let validationMessage of validationMessages">
+    {{validationMessage}}
+  </div>

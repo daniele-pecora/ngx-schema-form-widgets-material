@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "properties": {
+    "date-picker": {
+      "widget": {
+        "id": "date-picker",
+        "filled": true,
+        "_dateFormat": "dd.MM.yyyy",
+        "formatFilter": true
+      }
+    }
+  }
+}

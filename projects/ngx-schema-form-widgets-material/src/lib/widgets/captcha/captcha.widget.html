@@ -1,0 +1,38 @@
+<!--
+Element 'ngx-captcha'
+  - title = label
+  - description = some descriptive text below the RE-CAPTCHA
+
+Element 'ngx-recaptcha' in 'widget'
+  - siteKey
+  - type
+  - theme
+  - size
+  - language
+-->
+<div class="ui-g-12">
+  <div class="mat-checkbox">
+
+    <label *ngIf="schema.widget.size!=='invisible'" [attr.for]="id">
+      {{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
+      <ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+    </label>
+    <ngx-recaptcha
+      id="{{captchaNameId}}"
+      (captchaResponse)="showResponse($event)"
+      [language]="schema.widget.language||null"
+      [size]="schema.widget.size||null"
+      [theme]="schema.widget.theme||null"
+      [type]="schema.widget.type||null"
+      [site_key]="schema.widget.siteKey"
+      (loaded)="onLoaded($event)"
+      (captchaExpired)="onExpire($event)"
+      global="false"
+    ></ngx-recaptcha>
+    <h4 *ngIf="!captchaloaded" i18n>Captcha wird geladen...</h4>
+    <mat-hint *ngIf="schema.description && schema.widget.size!=='invisible'">{{schema.description}}</mat-hint>
+    <mat-error *ngIf="control?.errors">
+      <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
+    </mat-error>
+  </div>
+</div>

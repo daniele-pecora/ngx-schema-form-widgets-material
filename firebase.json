@@ -1,0 +1,16 @@
+{
+  "hosting": {
+    "public": "dist/ngx-schema-form-widgets-material-app",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

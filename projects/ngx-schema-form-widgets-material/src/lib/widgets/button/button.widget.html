@@ -1,0 +1,30 @@
+<!--
+
+Element 'button'
+ - label    : label
+ - description : tooltip
+ - id          : identifier for the button action and secondary style id if 'styleId' is not set
+ - styleId     : style id
+ - styleClass  : style class, can be addionally added to the button element
+ - disabled    : true|false|'valid'|'invalid'|'$ANY'|'$EMPTY' = disabled state, or fieldProperty is in/valid or fieldProperty has/ has not a value
+                 or any value prefix with '$VAL:' that must match with property value
+                 or any value prefix with '$NOT:' that must not match with property value
+ - severity    : primary|accent|warn = material button color attribute
+ - icon        : icon from primeng ultima
+ - iconPos     : left|right = primeng button icon position
+
+
+ - type          : One of the following button styles are supported
+    - 'flat'     = A flat button
+    - 'raised'   = A raised button
+    - 'fab'      = A floating action button
+    - 'mini-fab' = A floating action button at a regular button size
+
+   - position    = Set the position of the button
+                  {
+                    h:[left|right|outer-right|outer-left],
+                    v:[top|middle|bottom|outer-top|outer-bottom]
+                  }
+-->
+
+<ngx-ui-button-component [formProperty]="formProperty" [button]="button"></ngx-ui-button-component>

@@ -1,0 +1,49 @@
+:host {
+  margin: 0.2em;
+}
+
+.ngx-ui-widget-button-left {
+  float: none;
+}
+
+.ngx-ui-widget-button-left-outer {
+  float: none;
+  transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+}
+
+.ngx-ui-widget-button-right {
+  float: right;
+}
+
+.ngx-ui-widget-button-right-outer {
+  float: right;
+  transform: translateX(100%) !important;
+  -webkit-transform: translateX(100%) !important;
+  -moz-transform: translateX(100%) !important;
+}
+
+.ngx-ui-widget-button-top {
+  transform: translateY(-250%);
+  -webkit-transform: translateY(-250%);
+  -moz-transform: translateY(-250%);
+}
+
+.ngx-ui-widget-button-middle {
+  transform: translateY(-150%);
+  -webkit-transform: translateY(-150%);
+  -moz-transform: translateY(-150%);
+}
+
+.ngx-ui-widget-button-bottom {
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+}
+
+.ngx-ui-widget-button-bottom-outer {
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+}
