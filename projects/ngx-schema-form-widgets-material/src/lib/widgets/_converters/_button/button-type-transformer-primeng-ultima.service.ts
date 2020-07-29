@@ -5,8 +5,8 @@ import { ButtonTypeTransformerService } from './button-type-transformer.service'
  */
 export class ButtonTypeTransformerPrimengUltimaService extends ButtonTypeTransformerService {
   types = {
-    'mini-fab': 'ui-button-icon-only vo-widget-button-accent vo-widget-button-mini-fab',
-    'fab': 'ui-button-icon-only vo-widget-button-accent vo-widget-button-fab',
+    'mini-fab': 'ui-button-icon-only ngx-widget-button-accent ngx-widget-button-mini-fab',
+    'fab': 'ui-button-icon-only ngx-widget-button-accent ngx-widget-button-fab',
     'raised': '',
     'flat': 'flat',
     '': ''
