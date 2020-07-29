@@ -5,7 +5,7 @@ import simpleParser from './simple-bbcode.parser'
 import { escapeHTMLInBBCode } from '../_converters/_data/bbcode.converter';
 
 @Component({
-  selector: 'vo-ui-bbcode-widget',
+  selector: 'ngx-ui-bbcode-widget',
   templateUrl: './bbcode.widget.html'
 })
 export class BbcodeWidgetComponent extends ObjectLayoutWidget implements AfterViewInit {
