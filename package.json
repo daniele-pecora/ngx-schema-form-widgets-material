@@ -38,7 +38,10 @@
     "electron:mac": "npm run electron:build && electron-packager dist/ngx-schema-form-widgets-material-app --platform=mac",
     "-- pre-build --": "",
     "prebuild": "node update-tsconfig.app.json-files.js",
-    "prestart": "node update-tsconfig.app.json-files.js"
+    "prestart": "node update-tsconfig.app.json-files.js",
+    "prebuild:prod-server": "node update-tsconfig.app.json-files.js",
+    "-- Firebase deploy --": "",
+    "firebase:publish": "npm run build:prod-server && firebase deploy"
   },
   "private": true,
   "dependencies": {
