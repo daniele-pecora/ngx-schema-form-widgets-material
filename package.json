@@ -35,7 +35,10 @@
     "electron:windows": "npm run electron:build && electron-packager dist/ngx-schema-form-widgets-material-app --platform=win32",
     "electron:darwin": "npm run electron:build && electron-packager dist/ngx-schema-form-widgets-material-app --platform=darwin",
     "electron:linux": "npm run electron:build && electron-packager dist/ngx-schema-form-widgets-material-app --platform=linux",
-    "electron:mac": "npm run electron:build && electron-packager dist/ngx-schema-form-widgets-material-app --platform=mac"
+    "electron:mac": "npm run electron:build && electron-packager dist/ngx-schema-form-widgets-material-app --platform=mac",
+    "-- pre-build --": "",
+    "prebuild": "node update-tsconfig.app.json-files.js",
+    "prestart": "node update-tsconfig.app.json-files.js"
   },
   "private": true,
   "dependencies": {
