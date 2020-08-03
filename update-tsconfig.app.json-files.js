@@ -36,7 +36,7 @@ const findTSFilesInFormsFolder = () => {
 
 const updateFilesInTSConfigJSON = (tsconfig_json, formsFolderState) => {
     var tcj = JSON.parse(fs.readFileSync(tsconfig_json));
-    let tcj_files = tcj['files']
+    let tcj_files = tcj['files'] || []
 
     // filter out existing entries
     tcj_files = tcj_files.filter(element => {
