@@ -12,7 +12,10 @@
     "app/__forms/components/validation.ts",
     "app/__forms/date/bindings.ts",
     "app/__forms/radio/bindings.ts",
-    "app/__forms/switch/bindings.ts"
+    "app/__forms/switch/bindings.ts",
+    "app/__forms/wizard/action.ts",
+    "app/__forms/wizard/bindings.ts",
+    "app/__forms/wizard/validation.ts"
   ],
   "include": [
     "src/**/*.d.ts"
