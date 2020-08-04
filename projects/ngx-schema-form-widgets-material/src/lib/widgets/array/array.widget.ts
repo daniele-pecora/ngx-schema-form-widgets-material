@@ -14,7 +14,7 @@ import { ButtonTypeTransformerService } from '../_converters/_button/button-type
 export class ArrayWidgetComponent extends ArrayLayoutWidget implements AfterViewInit {
   tabActiveIndex = 0
   /** fix #88 counting items doesn't rely on items.length anymore */
-  itemCounterContinous = 0
+  itemCounterContinuous = 0
 
   /** feature: accordion */
   get currentPage() {
@@ -50,7 +50,12 @@ export class ArrayWidgetComponent extends ArrayLayoutWidget implements AfterView
       children.push(property)
       this.setItemLabel(property, children.length)
     })
-    this.itemCounterContinous = children.length
+    this.itemCounterContinuous = children.length
+
+    this.formProperty.schema.widget = this.formProperty.schema.widget || {}
+    if (this.formProperty.schema.widget['itemCounterContinuous']) {
+      this.itemCounterContinuous = this.formProperty.schema.widget['itemCounterContinuous']
+    }
   }
 
   private propertiesLength(): number {
@@ -58,7 +63,8 @@ export class ArrayWidgetComponent extends ArrayLayoutWidget implements AfterView
   }
 
   addItem(): any {
-    this.itemCounterContinous++
+    this.itemCounterContinuous++
+    this.formProperty.schema.widget['itemCounterContinuous'] = this.itemCounterContinuous
     const item = this.formProperty.addItem()
     this.setItemLabel(item)
     return item
@@ -91,7 +97,7 @@ export class ArrayWidgetComponent extends ArrayLayoutWidget implements AfterView
     const newSchema = Object.assign({}, item.schema)
     item.schema = newSchema
     /** make sure not to override 'title' when set by binding function */
-    item.schema.title = item.schema.title || createTitle((this.formProperty.schema.widget || {}), counter||this.itemCounterContinous)
+    item.schema.title = item.schema.title || createTitle((this.formProperty.schema.widget || {}), counter||this.itemCounterContinuous)
     if (item.schema.type === 'object') {
       for (const key in Object.keys(item.schema.properties)) {
         if (item.schema.properties.hasOwnProperty(key)) {

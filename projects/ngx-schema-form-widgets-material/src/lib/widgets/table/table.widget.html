@@ -434,7 +434,7 @@
     </ng-template>
 
     <ng-template #templateTableDefault>
-        <mat-table [dataSource]="model?.values" class="mat-elevation-z8 vo-mat-responsive-table">
+        <mat-table [dataSource]="model?.values" class="mat-elevation-z8 ngx-mat-responsive-table">
 
             <!-- whit this we create dynamic cell definition -->
             <ng-container *ngFor="let col of model?.cols; let colIndex = index" matColumnDef="{{col.field}}">

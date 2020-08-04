@@ -1,0 +1,124 @@
+{
+  "type": "object",
+  "title": "wizard",
+  "properties": {
+    "property-0": {
+      "type": "array",
+      "title": "Array",
+      "description": "Array description",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item-prop1": {
+            "type": "string",
+            "title": "Prop 1"
+          },
+          "item-prop2": {
+            "type": "string",
+            "title": "Prop 2"
+          }
+        }
+      },
+      "minItems": 0,
+      "maxItems": 5
+    },
+    "property-1": {
+      "type": "object",
+      "title": "Form title",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam ",
+      "properties": {
+        "sub-prop-1": {
+          "type": "string"
+        },
+        "sub-prop-2": {
+          "type": "string"
+        },
+        "sub-prop-3": {
+          "type": "string"
+        }
+      }
+    },
+    "property-2": {
+      "type": "string"
+    },
+    "property-3": {
+      "type": "string"
+    },
+    "property-4": {
+      "type": "string"
+    },
+    "property-5": {
+      "type": "string"
+    },
+    "property-6": {
+      "type": "string"
+    },
+    "property-7": {
+      "type": "string"
+    },
+    "property-8": {
+      "type": "string"
+    },
+    "property-9": {
+      "type": "string"
+    },
+    "property-10": {
+      "type": "string"
+    },
+    "property-11": {
+      "type": "string"
+    },
+    "property-12": {
+      "type": "string"
+    },
+    "property-13": {
+      "type": "string"
+    },
+    "property-14": {
+      "type": "string"
+    },
+    "property-15": {
+      "type": "string"
+    },
+    "property-16": {
+      "type": "string"
+    },
+    "property-17": {
+      "type": "string"
+    },
+    "property-18": {
+      "type": "string"
+    },
+    "property-19": {
+      "type": "string"
+    },
+    "property-20": {
+      "type": "string"
+    },
+    "property-21": {
+      "type": "string"
+    },
+    "property-22": {
+      "type": "string"
+    },
+    "property-23": {
+      "type": "string"
+    },
+    "property-24": {
+      "type": "string"
+    },
+    "property-25": {
+      "type": "string"
+    },
+    "property-26": {
+      "type": "string"
+    },
+    "property-27": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "property-1",
+    "property-2"
+  ]
+}
