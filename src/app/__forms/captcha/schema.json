@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "captchas": {
+      "type": "object",
+      "title": "CAPTCHAs",
+      "description": "Support of two different CAPTCHA types (visible & invisible)",
+      "properties": {
+        "captcha": {
+          "type": "string",
+          "title": "CAPTCHA",
+          "description": "You have to confirm CAPTCHA to get ready"
+        },
+        "captcha-invisible": {
+          "type": "string",
+          "title": "Invisible CAPTCHA",
+          "description": "Invisible CAPTCHA are confirmed automatically"
+        }
+      }
+    }
+  }
+}
