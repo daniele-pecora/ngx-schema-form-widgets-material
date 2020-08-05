@@ -32,5 +32,35 @@ export const actions = {
         })
         property.updateValueAndValidity(true, false)
         console.log('action_wizard_page_show_hide_2 after', property)
+    },
+    'action_change_array_item_numeration': (property: FormProperty, parameters: any) => {
+        console.log('action_change_array_item_numeration before', property)
+        let typeString = 'Numeration: continous'
+        if (!property.schema.widget.hasOwnProperty('itemNumeration')) {
+            property.schema.widget.itemNumeration = true
+        }
+        if (-1 === [true, false, 'index'].indexOf(property.schema.widget.itemNumeration)) {
+            property.schema.widget.itemNumeration = true
+        }
+
+        if (true === property.schema.widget.itemNumeration) {
+            property.schema.widget.itemNumeration = false
+            typeString = 'Numeration: OFF'
+        } else if (false === property.schema.widget.itemNumeration) {
+            property.schema.widget.itemNumeration = 'index'
+            typeString = 'Numeration: POSITION'
+        } else if ('index' === property.schema.widget.itemNumeration) {
+            property.schema.widget.itemNumeration = true
+            typeString = 'Numeration: CONTINOUS'
+        }
+
+        property.schema.buttons.forEach(element => {
+            if ('action_change_array_item_numeration' === element.id) {
+                element.label = typeString
+            }
+        })
+
+        property.updateValueAndValidity(true, false)
+        console.log('action_wizard_page_show_hide_2 after', property)
     }
 }

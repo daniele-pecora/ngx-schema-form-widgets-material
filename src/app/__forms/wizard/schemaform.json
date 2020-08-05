@@ -76,8 +76,18 @@
       "widget": {
         "id": "array",
         "style": "tabview",
-        "resetCounterWhenNoChildren":true
-      }
+        "itemNumeration": true,
+        "itemTitle": "MyItem"
+      },
+      "buttons": [
+        {
+          "id": "action_change_array_item_numeration",
+          "icon": "ui-icon-compare",
+          "iconPos": "left",
+          "label": "CONTINOUS",
+          "description": "Toggle items numeration mode (default -> continous)"
+        }
+      ]
     },
     "property-1": {
       "widget": {
