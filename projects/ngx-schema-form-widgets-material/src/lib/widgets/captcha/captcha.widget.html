@@ -9,6 +9,13 @@ Element 'ngx-recaptcha' in 'widget'
   - theme
   - size
   - language
+
+  - script_url   : The Google reCaptcha javascript or any other javascript that renders a CAPTCHA.   
+                   Default is `https://(www.recaptcha.net|www.google.com)/recaptcha/api.js?hl=(language)&render=explicit&onload=(callback)`.  
+                   If another javascript is provided that Google's ReCAPTCHA then make sure it is fully compliant.  
+                   For an example custom javascript see official page : https://www.npmjs.com/package/ngx-recaptcha-easy   
+  - loadingMsg    : A message that will be showed when the captcha script is loading. Default: 'Loading CAPTCHA ...'  
+  - loadingError  : A message that will be showed when the captcha script couldn't be loaded Default: 'Error loading CAPTCHA'  
 -->
 <div class="ui-g-12">
   <div class="mat-checkbox">
@@ -27,11 +34,13 @@ Element 'ngx-recaptcha' in 'widget'
       [site_key]="schema.widget.siteKey"
       (loaded)="onLoaded($event)"
       (captchaExpired)="onExpire($event)"
+      (error)="onError($event)"
       global="false"
     ></ngx-recaptcha>
-    <h4 *ngIf="!captchaloaded" i18n>Captcha wird geladen...</h4>
+    <h4 *ngIf="!captchaloaded" i18n>{{schema.widget.loadingMsg||'Loading CAPTCHA ...'}}</h4>
     <mat-hint *ngIf="schema.description && schema.widget.size!=='invisible'">{{schema.description}}</mat-hint>
     <mat-error *ngIf="control?.errors">
+      <div class="ui-message ui-messages-error" *ngIf="captchaloadingerror" i18n>{{schema.widget.loadingError||'Error loading CAPTCHA!'}}</div>
       <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
     </mat-error>
   </div>

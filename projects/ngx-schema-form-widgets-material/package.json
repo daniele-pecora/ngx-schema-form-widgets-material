@@ -1,6 +1,6 @@
 {
   "name": "ngx-schema-form-widgets-material",
-  "version": "9.0.3",
+  "version": "9.0.4",
   "peerDependencies": {
     "@angular/animations": "^9.1.11",
     "@angular/cdk": "9.2.4",
@@ -20,7 +20,7 @@
     "moment": "2.20.1",
     "ngx-openlayers": "^1.0.0-next.15",
     "ngx-qrcode2": "9.0.0",
-    "ngx-recaptcha-easy": "0.0.1",
+    "ngx-recaptcha-easy": "0.0.3",
     "ngx-schema-form": "^2.5.0",
     "ngx-schema-form-view": "1.0.0",
     "ol": "^6.3.1",
