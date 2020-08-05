@@ -66,7 +66,7 @@ export class ArrayWidgetComponent extends ArrayLayoutWidget implements AfterView
     this.itemCounterContinuous++
     this.formProperty.schema.widget['itemCounterContinuous'] = this.itemCounterContinuous
     const item = this.formProperty.addItem()
-    this.setItemLabel(item)
+    this.setItemLabel(item, this.itemCounterContinuous)
     return item
   }
 
@@ -81,7 +81,7 @@ export class ArrayWidgetComponent extends ArrayLayoutWidget implements AfterView
 
     const createTitle = (widget, count) => {
       let title = widget.itemTitle || ''
-      if (widget.hasOwnProperty('itemNumeration') && false === widget.itemNumeration) {
+      if ((widget.hasOwnProperty('itemNumeration') && false === widget.itemNumeration) || widget.itemNumeration === 'index') {
         title = title
       } else if (title) {
         title = `${count}. ${title}`
@@ -97,7 +97,7 @@ export class ArrayWidgetComponent extends ArrayLayoutWidget implements AfterView
     const newSchema = Object.assign({}, item.schema)
     item.schema = newSchema
     /** make sure not to override 'title' when set by binding function */
-    item.schema.title = item.schema.title || createTitle((this.formProperty.schema.widget || {}), counter||this.itemCounterContinuous)
+    item.schema.title = item.schema.title || createTitle((this.formProperty.schema.widget || {}), counter)
     if (item.schema.type === 'object') {
       for (const key in Object.keys(item.schema.properties)) {
         if (item.schema.properties.hasOwnProperty(key)) {
