@@ -36,6 +36,7 @@ Element 'ngx-recaptcha' in 'widget'
       (captchaExpired)="onExpire($event)"
       (error)="onError($event)"
       global="false"
+      [script_url]="schema.widget.script_url||null"
     ></ngx-recaptcha>
     <h4 *ngIf="!captchaloaded" i18n>{{schema.widget.loadingMsg||'Loading CAPTCHA ...'}}</h4>
     <mat-hint *ngIf="schema.description && schema.widget.size!=='invisible'">{{schema.description}}</mat-hint>
