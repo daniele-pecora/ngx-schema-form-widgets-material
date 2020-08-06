@@ -66,7 +66,7 @@
     "moment": "2.20.1",
     "ngx-openlayers": "^1.0.0-next.15",
     "ngx-qrcode2": "9.0.0",
-    "ngx-recaptcha-easy": "0.0.3",
+    "ngx-recaptcha-easy": "^9.0.0",
     "ngx-schema-form": "^2.5.4",
     "ngx-schema-form-view": "^1.0.0",
     "ol": "^6.3.1",
