@@ -25,7 +25,7 @@ const findTSFilesInFormsFolder = () => {
         console.log(element)
     });
     formsTsFiles = formsTsFiles.map((element) => {
-        return element.replace('src/', '')
+        return element.replace('src/', '')/*windows...*/.replace('src\\', '')
     })
     return {
         formsTsFiles: formsTsFiles, filterMatchingFormsTsFiles: element => {
