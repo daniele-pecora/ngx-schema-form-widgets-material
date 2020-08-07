@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core'
 import {ControlWidget} from 'ngx-schema-form'
-import {FormProperty} from 'ngx-schema-form/lib/model/formproperty'
+import {FormProperty} from 'ngx-schema-form'
 import { WidgetComponentHttpApiService} from '../_service/widget-component-http-api.service'
 import {Subscription, Observable} from 'rxjs'
 import {AutocompleteAsyncHelper} from "../_base/autocomplete-async-helper"

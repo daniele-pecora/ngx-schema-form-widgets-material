@@ -1,7 +1,7 @@
 import {HttpApiServiceOptions, WidgetComponentHttpApiService} from '../_service/widget-component-http-api.service'
 import {Subscription} from 'rxjs'
 import {OnDestroy} from '@angular/core'
-import {FormProperty} from 'ngx-schema-form/lib/model/formproperty'
+import {FormProperty} from 'ngx-schema-form'
 import { ExpressionCompiler } from '../_service/expression-complier.service'
 
 export class AutocompleteAsyncHelper implements OnDestroy {

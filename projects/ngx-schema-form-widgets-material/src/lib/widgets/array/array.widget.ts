@@ -2,7 +2,7 @@ import {ArrayLayoutWidget} from 'ngx-schema-form'
 import {AfterViewInit, Component} from '@angular/core'
 import {IconNameConverterPipe} from '../_converters/_icon/IconNames'
 import {SeverityNameConverterPipe} from '../_converters/_severity/SeverityNames'
-import {FormProperty} from 'ngx-schema-form/lib/model/formproperty'
+import {FormProperty} from 'ngx-schema-form'
 import { ButtonTypeTransformerService } from '../_converters/_button/button-type-transformer.service'
 
 @Component({

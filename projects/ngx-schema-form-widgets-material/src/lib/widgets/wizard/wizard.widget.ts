@@ -6,8 +6,8 @@ import {IconNameConverterPipe} from '../_converters/_icon/IconNames'
 import { ButtonTypeTransformerService } from '../_converters/_button/button-type-transformer.service'
 import { MatStepper } from '@angular/material/stepper';
 import {ActionRegistry} from 'ngx-schema-form'
-import {FormProperty} from 'ngx-schema-form/lib/model/formproperty'
-import {Action} from 'ngx-schema-form/lib/model/action'
+import {FormProperty} from 'ngx-schema-form'
+import {Action} from 'ngx-schema-form'
 import { DOCUMENT } from '@angular/common'
 
 @Component({
