@@ -1,5 +1,5 @@
 import {Binding, BindingRegistry} from 'ngx-schema-form'
-import {FormProperty} from 'ngx-schema-form/lib/model/formproperty'
+import {FormProperty} from 'ngx-schema-form'
 
 export function triggerBinding(this_context, eventId, event, bindingRegistry: BindingRegistry, formProperty: FormProperty) {
   const bindings: Binding[] = bindingRegistry.get(formProperty.path)

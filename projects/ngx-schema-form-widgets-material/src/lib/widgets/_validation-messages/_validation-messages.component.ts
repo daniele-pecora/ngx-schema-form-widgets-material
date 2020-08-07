@@ -2,7 +2,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core'
 import {Message} from '../_domain/message'
 import {Widget} from "ngx-schema-form";
 import {SeverityNameTransformerService} from '../_converters/_severity/severity-name-transformer.service'
-import {FormProperty} from 'ngx-schema-form/lib/model/formproperty'
+import {FormProperty} from 'ngx-schema-form'
 import {Subscription} from 'rxjs'
 
 

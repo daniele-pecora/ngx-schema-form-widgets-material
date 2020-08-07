@@ -1,4 +1,4 @@
-import { FormProperty, PropertyGroup } from 'ngx-schema-form/lib/model/formproperty';
+import { FormProperty, PropertyGroup } from 'ngx-schema-form';
 
 
 export const bindings = {
