@@ -89,7 +89,7 @@
     "@types/jexl": "^2.1.0",
     "@types/node": "^12.11.1",
     "codelyzer": "^5.1.2",
-    "electron": "^1.4.13",
+    "electron": "^9.1.0",
     "electron-packager": "^12.2.0",
     "enhanced-resolve": "^3.4.1",
     "jasmine-core": "3.4.0",
@@ -108,6 +108,6 @@
     "typedoc": "^0.8.0",
     "typescript": "^3.6.4",
     "webpack": "^4.39.1",
-    "webpack-bundle-analyzer": "^2.13.1"
+    "webpack-bundle-analyzer": "^3.8.0"
   }
 }
