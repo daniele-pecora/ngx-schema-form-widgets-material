@@ -17,6 +17,8 @@ A tiny impression of a preview.
 
 ## DEMO
 
+See a demo application [click here](https://ngx-schema-form-material.web.app/)
+
 ## Usage
 
 Install dependencies: 
