@@ -86,7 +86,7 @@ Element 'widget':
 
         - formatFilter (boolean) : This feature is enabled by default.
                                    Will filter the input so only valid characters are accepted.
-                                   It will restrict the length of the date-string to the `dateFormat` length.
+                                   It will restrict the lenght of the date-string to the `dateFormat` lenght.
                                    It will autofill the `dateFormat`-separator character so they must not be typed at all.
                                    e.g. Assuming the date-format is `dd.MM.yyyy` then typing the dot `.` is not required and will be autofilled.
 
@@ -96,11 +96,6 @@ Element 'widget':
   - size  = when not set the widget will be set to full width of available space
             set this to 'default' to use defaults width
             set to a positive number value to set a value like on input element
--->
-<!--
-  Event Binding
-    - change
-    - input
 -->
 
 <mat-form-field [appearance]="schema?.widget?.filled?'fill':'standard'"
@@ -126,7 +121,6 @@ Element 'widget':
 
     [attr.required]="(formProperty|IsRequiredAttrString)"
     [attr.aria-required]="(formProperty|IsRequiredAttr)"
-    [id]="id"
   >
 
   <ngx-ui-widget-addon *ngIf="schema?.widget?.suffix" [addons]="schema.widget.suffix" [suffix]="true"></ngx-ui-widget-addon>

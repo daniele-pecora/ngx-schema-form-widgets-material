@@ -15,6 +15,10 @@ Element 'array' in 'widget'
   - itemNumeration = Prepends a numeric before title.
                    eg. '1. Simple Item'
                    default is <code>true</code>
+                   Possible values are `false`, `true` or `index`
+                   - `false` no counter will be prepended to the items title
+                   - `true` a continous counter will be prepended to the items title. This counter type will not stop incrementing when items get deleted.
+                   - `index` a counter based on the items position, starting by 1, will be prepended to the items title
 
   - buttonAdd
   - buttonRemove
@@ -95,7 +99,7 @@ Element 'array' in 'widget'
           ><mat-icon>close</mat-icon></span>
 
           <mat-panel-title>
-              <span i18n>{{formProperty.schema.items.type==='object'?(itemProperty.schema.title || itemProperty._path):null}}</span>
+              <span i18n>{{formProperty.schema.items.type==='object'?(formProperty.schema.widget.itemNumeration==='index'?(i+1)+'. ':'')+(itemProperty.schema.title || itemProperty._path):null}}</span>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <div>
@@ -121,10 +125,10 @@ Element 'array' in 'widget'
       <ng-container *ngFor="let itemProperty of formProperty.properties; let i=index" >
         <mat-tab
           i18n-label
-          [label]="formProperty.schema.items.type==='object'?(itemProperty.schema.title || itemProperty._path):null"
+          [label]="(formProperty.schema.widget.itemNumeration==='index'?(i+1)+'. ':'')+(formProperty.schema.items.type==='object'?(itemProperty.schema.title || itemProperty._path):null)"
         >
           <ng-template mat-tab-label>
-            <span class="mat-tab-label--text" i18n>{{formProperty.schema.items.type==='object'?(itemProperty.schema.title || itemProperty._path):null}}</span>
+            <span class="mat-tab-label--text" i18n>{{formProperty.schema.items.type==='object'?(formProperty.schema.widget.itemNumeration==='index'?(i+1)+'. ':'')+(itemProperty.schema.title || itemProperty._path):null}}</span>
             <button
               mat-flat-button
               [attr.title]="schema.widget?.buttonRemove?.description||schema.widget?.buttonRemove?.label||null"
@@ -158,7 +162,7 @@ Element 'array' in 'widget'
     </ng-container>
     <div *ngFor="let itemProperty of formProperty.properties; let i=index">
           <span
-            *ngIf="formProperty.schema.items.type==='object'">{{itemProperty.schema.title || itemProperty._path}}</span>
+            *ngIf="formProperty.schema.items.type==='object'">{{(formProperty.schema.widget.itemNumeration==='index'?(i+1)+'. ':'')}}{{itemProperty.schema.title || itemProperty._path}}</span>
       <ng-template #buttonRemove>
           <ng-container [ngTemplateOutlet]="buttonRemoveTemplate" [ngTemplateOutletContext]="{
             button: schema.widget.buttonRemove,

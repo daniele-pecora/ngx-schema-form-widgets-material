@@ -12,8 +12,9 @@ import { NgxRecaptchaComponent } from 'ngx-recaptcha-easy'
 export class CaptchaWidgetComponent extends ControlWidget implements OnInit {
 
   captchaloaded: boolean
+  captchaloadingerror: boolean
   @ViewChild(NgxRecaptchaComponent, { static: false }) captcha: NgxRecaptchaComponent
-
+  
   captchaNameId = this.id
   initCallback
 
@@ -23,6 +24,11 @@ export class CaptchaWidgetComponent extends ControlWidget implements OnInit {
     if (this.schema.widget.size === 'invisible') {
       this.captcha.execute()
     }
+  }
+  
+  onError(event){
+    this.captchaloadingerror = true
+    console.error(event)
   }
 
   ngOnInit() {

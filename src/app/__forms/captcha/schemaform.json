@@ -1,0 +1,41 @@
+{
+  "widget": {
+    "id": "form",
+    "asCard": true
+  },
+  "properties": {
+    "captchas": {
+      "type": "object",
+      "widget": "form",
+      "properties": {
+        "captcha": {
+          "widget": {
+            "script_url": "https://nocapctha.js",
+            "loadingMsg": "Custom message showing when CAPTCHA is loading...",
+            "loadingError": "Custom message showing when loading CAPTCHA has failed",
+            "id": "captcha",
+            "siteKey": "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI",
+            "type": "image audio",
+            "language": "de",
+            "theme": "light",
+            "size": "visible"
+          }
+        },
+        "captcha-invisible": {
+          "widget": {
+            "id": "captcha",
+            "siteKey": "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI",
+            "type": "image audio",
+            "language": "de",
+            "theme": "light",
+            "size": "invisible"
+          }
+        }
+      },
+      "order": [
+        "captcha-invisible",
+        "captcha"
+      ]
+    }
+  }
+}

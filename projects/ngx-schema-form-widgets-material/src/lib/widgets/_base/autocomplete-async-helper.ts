@@ -1,7 +1,7 @@
 import {HttpApiServiceOptions, WidgetComponentHttpApiService} from '../_service/widget-component-http-api.service'
 import {Subscription} from 'rxjs'
 import {OnDestroy} from '@angular/core'
-import {FormProperty} from 'ngx-schema-form/lib/model/formproperty'
+import {FormProperty} from 'ngx-schema-form'
 import { ExpressionCompiler } from '../_service/expression-complier.service'
 
 export class AutocompleteAsyncHelper implements OnDestroy {
@@ -23,7 +23,7 @@ export class AutocompleteAsyncHelper implements OnDestroy {
 
   private createErrorLog(propertyName, actionName, expressionString, result, err): any[] {
     return [
-      `Failed to ${actionName} expression property "${propertyName}" in 'selection.widget' 
+      `Failed to ${actionName} expression property "${propertyName}" in 'selection.widget'
     for path ${this.formProperty.path} in field ${this.name}`
       , '\n'
       , `Expression: ${expressionString}`, '\n'
@@ -148,7 +148,7 @@ export class AutocompleteAsyncHelper implements OnDestroy {
         }
         if (this.schema.widget.valueExpression) {
           try {
-            valueValue = this.expressionCompiler.evaluate(this.schema.widget.labelExpression, { item: _item })
+            valueValue = this.expressionCompiler.evaluate(this.schema.widget.valueExpression, { item: _item })
           } catch (err) {
             this.logExpressionError('valueExpression', 'execute', this.schema.widget.valueExpression, _item, err)
             throw new Error('Failed to execute expression property \'valueExpression\' in \'selection.widget\'')

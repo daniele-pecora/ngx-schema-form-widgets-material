@@ -1,5 +1,5 @@
 import {ObjectLayoutWidget} from 'ngx-schema-form'
-import {OnInit} from '@angular/core'
+import { OnInit } from '@angular/core'
 import {ActionRegistry} from 'ngx-schema-form'
 import { IconNameConverterPipe } from '../_converters/_icon/IconNames'
 import { SeverityNameConverterPipe } from '../_converters/_severity/SeverityNames'
@@ -79,5 +79,5 @@ export abstract class ActionObjectLayoutWidgetComponent extends ObjectLayoutWidg
   isButtonVisibile(objDisabled, validity, value) {
     return clickableVisibilityState(objDisabled, validity, value)
   }
-  
+
 }

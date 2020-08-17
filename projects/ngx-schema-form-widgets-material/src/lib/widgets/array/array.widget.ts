@@ -2,7 +2,7 @@ import {ArrayLayoutWidget} from 'ngx-schema-form'
 import {AfterViewInit, Component} from '@angular/core'
 import {IconNameConverterPipe} from '../_converters/_icon/IconNames'
 import {SeverityNameConverterPipe} from '../_converters/_severity/SeverityNames'
-import {FormProperty} from 'ngx-schema-form/lib/model/formproperty'
+import {FormProperty} from 'ngx-schema-form'
 import { ButtonTypeTransformerService } from '../_converters/_button/button-type-transformer.service'
 
 @Component({
@@ -14,7 +14,7 @@ import { ButtonTypeTransformerService } from '../_converters/_button/button-type
 export class ArrayWidgetComponent extends ArrayLayoutWidget implements AfterViewInit {
   tabActiveIndex = 0
   /** fix #88 counting items doesn't rely on items.length anymore */
-  itemCounterContinous = 0
+  itemCounterContinuous = 0
 
   /** feature: accordion */
   get currentPage() {
@@ -50,7 +50,12 @@ export class ArrayWidgetComponent extends ArrayLayoutWidget implements AfterView
       children.push(property)
       this.setItemLabel(property, children.length)
     })
-    this.itemCounterContinous = children.length
+    this.itemCounterContinuous = children.length
+
+    this.formProperty.schema.widget = this.formProperty.schema.widget || {}
+    if (this.formProperty.schema.widget['itemCounterContinuous']) {
+      this.itemCounterContinuous = this.formProperty.schema.widget['itemCounterContinuous']
+    }
   }
 
   private propertiesLength(): number {
@@ -58,9 +63,10 @@ export class ArrayWidgetComponent extends ArrayLayoutWidget implements AfterView
   }
 
   addItem(): any {
-    this.itemCounterContinous++
+    this.itemCounterContinuous++
+    this.formProperty.schema.widget['itemCounterContinuous'] = this.itemCounterContinuous
     const item = this.formProperty.addItem()
-    this.setItemLabel(item)
+    this.setItemLabel(item, this.itemCounterContinuous)
     return item
   }
 
@@ -75,7 +81,7 @@ export class ArrayWidgetComponent extends ArrayLayoutWidget implements AfterView
 
     const createTitle = (widget, count) => {
       let title = widget.itemTitle || ''
-      if (widget.hasOwnProperty('itemNumeration') && false === widget.itemNumeration) {
+      if ((widget.hasOwnProperty('itemNumeration') && false === widget.itemNumeration) || widget.itemNumeration === 'index') {
         title = title
       } else if (title) {
         title = `${count}. ${title}`
@@ -91,7 +97,7 @@ export class ArrayWidgetComponent extends ArrayLayoutWidget implements AfterView
     const newSchema = Object.assign({}, item.schema)
     item.schema = newSchema
     /** make sure not to override 'title' when set by binding function */
-    item.schema.title = item.schema.title || createTitle((this.formProperty.schema.widget || {}), counter||this.itemCounterContinous)
+    item.schema.title = item.schema.title || createTitle((this.formProperty.schema.widget || {}), counter)
     if (item.schema.type === 'object') {
       for (const key in Object.keys(item.schema.properties)) {
         if (item.schema.properties.hasOwnProperty(key)) {

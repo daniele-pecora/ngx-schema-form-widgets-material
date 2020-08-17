@@ -1,6 +1,6 @@
 import {Component} from '@angular/core'
 import {ControlWidget} from 'ngx-schema-form'
-import {FormProperty} from 'ngx-schema-form/lib/model/formproperty'
+import {FormProperty} from 'ngx-schema-form'
 import {OsmViewAddressModel} from '../_osm/osm-view.component'
 
 @Component({

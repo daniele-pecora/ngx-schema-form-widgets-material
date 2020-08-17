@@ -26,7 +26,6 @@ export const inputDateAutoComplete = (srcElement: any, formProperty: FormPropert
             }
             return found
         }
-
         const dateFormat = formProperty.schema.widget.dateFormat || defaultDateFormat
         const formatMaxSize = dateFormat.length
         const separatorMeta = matchAll(dateFormat, new RegExp('[^YMDHSA]', 'gi'))
@@ -37,9 +36,6 @@ export const inputDateAutoComplete = (srcElement: any, formProperty: FormPropert
             separatorPositions.push(sMeta['index'])
         }
         const transformValue = (formProperty: FormProperty, srcElement: any) => {
-            if (!srcElement /** may be null if date-picker is used */) {
-                return srcElement
-            }
             if (srcElement.value &&
                 /** check type because it may be a 'Date' object that we don't care about */
                 typeof (srcElement.value) === 'string') {
@@ -113,6 +109,5 @@ export const inputDateAutoComplete = (srcElement: any, formProperty: FormPropert
         }
         formProperty['dateFormatSettings'] = dateFormatSettings
     }
-    if (srcElement)
-        formProperty['dateFormatSettings'].transformValue(formProperty, srcElement)
+    formProperty['dateFormatSettings'].transformValue(formProperty, srcElement)
 }

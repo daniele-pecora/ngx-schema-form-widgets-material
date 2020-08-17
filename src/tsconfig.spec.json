@@ -9,7 +9,19 @@
   },
   "files": [
     "test.ts",
-    "polyfills.ts"
+    "polyfills.ts",
+    "app/__forms/captcha/action.ts",
+    "app/__forms/captcha/bindings.ts",
+    "app/__forms/captcha/validation.ts",
+    "app/__forms/components/action.ts",
+    "app/__forms/components/bindings.ts",
+    "app/__forms/components/validation.ts",
+    "app/__forms/date/bindings.ts",
+    "app/__forms/radio/bindings.ts",
+    "app/__forms/switch/bindings.ts",
+    "app/__forms/wizard/action.ts",
+    "app/__forms/wizard/bindings.ts",
+    "app/__forms/wizard/validation.ts"
   ],
   "include": [
     "**/*.spec.ts",

@@ -1,10 +1,11 @@
 import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core'
 import {ControlWidget} from 'ngx-schema-form'
-import {FormProperty} from 'ngx-schema-form/lib/model/formproperty'
+import {FormProperty} from 'ngx-schema-form'
 import { WidgetComponentHttpApiService} from '../_service/widget-component-http-api.service'
 import {Subscription, Observable} from 'rxjs'
 import {AutocompleteAsyncHelper} from "../_base/autocomplete-async-helper"
-import { MatAutocomplete, MatInput, MatAutocompleteTrigger } from '@angular/material'
+import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
 import { ExpressionCompiler } from '../_service/expression-complier.service'
 
 @Component({
@@ -24,9 +25,9 @@ export class AutoCompleteWidgetComponent extends ControlWidget implements OnInit
   isLoading: boolean
   filteredOptions: Observable<string[]>
 
-  @ViewChild('autoInput', { static: false }) autocompleteInput: MatInput
-  @ViewChild('auto', { static: false }) autocomplete: MatAutocomplete
-  @ViewChild(MatAutocompleteTrigger, { static: false }) autocompleteTrigger: MatAutocompleteTrigger
+  @ViewChild('autoInput') autocompleteInput: MatInput
+  @ViewChild('auto') autocomplete: MatAutocomplete
+  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger: MatAutocompleteTrigger
 
   constructor(private lookupService: WidgetComponentHttpApiService, private expressionCompiler: ExpressionCompiler) {
     super()
