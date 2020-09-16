@@ -35,7 +35,7 @@ Element 'ngx-recaptcha' in 'widget'
     <ng-container *ngIf="requiresConsent || (this.schema?.widget?.consentRequired && this.schema?.widget?.consentStatic)">
       <div>
       <div class="ui-widget-captcha-consentText" [innerHTML]="this.htmlContent"></div>
-      <label [pTooltip]="this.schema?.widget?.consentTitle||consentTitleDefault" [title]="this.schema?.widget?.consentTitle||consentTitleDefault">
+      <label [matTooltip]="this.schema?.widget?.consentTitle||consentTitleDefault" [title]="this.schema?.widget?.consentTitle||consentTitleDefault">
         <input
           [title]="this.schema?.widget?.consentTitle||consentTitleDefault" type="checkbox" value="allow" [checked]="!requiresConsent" (change)="storeConsent($event)">{{schema?.widget?.consentPrompt||consentPromptDefault}}</label>
       </div>
