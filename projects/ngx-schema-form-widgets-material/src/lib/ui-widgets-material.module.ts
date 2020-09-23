@@ -77,6 +77,7 @@ import {MatExpansionModule,} from '@angular/material/expansion'
 import {MatTabsModule,} from '@angular/material/tabs'
 import {MatDialogModule,} from '@angular/material/dialog'
 import {MatTableModule} from '@angular/material/table'
+import {MatChipsModule} from '@angular/material/chips'
 
 import {NgxRecaptchaModule} from 'ngx-recaptcha-easy'
 import {TextMaskModule} from 'angular2-text-mask'
@@ -131,6 +132,7 @@ const moduleProviders = [
     MatExpansionModule,
     MatTabsModule,
     MatTableModule,
+    MatChipsModule,
     // ngx-recaptcha
     NgxRecaptchaModule,
     // angular2-text-mask

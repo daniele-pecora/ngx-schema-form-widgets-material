@@ -132,8 +132,38 @@ Element 'widget':
             set this to 'default' to use defaults width
             set to a positive number value to set a value like on input element
 -->
+<!--
+Multiselect:
+        Multiselect represented by chips will be automatically enabled when 
+        the type of the json schema property is `array` 
+        and the type definition of `items` is one of the primitive types `string`, `boolean`, `number`.
+        The json schema properties `minItems` and `maxItems` do work as expected.
 
-<!-- due to a misconcetion in ReactiveForm setting '[disabled]' doesn't visualize the 'disabled' state, so also '[attr.disabled]' must be set -->
+        - unique = `true|false - will accept only unique values otherwise also duplicates are allowed
+-->
+<!--
+Predefined values:
+        The autocomplete feature can also be used with predefined values via `items.anyOf` or `items.oneOf`
+        - items.anyOf : Will be prioritized if set.
+        - items.oneOf : Will be used only if `anyOf` ist not set.
+        How the label and value will be used in `anyOf` or `oneOf`:
+        If `enum[0]` is set the it will be used as label and value
+        otherwise `title` if present, if not it will search for `description` 
+Element 'widget':
+        - matchExpression  = Defines how the value to set from the autocompletion list will get determined.
+                             Default comparison function is best described by lower-case starts-with.
+                             The expression will get passed the query the user typed as string `query` 
+                             and a value as string `value` from the items defined in either `oneOf` or `anyOf`
+                             e.g. `"matchExpression": "0==indexOf(toLowerCase(value),toLowerCase(query))"`
+                              the built in expression parser supports some extra methods methods
+                              - startsWith  : e.g. `toLowerCase(value)`
+                              - match       : e.g. `match(value, regexval)`
+                              - indexOf     : e.g. `indexOf(value, string)`
+                              - toLowerCase : e.g. `toLowerCase(value)`
+                              - trim        : e.g. `trim(value)`
+-->
+
+<!-- due to a misconception in ReactiveForm setting '[disabled]' doesn't visualize the 'disabled' state, so also '[attr.disabled]' must be set -->
 <mat-form-field [appearance]="schema?.widget?.filled?'fill':'standard'"
   [class.ngx-ui-widget-full-width]="!schema.widget?.size"
 >
@@ -142,31 +172,79 @@ Element 'widget':
     <ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
   </mat-label>
   <ngx-ui-widget-addon *ngIf="schema?.widget?.prefix" [addons]="schema.widget.prefix"></ngx-ui-widget-addon>
-  <input
-    #autoInput
-    matInput
-    type="text"
+  
+<!-- multiple selection -->
+ <mat-chip-list 
+ *ngIf="asMultiselect"
+   #chipList aria-label="Item selection">
+   <mat-chip
+     *ngFor="let item of multiselectValues"
+     [selectable]="selectable"
+     [removable]="removable"
+     (removed)="remove(item)">
+     {{item}}
+     <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+   </mat-chip>
 
-    [attr.id]="id"
-    [attr.name]="name"
+ <input
+ *ngIf="asMultiselect"
+   #autoInputMultiselect
+   matInput
+   type="text"
 
-    [disabled]="schema.readOnly"
-    [attr.disabled]="schema.readOnly?'disabled':null"
+   [attr.id]="id"
+   [attr.name]="name"
 
-    [formControl]="control"
-    [matAutocomplete]="'auto'"
+   [disabled]="(schema.readOnly)||!checkMax()"
+   [attr.disabled]="(schema.readOnly?'disabled':null)||!checkMax"
 
-    [readonly]="schema.widget.readonly && (schema.widget.readonly===false || schema.widget.readonly===true)? schema.widget.readonly : false"
+   [formControl]="multiselectControl"
+   [matAutocomplete]="auto"
 
-    [attr.required]="(formProperty|IsRequiredAttrString)"
-    [attr.aria-required]="(formProperty|IsRequiredAttr)"
-  >
-  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" *ngIf="!schema.readOnly">
-    <mat-option *ngIf="isLoading" class="is-loading"><mat-spinner diameter="30"></mat-spinner></mat-option>
-    <mat-option (onSelectionChange)="onSelect(result)" *ngFor="let result of filteredOptions | async" [value]="result">
-      {{result}}
-    </mat-option>
-  </mat-autocomplete>
+   [readonly]="schema.widget.readonly && (schema.widget.readonly===false || schema.widget.readonly===true)? schema.widget.readonly : false"
+
+   [attr.required]="(formProperty|IsRequiredAttrString)"
+   [attr.aria-required]="(formProperty|IsRequiredAttr)"
+
+   [matChipInputFor]="chipList"
+   [errorStateMatcher]="errorStateMatcher"
+ >
+ </mat-chip-list>
+ <!-- single selection -->
+ <input
+ *ngIf="!asMultiselect"
+ #autoInputSingleselect
+ matInput
+ type="text"
+
+ [attr.id]="id"
+ [attr.name]="name"
+
+ [disabled]="schema.readOnly"
+ [attr.disabled]="schema.readOnly?'disabled':null"
+
+ [formControl]="control"
+ [matAutocomplete]="auto"
+
+ [readonly]="schema.widget.readonly && (schema.widget.readonly===false || schema.widget.readonly===true)? schema.widget.readonly : false"
+
+ [attr.required]="(formProperty|IsRequiredAttrString)"
+ [attr.aria-required]="(formProperty|IsRequiredAttr)"
+>
+<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" *ngIf="!schema.readOnly">
+ <mat-option *ngIf="isLoading" class="is-loading"><mat-spinner diameter="30"></mat-spinner></mat-option>
+ <mat-option (onSelectionChange)="onSelect(result)" *ngFor="let result of filteredOptions | async" [value]="result">
+   {{result}}
+ </mat-option>
+</mat-autocomplete>
+<pre>
+  (control.dirty:{{control.dirty}})
+  (control.touched:{{control.touched}})
+  (multiselectControl.dirty:{{multiselectControl.dirty}})
+  (multiselectControl.touched:{{multiselectControl.touched}})
+
+  {{control?.errors|json}}</pre>
+
   <ngx-ui-widget-addon *ngIf="schema?.widget?.suffix" [addons]="schema.widget.suffix" [suffix]="true"></ngx-ui-widget-addon>
   <mat-hint *ngIf="schema.description">{{schema.description}}</mat-hint>
   <mat-error *ngIf="control?.errors">

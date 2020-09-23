@@ -1,0 +1,116 @@
+{
+    "type": "object",
+    "properties": {
+        "autocomplete-simple": {
+            "type": "string",
+            "title": "autocomplete simple",
+            "description": "Presentation of the component 'autocomplete'.",
+            "widget": {
+                "id": "autocomplete"
+            }
+        },
+        "autocomplete-multi": {
+            "type": "array",
+            "title": "autocomplete multi",
+            "description": "Presentation of the component 'autocomplete' multiselection.",
+            "widget": {
+                "id": "autocomplete"
+            },
+            "items": {
+                "type": "string"
+            }
+        },
+        "autocomplete-multi-min-max": {
+            "type": "array",
+            "title": "autocomplete multi min max",
+            "description": "Presentation of the component 'autocomplete' multiselection with min max items.",
+            "widget": {
+                "id": "autocomplete"
+            },
+            "items": {
+                "type": "string"
+            },
+            "minItems": 2,
+            "maxItems": 3
+        },
+        "autocomplete-multi-min-max-predefined": {
+            "type": "array",
+            "_type": "string",
+            "title": "autocomplete multi min max predefined",
+            "description": "Presentation of the component 'autocomplete' multiselection with min max predefined items.",
+            "widget": {
+                "id": "autocomplete",
+                "forceSelection": true,
+                "unique": false
+            },
+            "items": {
+                "type": "string",
+                "_anyOf": [
+                    {
+                        "enum": [
+                            "Dr."
+                        ],
+                        "description": "Dr."
+                    },
+                    {
+                        "enum": [
+                            "Dr. EH"
+                        ],
+                        "description": "Dr. EH",
+                        "disabled": true
+                    },
+                    {
+                        "enum": [
+                            "Dr. HC"
+                        ],
+                        "description": "Dr. HC"
+                    }
+                ],
+                "anyOf": [
+                    {
+                        "enum": [
+                            "one"
+                        ],
+                        "description": "One"
+                    },
+                    {
+                        "enum": [
+                            "two"
+                        ],
+                        "description": "Two",
+                        "disabled": true
+                    },
+                    {
+                        "enum": [
+                            "three"
+                        ],
+                        "description": "Three"
+                    }
+                ],
+                "oneOf": [
+                    {
+                        "enum": [
+                            "one"
+                        ],
+                        "description": "one"
+                    },
+                    {
+                        "enum": [
+                            "two"
+                        ],
+                        "description": "two",
+                        "disabled": true
+                    },
+                    {
+                        "enum": [
+                            "three"
+                        ],
+                        "description": "three"
+                    }
+                ]
+            },
+            "minItems": 2,
+            "maxItems": 3
+        }
+    }
+}
