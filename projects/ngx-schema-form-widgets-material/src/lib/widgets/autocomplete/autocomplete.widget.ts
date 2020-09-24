@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ControlWidget } from 'ngx-schema-form'
 import { FormProperty } from 'ngx-schema-form'
 import { WidgetComponentHttpApiService } from '../_service/widget-component-http-api.service'
@@ -9,7 +9,7 @@ import { MatInput } from '@angular/material/input';
 import { ExpressionCompiler } from '../_service/expression-complier.service'
 
 import { COMMA, ENTER } from '@angular/cdk/keycodes'
-import { MatChipInputEvent } from '@angular/material/chips'
+import { MatChipInputEvent, MatChipList } from '@angular/material/chips'
 import { FormControl, FormGroupDirective, NgForm } from '@angular/forms'
 import { ErrorStateMatcher } from '@angular/material/core'
 
@@ -38,6 +38,7 @@ export class AutoCompleteWidgetComponent extends ControlWidget implements OnInit
   @ViewChild('autoInputMultiselect') autocompleteInputMultiselect: MatInput
   // @ViewChild('autoMultiselect') autocompleteMultiselect: MatAutocomplete
   // @ViewChild(MatAutocompleteTrigger) autocompleteTriggerMultiselect: MatAutocompleteTrigger
+  @ViewChild('chipList') chipList: MatChipList
   multiselectControl: FormControl = new FormControl()
   multiselectValues = []
   separatorKeysCodes: number[] = [ENTER, COMMA]
@@ -98,24 +99,45 @@ export class AutoCompleteWidgetComponent extends ControlWidget implements OnInit
       })
     } else {
       this.multiselectControl.valueChanges.subscribe(() => {
-        if (this.multiselectControl.touched) {
-          this.control.markAsTouched()
-        }
         this.isLoading = true
         this.search({ query: this.multiselectControl.value })
       })
-      this.multiselectControl.valueChanges.subscribe(() => {console.log('this.multiselectControl.valueChanges',
-      this.control.errors,
-      'this.control:',this.control,
-      'this.multiselectControl:',this.multiselectControl
-      )
-        if (this.control.hasError) {
+      // error passing
+      const udpateStates = () => {
+        if (this.multiselectControl.touched) {
           this.control.markAsTouched()
-          this.multiselectControl.setErrors(this.control.errors, { emitEvent: true })
-          if (this.control.pristine)
-            this.multiselectControl.markAsPristine()
         }
+        if (this.multiselectControl.dirty) {
+          this.control.markAsDirty()
+        }
+        if (this.multiselectControl.pristine) {
+          this.control.markAsPristine()
+        }
+        if (this.multiselectControl.untouched) {
+          this.control.markAsUntouched()
+        }
+        if (this.multiselectControl.pending) {
+          this.control.markAsPending()
+        }
+        this.updateChipListErrorState()
+      }
+      // now it shows an error but at the beginning it...
+      // TODO still not showing error text ....
+      this.control.valueChanges.subscribe(() => {
+        this.control.markAsTouched()
+        this.multiselectControl.markAsTouched()
+        udpateStates()
+        console.log('this.control.valueChanges.subscribe(() => {', this.control, this.multiselectControl,
+        this.formProperty)
       })
+
+    }
+  }
+
+  updateChipListErrorState() {
+    if (this.asMultiselect) {
+      this.chipList.errorState = this.control.invalid
+      this.multiselectControl.setErrors(this.control.errors, { emitEvent: true })
     }
   }
 
@@ -156,16 +178,13 @@ export class AutoCompleteWidgetComponent extends ControlWidget implements OnInit
       // if(event.query)
       for (const item of preDefinedValues) {
         if (this.matchExpression(item.description, event.query)) {
-          const useKey = item.enum[0] || item.description || item.title
+          const useKey = item.enum[0] || item.title || item.description
           const useValue = useKey
           this.results.push(useKey)
           this.resultMap.push({ key: useKey, value: useValue })
           this.resultMapIndex[`_${useKey}`] = useValue
         }
       }
-      console.log(`results:`,this.results)
-      console.log(`resultMap:`,this.resultMap)
-      console.log(`resultMapIndex:`,this.resultMapIndex)
       this.updateValuesFromSearch_onComplete()
       return
     }
@@ -193,12 +212,10 @@ export class AutoCompleteWidgetComponent extends ControlWidget implements OnInit
 
   onChange(event) {
     this.updateTargets(event)
-    // this.resetResults()
   }
 
   onSelect(event) {this.selected(event)
     this.updateTargets(event)
-   // this.resetResults()
   }
 
   private resetResults() {
@@ -343,7 +360,9 @@ export class AutoCompleteWidgetComponent extends ControlWidget implements OnInit
 }
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return (control && control.invalid);
+    // const isSubmitted = form && form.submitted;
+    const errorState = control && control.touched && control.invalid
+    console.log('##MyErrorStateMatcher## isErrorState:', errorState, control)
+    return errorState;
   }
 }
