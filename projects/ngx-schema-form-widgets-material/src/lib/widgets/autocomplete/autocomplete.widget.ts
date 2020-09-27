@@ -47,7 +47,8 @@ export class AutoCompleteWidgetComponent extends ControlWidget implements OnInit
   get asMultiselect(): boolean { return ((this.schema.items && this.schema.items.anyOf) || (`${this.schema.type}` === 'array' && (-1 !== ['string', 'number', 'boolean'].indexOf(`${this.schema.items.type}` || 'noitemtypeset')))) }
   errorStateMatcher = new MyErrorStateMatcher()
 
-  constructor(private lookupService: WidgetComponentHttpApiService, private expressionCompiler: ExpressionCompiler) {
+  constructor(private lookupService: WidgetComponentHttpApiService, private expressionCompiler: ExpressionCompiler
+    , private ngZone: NgZone) {
     super()
   }
   /**
@@ -124,13 +125,24 @@ export class AutoCompleteWidgetComponent extends ControlWidget implements OnInit
       // now it shows an error but at the beginning it...
       // TODO still not showing error text ....
       this.control.valueChanges.subscribe(() => {
+        this.ngZone.run(()=>{
         this.control.markAsTouched()
         this.multiselectControl.markAsTouched()
         udpateStates()
         console.log('this.control.valueChanges.subscribe(() => {', this.control, this.multiselectControl,
         this.formProperty)
+        })
       })
 
+      this.formProperty.errorsChanges.subscribe(() => {
+        this.multiselectControl.setErrors(this.control.errors, { emitEvent: true })
+      })
+/*
+      this.multiselectControl.valueChanges.subscribe(() => {
+        this.chipList.errorState = this.control.invalid && this.multiselectControl.touched
+        this.multiselectControl.setErrors(this.control.errors, { emitEvent: true })
+      })
+*/
     }
   }
 
