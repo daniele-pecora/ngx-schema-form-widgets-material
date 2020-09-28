@@ -10,8 +10,8 @@ import { ExpressionCompiler } from '../_service/expression-complier.service'
 
 import { COMMA, ENTER } from '@angular/cdk/keycodes'
 import { MatChipInputEvent, MatChipList } from '@angular/material/chips'
-import { FormControl, FormGroupDirective, NgForm } from '@angular/forms'
-import { ErrorStateMatcher } from '@angular/material/core'
+import { FormControl } from '@angular/forms'
+import { ValidationFieldMessagesComponent } from '../_validation-field-messages/_validation-field-messages.component'
 
 @Component({
   selector: 'ngx-ui-autocomplete-widget',
@@ -36,8 +36,6 @@ export class AutoCompleteWidgetComponent extends ControlWidget implements OnInit
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger: MatAutocompleteTrigger
 
   @ViewChild('autoInputMultiselect') autocompleteInputMultiselect: MatInput
-  // @ViewChild('autoMultiselect') autocompleteMultiselect: MatAutocomplete
-  // @ViewChild(MatAutocompleteTrigger) autocompleteTriggerMultiselect: MatAutocompleteTrigger
   @ViewChild('chipList') chipList: MatChipList
   multiselectControl: FormControl = new FormControl()
   multiselectValues = []
@@ -45,7 +43,7 @@ export class AutoCompleteWidgetComponent extends ControlWidget implements OnInit
   selectable = true
   removable = true
   get asMultiselect(): boolean { return ((this.schema.items && this.schema.items.anyOf) || (`${this.schema.type}` === 'array' && (-1 !== ['string', 'number', 'boolean'].indexOf(`${this.schema.items.type}` || 'noitemtypeset')))) }
-  errorStateMatcher = new MyErrorStateMatcher()
+  @ViewChild('validationMessages') validationMessages: ValidationFieldMessagesComponent
 
   constructor(private lookupService: WidgetComponentHttpApiService, private expressionCompiler: ExpressionCompiler
     , private ngZone: NgZone) {
@@ -60,7 +58,6 @@ export class AutoCompleteWidgetComponent extends ControlWidget implements OnInit
    */
   reAttachAutocomplete_AfterViewInit() {
     this.autocompleteTrigger.autocomplete = this.autocomplete
-    //this.autocompleteTriggerMultiselect.autocomplete = this.autocompleteMultiselect
   }
 
   /**
@@ -99,57 +96,44 @@ export class AutoCompleteWidgetComponent extends ControlWidget implements OnInit
         this.search({ query: this.control.value })
       })
     } else {
+      /**
+       * Handle multiselction widget
+       */
       this.multiselectControl.valueChanges.subscribe(() => {
         this.isLoading = true
         this.search({ query: this.multiselectControl.value })
       })
-      // error passing
-      const udpateStates = () => {
-        if (this.multiselectControl.touched) {
-          this.control.markAsTouched()
-        }
-        if (this.multiselectControl.dirty) {
-          this.control.markAsDirty()
-        }
-        if (this.multiselectControl.pristine) {
-          this.control.markAsPristine()
-        }
-        if (this.multiselectControl.untouched) {
-          this.control.markAsUntouched()
-        }
-        if (this.multiselectControl.pending) {
-          this.control.markAsPending()
-        }
-        this.updateChipListErrorState()
-      }
-      // now it shows an error but at the beginning it...
-      // TODO still not showing error text ....
       this.control.valueChanges.subscribe(() => {
-        this.ngZone.run(()=>{
-        this.control.markAsTouched()
-        this.multiselectControl.markAsTouched()
-        udpateStates()
-        console.log('this.control.valueChanges.subscribe(() => {', this.control, this.multiselectControl,
-        this.formProperty)
-        })
-      })
-
-      this.formProperty.errorsChanges.subscribe(() => {
         this.multiselectControl.setErrors(this.control.errors, { emitEvent: true })
+        this.chipList.errorState = this.multiselectControl.touched && this.multiselectControl.invalid
       })
-/*
+      this.formProperty.errorsChanges.subscribe((errors) => {
+        this.multiselectControl.setErrors(this.control.errors, { emitEvent: true })
+        this.chipList.errorState = this.multiselectControl.touched && this.multiselectControl.invalid
+      })
       this.multiselectControl.valueChanges.subscribe(() => {
-        this.chipList.errorState = this.control.invalid && this.multiselectControl.touched
+        /**
+         * Just update showing the error as helper text.
+         * Because the `ngx-ui-field-validation-messages` component will not show errors if not `dirty`
+         */
+        this.control.markAsDirty()
         this.multiselectControl.setErrors(this.control.errors, { emitEvent: true })
+        this.chipList.errorState = this.multiselectControl.touched && this.multiselectControl.invalid
+        if (this.chipList.errorState) {
+          /**
+           * Just update showing the error as helper text.
+           * Because the `ngx-ui-field-validation-messages` component will not update errors itself
+           */
+          this.validationMessages.ngOnInit()
+        }
       })
-*/
     }
   }
 
   updateChipListErrorState() {
     if (this.asMultiselect) {
-      this.chipList.errorState = this.control.invalid
       this.multiselectControl.setErrors(this.control.errors, { emitEvent: true })
+      this.chipList.errorState = this.multiselectControl.touched && this.multiselectControl.invalid
     }
   }
 
@@ -187,7 +171,7 @@ export class AutoCompleteWidgetComponent extends ControlWidget implements OnInit
       this.results = []
       this.resultMap = []
       this.resultMapIndex = {}
-      // if(event.query)
+
       for (const item of preDefinedValues) {
         if (this.matchExpression(item.description, event.query)) {
           const useKey = item.enum[0] || item.title || item.description
@@ -369,12 +353,4 @@ export class AutoCompleteWidgetComponent extends ControlWidget implements OnInit
     return false !== (this.schema.widget || {}).unique
   }
 
-}
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    // const isSubmitted = form && form.submitted;
-    const errorState = control && control.touched && control.invalid
-    console.log('##MyErrorStateMatcher## isErrorState:', errorState, control)
-    return errorState;
-  }
 }
