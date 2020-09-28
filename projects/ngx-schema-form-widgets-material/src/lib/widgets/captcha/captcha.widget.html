@@ -16,7 +16,15 @@ Element 'ngx-recaptcha' in 'widget'
                    For an example custom javascript see official page : https://www.npmjs.com/package/ngx-recaptcha-easy   
   - loadingMsg    : A message that will be showed when the captcha script is loading. Default: 'Loading CAPTCHA ...'  
   - loadingError  : A message that will be showed when the captcha script couldn't be loaded Default: 'Error loading CAPTCHA'  
+
+  - consentContent  : Some BBCode: (Default: 'This form uses ReCaptcha. Before sending the form, [u][url=https://policies.google.com/privacy?]please accept cookies before sending the form[/url][/u]')
+  - consentPrompt   : Some text for the 'Accept' checkbox label. (Default: '')
+  - consentRequired : true|false (Default: false)
+  - consentCookie   : string (Default: ReCAPTCHA_consent)
+  - consentStatic   : boolean . Will keep the checkbox visible even if consent is given (Default: false)
+  - consentTitle    : string: (Default: 'Required privacy policy agreement')
 -->
+
 <div class="ui-g-12">
   <div class="mat-checkbox">
 
@@ -24,6 +32,15 @@ Element 'ngx-recaptcha' in 'widget'
       {{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
       <ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
     </label>
+    <ng-container *ngIf="requiresConsent || (this.schema?.widget?.consentRequired && this.schema?.widget?.consentStatic)">
+      <div>
+      <div class="ui-widget-captcha-consentText" [innerHTML]="this.htmlContent"></div>
+      <label [matTooltip]="this.schema?.widget?.consentTitle||consentTitleDefault" [title]="this.schema?.widget?.consentTitle||consentTitleDefault">
+        <input
+          [title]="this.schema?.widget?.consentTitle||consentTitleDefault" type="checkbox" value="allow" [checked]="!requiresConsent" (change)="storeConsent($event)">{{schema?.widget?.consentPrompt||consentPromptDefault}}</label>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="showCAPTCHA">
     <ngx-recaptcha
       id="{{captchaNameId}}"
       (captchaResponse)="showResponse($event)"
@@ -44,5 +61,6 @@ Element 'ngx-recaptcha' in 'widget'
       <div class="ui-message ui-messages-error" *ngIf="captchaloadingerror" i18n>{{schema.widget.loadingError||'Error loading CAPTCHA!'}}</div>
       <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
     </mat-error>
+    </ng-container>
   </div>
 </div>
