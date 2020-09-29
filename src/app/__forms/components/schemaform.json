@@ -451,11 +451,19 @@
                 "columns": [
                   {
                     "field": "col-1",
-                    "header": "Col 1"
+                    "header": "Col 1",
+                    "sort": true,
+                    "sortAriaLabel": "Activate to sort 'col-1'",
+                    "sortAriaLabelAsc": "Activate to sort 'col-1' in ascending order",
+                    "sortAriaLabelDesc": "Activate to sort 'col-1' in descending order"
                   },
                   {
                     "field": "col-2",
-                    "header": "Col 2"
+                    "header": "Col 2",
+                    "sort": true,
+                    "sortAriaLabel": "Activate to sort 'col-2'",
+                    "sortAriaLabelAsc": "Activate to sort 'col-2' in ascending order",
+                    "sortAriaLabelDesc": "Activate to sort 'col-2' in descending order"
                   },
                   {
                     "field": "col-3",
