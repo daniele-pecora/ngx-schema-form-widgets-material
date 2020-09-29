@@ -1,21 +1,48 @@
 /**
  * Created by daniele on 14.04.19.
  */
-import { Component, OnDestroy } from "@angular/core";
-import { ObjectLayoutWidget, FormProperty, ArrayProperty } from "ngx-schema-form";
-import { Subscription } from 'rxjs'
+import { Component, Injectable, OnDestroy } from '@angular/core'
+import { ObjectLayoutWidget, FormProperty, ArrayProperty } from 'ngx-schema-form'
+import { Subject, Subscription } from 'rxjs'
 import { SafeHtml } from '@angular/platform-browser'
-import { JEXLExpressionCompiler } from "../_service/expression-complier.service"
+import { JEXLExpressionCompiler } from '../_service/expression-complier.service'
 import { DataConverterRegistryPipe, Converter } from '../_converters/_data/data-converter-registry.pipe'
 import { DataConverterTransformerRegistry } from '../_converters/_data/data-converter-transformer.registry'
-import { MatTable } from "@angular/material/table";
-import { MatSortHeaderIntl } from "@angular/material/sort";
+import { MatTable } from '@angular/material/table'
+import { MatSortHeaderIntl } from '@angular/material/sort'
+
+@Injectable()
+export class CustomMatSortHeaderIntl {
+    mappings: {
+        [column: string]: {
+            sortAriaLabel: string
+            sortAriaLabelAsc: string
+            sortAriaLabelDesc: string
+        }
+    }
+    states: {
+        [columns: string]: string
+    } = {}
+
+    changes: Subject<void> = new Subject<void>()
+    sortButtonLabel(id: string) {
+        let keyString = 'sortAriaLabel'
+        if (this.states[id] === 'asc') {
+            keyString = 'sortAriaLabelAsc'
+        } else if (this.states[id] === 'desc') {
+            keyString = 'sortAriaLabelDesc'
+        }
+        return this.mappings[id] ? this.mappings[id][keyString] : null
+    }
+}
 
 @Component({
     selector: 'ngx-ui-form-table',
     templateUrl: './table.widget.html',
     styleUrls: ['./table.widget.scss'],
-    providers: [JEXLExpressionCompiler, DataConverterRegistryPipe, DataConverterTransformerRegistry, MatSortHeaderIntl]
+    providers: [JEXLExpressionCompiler, DataConverterRegistryPipe, DataConverterTransformerRegistry,
+        { provide: MatSortHeaderIntl, useClass: CustomMatSortHeaderIntl }
+    ]
 })
 export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestroy {
     model = {
@@ -177,13 +204,20 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
         const _transform = item.transform
         const _transformLabel = item.transformLabel
 
-        return !(_value || _empty!==false)
+        return !(_value || _empty !== false)
     }
 
     updateColIds() {
+        const msortservice = this.matSortService as CustomMatSortHeaderIntl
+        msortservice.mappings = msortservice.mappings || {} as {[column:string]:{
+            sortAriaLabel: string
+            sortAriaLabelAsc: string
+            sortAriaLabelDesc: string
+        }}
         const colIds = []
         for (const col of this.model.cols) {
             colIds.push(col.field)
+            msortservice.mappings[col.field] = col
         }
         this.model['colIds'] = colIds
     }
@@ -261,7 +295,9 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
             table['_orgmodel'].values = [].concat(this.model.values)
             table['_orgmodel']['colIds'] = [].concat(this.model['colIds'])
         }
-        let sortButtonLabel = ''
+        const msortservice = this.matSortService as CustomMatSortHeaderIntl
+        msortservice.states[activeCol] = direction
+
         if (!direction) {
             this.model = {
                 cols: [],
@@ -279,7 +315,9 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
                 return item2[activeCol].localeCompare(item1[activeCol])
             })
         }
-        this.matSortService.sortButtonLabel(sortButtonLabel)
+
         table.renderRows()
+
+        console.error('this.model["cols"]', event, this.model['cols'])
     }
 }
