@@ -263,15 +263,19 @@
     </ng-container>
 
     <ng-template #templateTableKeyValue>
-        <mat-table [dataSource]="schema?.widget?.keyValue" class="mat-elevation-z8">
+        <mat-table [dataSource]="schema?.widget?.keyValue" class="mat-elevation-z8"
+        matSort
+        #tableKeyValue
+        >
             <!-- col definition for the KEY column -->
             <ng-container matColumnDef="col_key">
                 <mat-header-cell *matHeaderCellDef
                 [class.ngx-ui-cell-border]="schema?.widget?.collapsed!==true"
+                mat-sort-header
                 >Key</mat-header-cell>
                 <mat-cell *matCellDef="let item"
                 [class.ngx-ui-cell-border]="schema?.widget?.collapsed!==true"
-                >
+                >CCC
                     <ng-container [ngTemplateOutlet]="rowTemplateKeyValue_Label" [ngTemplateOutletContext]="{
                         value: item.value === '' ? '' : (item.value || (item.valuePath ? formProperty.searchProperty(item.valuePath)?.value : '')),
                         label: item.label === '' ? '' : (item.label || (item.labelPath ? (formProperty.searchProperty(item.labelPath)?.parent?.schema?.items?.title||formProperty.searchProperty(item.labelPath)?.schema?.title) : '') || (item.valuePath ? (formProperty.searchProperty(item.valuePath)?.parent?.schema?.items?.title||formProperty.searchProperty(item.valuePath)?.schema?.title) : '')),
@@ -286,10 +290,11 @@
             <ng-container matColumnDef="col_value">
                 <mat-header-cell *matHeaderCellDef
                 [class.ngx-ui-cell-border]="schema?.widget?.collapsed!==true"
+                mat-sort-header
                 >Value</mat-header-cell>
                 <mat-cell *matCellDef="let item"
                 [class.ngx-ui-cell-border]="schema?.widget?.collapsed!==true"
-                >
+                >RRR
                     <ng-container [ngTemplateOutlet]="rowTemplateKeyValue_Value" [ngTemplateOutletContext]="{
                         value: item.value === '' ? '' : (item.value || (item.valuePath ? formProperty.searchProperty(item.valuePath)?.value : '')),
                         label: item.label === '' ? '' : (item.label || (item.labelPath ? (formProperty.searchProperty(item.labelPath)?.parent?.schema?.items?.title||formProperty.searchProperty(item.labelPath)?.schema?.title) : '') || (item.valuePath ? (formProperty.searchProperty(item.valuePath)?.parent?.schema?.items?.title||formProperty.searchProperty(item.valuePath)?.schema?.title) : '')),
@@ -306,7 +311,8 @@
                 <th mat-header-cell *matHeaderCellDef
                 [attr.colspan]="model.colIds?.length"
                 class="ngx-ui-mat-responsive-table-caption"
-                >
+                mat-sort-header
+                >EEE
                     {{schema.widget.caption}}</th>
             </ng-container>
             <ng-template *ngIf="schema?.widget?.caption">
@@ -434,13 +440,19 @@
     </ng-template>
 
     <ng-template #templateTableDefault>
-        <mat-table [dataSource]="model?.values" class="mat-elevation-z8 ngx-mat-responsive-table">
+        <mat-table 
+        #tableDefault
+        [dataSource]="model?.values" class="mat-elevation-z8 ngx-mat-responsive-table"
+        matSort
+        (matSortChange)="onMatSortChange($event, tableDefault)"
+        >
 
             <!-- whit this we create dynamic cell definition -->
             <ng-container *ngFor="let col of model?.cols; let colIndex = index" matColumnDef="{{col.field}}">
                 <mat-header-cell *matHeaderCellDef="let item"
                 [class.ngx-ui-cell-border]="schema?.widget?.collapsed!==true"
-                >
+                mat-sort-header
+                >FFF
                 <!-- {{col.header}} -->
                 <ng-container *ngIf="(schema?.widget?.model?.transformLabel||{})[col.field]; else noConverterLabel"
                 [ngTemplateOutlet]="valueTH"
@@ -456,7 +468,7 @@
                 </mat-header-cell>
                 <mat-cell *matCellDef="let item"
                 [class.ngx-ui-cell-border]="schema?.widget?.collapsed!==true"
-                >
+                >FFF
                     <!-- <ng-container *ngIf="(schema?.widget?.model?.transform||{})[col.field]; else noConverter">
                             {{item[col.field]|DataConverter:formProperty:schema.widget.model.transform[col.field]}}
                     </ng-container>

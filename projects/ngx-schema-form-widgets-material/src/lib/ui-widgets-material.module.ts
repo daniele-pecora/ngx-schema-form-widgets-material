@@ -77,6 +77,7 @@ import {MatExpansionModule,} from '@angular/material/expansion'
 import {MatTabsModule,} from '@angular/material/tabs'
 import {MatDialogModule,} from '@angular/material/dialog'
 import {MatTableModule} from '@angular/material/table'
+import {MatSortModule} from '@angular/material/sort'
 import {MatChipsModule} from '@angular/material/chips'
 
 import {NgxRecaptchaModule} from 'ngx-recaptcha-easy'
@@ -132,6 +133,7 @@ const moduleProviders = [
     MatExpansionModule,
     MatTabsModule,
     MatTableModule,
+    MatSortModule,
     MatChipsModule,
     // ngx-recaptcha
     NgxRecaptchaModule,

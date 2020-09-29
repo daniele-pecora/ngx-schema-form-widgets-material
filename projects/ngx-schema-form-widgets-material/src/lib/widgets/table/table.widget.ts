@@ -8,6 +8,7 @@ import { SafeHtml } from '@angular/platform-browser'
 import { JEXLExpressionCompiler } from "../_service/expression-complier.service"
 import { DataConverterRegistryPipe, Converter } from '../_converters/_data/data-converter-registry.pipe'
 import { DataConverterTransformerRegistry } from '../_converters/_data/data-converter-transformer.registry'
+import { MatTable } from "@angular/material/table";
 
 @Component({
     selector: 'ngx-ui-form-table',
@@ -247,5 +248,34 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
 
         const found = this.dataConverterTransformerRegistry.findTransformer('bbcode', transformer)
         return found
+    }
+
+    onMatSortChange(event, table: MatTable<any>) {
+        const activeCol = event.active
+        const direction = event.direction
+        if (!table['_orgmodel']) {
+            table['_orgmodel'] = { cols: [], values: [] }
+            table['_orgmodel'].cols = [].concat(this.model.cols)
+            table['_orgmodel'].values = [].concat(this.model.values)
+            table['_orgmodel']['colIds'] = [].concat(this.model['colIds'])
+        }
+        if (!direction) {
+            this.model = {
+                cols: [],
+                values: []
+            }
+            this.model['colIds'] = [].concat(table['_orgmodel']['colIds'])
+            this.model['cols'] = [].concat(table['_orgmodel']['cols'])
+            this.model['values'] = [].concat(table['_orgmodel']['values'])
+        } else if ('asc' === direction) {
+            this.model.values.sort((item1, item2) => {
+                return item1[activeCol].localeCompare(item2[activeCol])
+            })
+        } else if ('desc' === direction) {
+            this.model.values.sort((item1, item2) => {
+                return item2[activeCol].localeCompare(item1[activeCol])
+            })
+        }
+        table.renderRows()
     }
 }
