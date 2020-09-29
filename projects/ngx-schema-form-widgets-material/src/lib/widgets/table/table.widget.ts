@@ -9,12 +9,13 @@ import { JEXLExpressionCompiler } from "../_service/expression-complier.service"
 import { DataConverterRegistryPipe, Converter } from '../_converters/_data/data-converter-registry.pipe'
 import { DataConverterTransformerRegistry } from '../_converters/_data/data-converter-transformer.registry'
 import { MatTable } from "@angular/material/table";
+import { MatSortHeaderIntl } from "@angular/material/sort";
 
 @Component({
     selector: 'ngx-ui-form-table',
     templateUrl: './table.widget.html',
     styleUrls: ['./table.widget.scss'],
-    providers: [JEXLExpressionCompiler, DataConverterRegistryPipe, DataConverterTransformerRegistry]
+    providers: [JEXLExpressionCompiler, DataConverterRegistryPipe, DataConverterTransformerRegistry, MatSortHeaderIntl]
 })
 export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestroy {
     model = {
@@ -27,7 +28,8 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
         [key: string]: Subscription
     } = {}
 
-    constructor(private dataConverterTransformerRegistry: DataConverterTransformerRegistry) {
+    constructor(private dataConverterTransformerRegistry: DataConverterTransformerRegistry
+        , private matSortService: MatSortHeaderIntl) {
         super()
     }
 
@@ -259,6 +261,7 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
             table['_orgmodel'].values = [].concat(this.model.values)
             table['_orgmodel']['colIds'] = [].concat(this.model['colIds'])
         }
+        let sortButtonLabel = ''
         if (!direction) {
             this.model = {
                 cols: [],
@@ -276,6 +279,7 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
                 return item2[activeCol].localeCompare(item1[activeCol])
             })
         }
+        this.matSortService.sortButtonLabel(sortButtonLabel)
         table.renderRows()
     }
 }
