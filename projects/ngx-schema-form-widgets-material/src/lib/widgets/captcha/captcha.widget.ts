@@ -102,7 +102,6 @@ export class CaptchaWidgetComponent extends ControlWidget implements OnInit {
   }
 
   storeConsent(event) {
-    console.log(event)
     if (event.target.checked) {
       this.storeCookie(this.schema.widget.consentCookieName || this.consentCookieNameDefault, 'allow')
     } else {
