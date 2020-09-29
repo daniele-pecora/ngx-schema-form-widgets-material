@@ -98,7 +98,7 @@ export class CaptchaWidgetComponent extends ControlWidget implements OnInit {
   }
 
   requiresConsentRequest() {
-    return 'allow' !== this.getCookie(this.schema.widget.consentCookieName || this.consentCookieNameDefault)
+    return this.schema.widget.consentRequired && 'allow' !== this.getCookie(this.schema.widget.consentCookieName || this.consentCookieNameDefault)
   }
 
   storeConsent(event) {
