@@ -1,19 +1,48 @@
 /**
  * Created by daniele on 14.04.19.
  */
-import { Component, OnDestroy } from "@angular/core";
-import { ObjectLayoutWidget, FormProperty, ArrayProperty } from "ngx-schema-form";
-import { Subscription } from 'rxjs'
+import { Component, Injectable, OnDestroy } from '@angular/core'
+import { ObjectLayoutWidget, FormProperty, ArrayProperty } from 'ngx-schema-form'
+import { Subject, Subscription } from 'rxjs'
 import { SafeHtml } from '@angular/platform-browser'
-import { JEXLExpressionCompiler } from "../_service/expression-complier.service"
+import { JEXLExpressionCompiler } from '../_service/expression-complier.service'
 import { DataConverterRegistryPipe, Converter } from '../_converters/_data/data-converter-registry.pipe'
 import { DataConverterTransformerRegistry } from '../_converters/_data/data-converter-transformer.registry'
+import { MatTable } from '@angular/material/table'
+import { MatSortHeaderIntl } from '@angular/material/sort'
+
+@Injectable()
+export class CustomMatSortHeaderIntl {
+    mappings: {
+        [column: string]: {
+            sortAriaLabel: string
+            sortAriaLabelAsc: string
+            sortAriaLabelDesc: string
+        }
+    }
+    states: {
+        [columns: string]: string
+    } = {}
+
+    changes: Subject<void> = new Subject<void>()
+    sortButtonLabel(id: string) {
+        let keyString = 'sortAriaLabel'
+        if (this.states[id] === 'asc') {
+            keyString = 'sortAriaLabelAsc'
+        } else if (this.states[id] === 'desc') {
+            keyString = 'sortAriaLabelDesc'
+        }
+        return this.mappings[id] ? this.mappings[id][keyString] : null
+    }
+}
 
 @Component({
     selector: 'ngx-ui-form-table',
     templateUrl: './table.widget.html',
     styleUrls: ['./table.widget.scss'],
-    providers: [JEXLExpressionCompiler, DataConverterRegistryPipe, DataConverterTransformerRegistry]
+    providers: [JEXLExpressionCompiler, DataConverterRegistryPipe, DataConverterTransformerRegistry,
+        { provide: MatSortHeaderIntl, useClass: CustomMatSortHeaderIntl }
+    ]
 })
 export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestroy {
     model = {
@@ -26,7 +55,8 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
         [key: string]: Subscription
     } = {}
 
-    constructor(private dataConverterTransformerRegistry: DataConverterTransformerRegistry) {
+    constructor(private dataConverterTransformerRegistry: DataConverterTransformerRegistry
+        , private matSortService: MatSortHeaderIntl) {
         super()
     }
 
@@ -174,13 +204,20 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
         const _transform = item.transform
         const _transformLabel = item.transformLabel
 
-        return !(_value || _empty!==false)
+        return !(_value || _empty !== false)
     }
 
     updateColIds() {
+        const msortservice = this.matSortService as CustomMatSortHeaderIntl
+        msortservice.mappings = msortservice.mappings || {} as {[column:string]:{
+            sortAriaLabel: string
+            sortAriaLabelAsc: string
+            sortAriaLabelDesc: string
+        }}
         const colIds = []
         for (const col of this.model.cols) {
             colIds.push(col.field)
+            msortservice.mappings[col.field] = col
         }
         this.model['colIds'] = colIds
     }
@@ -247,5 +284,38 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
 
         const found = this.dataConverterTransformerRegistry.findTransformer('bbcode', transformer)
         return found
+    }
+
+    onMatSortChange(event, table: MatTable<any>) {
+        const activeCol = event.active
+        const direction = event.direction
+        if (!table['_orgmodel']) {
+            table['_orgmodel'] = { cols: [], values: [] }
+            table['_orgmodel'].cols = [].concat(this.model.cols)
+            table['_orgmodel'].values = [].concat(this.model.values)
+            table['_orgmodel']['colIds'] = [].concat(this.model['colIds'])
+        }
+        const msortservice = this.matSortService as CustomMatSortHeaderIntl
+        msortservice.states[activeCol] = direction
+
+        if (!direction) {
+            this.model = {
+                cols: [],
+                values: []
+            }
+            this.model['colIds'] = [].concat(table['_orgmodel']['colIds'])
+            this.model['cols'] = [].concat(table['_orgmodel']['cols'])
+            this.model['values'] = [].concat(table['_orgmodel']['values'])
+        } else if ('asc' === direction) {
+            this.model.values.sort((item1, item2) => {
+                return item1[activeCol].localeCompare(item2[activeCol])
+            })
+        } else if ('desc' === direction) {
+            this.model.values.sort((item1, item2) => {
+                return item2[activeCol].localeCompare(item1[activeCol])
+            })
+        }
+
+        table.renderRows()
     }
 }

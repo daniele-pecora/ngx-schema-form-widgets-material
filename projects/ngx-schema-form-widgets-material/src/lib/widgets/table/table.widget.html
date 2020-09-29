@@ -8,11 +8,20 @@
                             - columns = An array containing the columns information
                                 - header = The label to show as column header
                                 - field  = The property in data property
+                                - sort   = Enable sorting for this column
+                                - sortAriaLabel     = Aria label text for sorting icon
+                                - sortAriaLabelAsc  = Aria label text for sorting icon when sorting ascending
+                                - sortAriaLabelDesc = Aria label text for sorting icon when sorting descending
                             - data = An array of items containig values for every columns field
                         e.g.
                         {
                             "columns" : [
-                                {"header" : "Column 1", "field" : "property-1"}
+                                {"header" : "Column 1", "field" : "property-1", 
+                                    "sort": true, 
+                                    "sortAriaLabel": "Activate to sort 'Column 1'",
+                                    "sortAriaLabelAsc": "Activate to sort 'Column 1' in ascending order",
+                                    "sortAriaLabelDesc": "Activate to sort 'Column 1' in descending order"
+                                 }
                                 ,{"header" : "Column 2", "field" : "property-2"}
                                 ,{"header" : "Column 3", "field" : "property-3"}
                                 ],
@@ -263,7 +272,10 @@
     </ng-container>
 
     <ng-template #templateTableKeyValue>
-        <mat-table [dataSource]="schema?.widget?.keyValue" class="mat-elevation-z8">
+        <mat-table [dataSource]="schema?.widget?.keyValue" class="mat-elevation-z8"
+        matSort
+        #tableKeyValue
+        >
             <!-- col definition for the KEY column -->
             <ng-container matColumnDef="col_key">
                 <mat-header-cell *matHeaderCellDef
@@ -356,12 +368,6 @@
     <!-- template for VALUE cell -->
     <ng-template #rowTemplateKeyValue_Value let-value="value" let-label="label" let-empty="empty" let-transform="transform" let-transformLabel="transformLabel">
         <ng-container *ngIf="value || empty!==false">
-            <!-- <ng-container *ngIf="transform; else noConverter">
-                    {{(value||empty)|DataConverter:formProperty:transform}}
-            </ng-container>
-            <ng-template #noConverter>
-                    {{value||empty}}
-            </ng-template> -->
             <ng-container *ngIf="transform; else noConverter"
                 [ngTemplateOutlet]="valueTD"
                 [ngTemplateOutletContext]="{
@@ -434,35 +440,47 @@
     </ng-template>
 
     <ng-template #templateTableDefault>
-        <mat-table [dataSource]="model?.values" class="mat-elevation-z8 ngx-mat-responsive-table">
+        <mat-table 
+        #tableDefault
+        [dataSource]="model?.values" class="mat-elevation-z8 ngx-mat-responsive-table"
+        matSort
+        (matSortChange)="onMatSortChange($event, tableDefault)"
+        >
 
             <!-- whit this we create dynamic cell definition -->
             <ng-container *ngFor="let col of model?.cols; let colIndex = index" matColumnDef="{{col.field}}">
+                <ng-template #matHeaderCellContent>
+                    <!-- {{col.header}} -->
+                    <ng-container *ngIf="(schema?.widget?.model?.transformLabel||{})[col.field]; else noConverterLabel"
+                    [ngTemplateOutlet]="valueTH"
+                    [ngTemplateOutletContext]="{
+                        value:col.header,
+                        formProperty:formProperty,
+                        transformer:schema.widget.model.transformLabel[col.field]
+                    }" >
+                    </ng-container>
+                    <ng-template #noConverterLabel>
+                        <span class="_vo-mat-responsive-table-cell-label">{{col.header}}</span>
+                    </ng-template>
+                </ng-template>
+                <ng-container *ngIf="col.sort">
+                <mat-header-cell *matHeaderCellDef="let item"
+                [class.ngx-ui-cell-border]="schema?.widget?.collapsed!==true"
+                mat-sort-header
+                >
+                    <ng-container [ngTemplateOutlet]="matHeaderCellContent"></ng-container>
+                </mat-header-cell>
+                </ng-container>
+                <ng-container *ngIf="!col.sort">
                 <mat-header-cell *matHeaderCellDef="let item"
                 [class.ngx-ui-cell-border]="schema?.widget?.collapsed!==true"
                 >
-                <!-- {{col.header}} -->
-                <ng-container *ngIf="(schema?.widget?.model?.transformLabel||{})[col.field]; else noConverterLabel"
-                [ngTemplateOutlet]="valueTH"
-                [ngTemplateOutletContext]="{
-                    value:col.header,
-                    formProperty:formProperty,
-                    transformer:schema.widget.model.transformLabel[col.field]
-                }" >
-                </ng-container>
-                <ng-template #noConverterLabel>
-                    <span class="_vo-mat-responsive-table-cell-label">{{col.header}}</span>
-                </ng-template>
+                    <ng-container [ngTemplateOutlet]="matHeaderCellContent"></ng-container>
                 </mat-header-cell>
+                </ng-container>
                 <mat-cell *matCellDef="let item"
                 [class.ngx-ui-cell-border]="schema?.widget?.collapsed!==true"
                 >
-                    <!-- <ng-container *ngIf="(schema?.widget?.model?.transform||{})[col.field]; else noConverter">
-                            {{item[col.field]|DataConverter:formProperty:schema.widget.model.transform[col.field]}}
-                    </ng-container>
-                    <ng-template #noConverter>
-                            {{item[col.field]}}
-                    </ng-template> -->
                     <ng-container *ngIf="(schema?.widget?.model?.transform||{})[col.field]; else noConverter"
                     [ngTemplateOutlet]="valueTD"
                     [ngTemplateOutletContext]="{
