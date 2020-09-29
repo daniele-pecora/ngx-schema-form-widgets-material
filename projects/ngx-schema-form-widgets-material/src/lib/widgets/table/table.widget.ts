@@ -317,7 +317,5 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
         }
 
         table.renderRows()
-
-        console.error('this.model["cols"]', event, this.model['cols'])
     }
 }
