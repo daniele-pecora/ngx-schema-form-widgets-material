@@ -26,6 +26,7 @@ export const inputDateAutoComplete = (srcElement: any, formProperty: FormPropert
             }
             return found
         }
+
         const dateFormat = formProperty.schema.widget.dateFormat || defaultDateFormat
         const formatMaxSize = dateFormat.length
         const separatorMeta = matchAll(dateFormat, new RegExp('[^YMDHSA]', 'gi'))
@@ -35,7 +36,14 @@ export const inputDateAutoComplete = (srcElement: any, formProperty: FormPropert
             separatorChars.push(sMeta[0])
             separatorPositions.push(sMeta['index'])
         }
+        // separate all date format parts by their separator characters
+        const dateFormatPartsRegExp = new RegExp('[' + separatorChars.filter((item, pos) => separatorChars.indexOf(item) === pos).join('') + ']', 'ig')
+        const dateFormatParts = dateFormat.split(dateFormatPartsRegExp)
+
         const transformValue = (formProperty: FormProperty, srcElement: any) => {
+            if (!srcElement /** may be null if date-picker is used */) {
+                return srcElement
+            }
             if (srcElement.value &&
                 /** check type because it may be a 'Date' object that we don't care about */
                 typeof (srcElement.value) === 'string') {
@@ -44,6 +52,54 @@ export const inputDateAutoComplete = (srcElement: any, formProperty: FormPropert
                     srcElement.value = srcElement.value.substring(0, formatMaxSize)
                     return srcElement.value
                 }
+
+                /* BEGIN - check if separator character has been typed */
+                const _lastChar = `${srcElement.value}`.slice(-1)
+                if (-1 !== separatorChars.indexOf(_lastChar)) {
+                    //1. find the current separator position and date format part
+                    let separatorPos = -1
+                    let separatorChar
+                    let dateFormatPart
+                    let separatorCount = -1
+                    for (let i = 0; i < separatorPositions.length; i++) {
+                        if (srcElement.value.length <= separatorPositions[i]) {
+                            if (separatorCount !== separatorPositions.length - 1) {
+                                separatorChar = separatorChars[i] 
+                                separatorPos = separatorPositions[i]
+                                dateFormatPart = dateFormatParts[i]
+                                separatorCount = i
+                            }
+                            break
+                        }
+                    }
+                    // 2. fill up the string with 0 padding if necessary
+                    if (-1 !== separatorPos) {
+                        if (separatorCount) {
+                            let datePartString = srcElement.value.substring(
+                                separatorPositions[separatorCount - 1] + separatorChars[separatorCount - 1].length,
+                                separatorPositions[separatorCount] - separatorChars[separatorCount].length
+                            )
+                            if (datePartString && -1 === separatorChars.indexOf(datePartString)) {
+                                let addPadding = ''
+                                dateFormatPart.split('').map(item => {
+                                    if ((datePartString.length + addPadding.length) < dateFormatPart.length) {
+                                        addPadding = '0' + addPadding
+                                    }
+                                    return item;
+                                })
+                                srcElement.value = srcElement.value.substring(0, separatorPositions[separatorCount - 1] + separatorChars[separatorCount - 1].length)
+                                    + addPadding
+                                    + srcElement.value.substring(separatorPositions[separatorCount - 1] + separatorChars[separatorCount - 1].length)
+                            }
+                        } else {
+                            srcElement.value = '0' + srcElement.value
+                        }
+                    }
+                    // 3. pass the value for further processing
+                    // ...
+                }
+                /* END - check if separator character has been typed */
+
                 /* BEGIN - filter only allowed characters */
                 const lastChar = `${srcElement.value}`.slice(-1)
                 if (-1 === separatorChars.indexOf(lastChar) && !lastChar.match(new RegExp('[0-9]'))) {
@@ -109,5 +165,6 @@ export const inputDateAutoComplete = (srcElement: any, formProperty: FormPropert
         }
         formProperty['dateFormatSettings'] = dateFormatSettings
     }
-    formProperty['dateFormatSettings'].transformValue(formProperty, srcElement)
+    if (srcElement)
+        formProperty['dateFormatSettings'].transformValue(formProperty, srcElement)
 }
