@@ -69,6 +69,14 @@ Install grid style from primeng in your `angular.json`
 ```
 
 
+Import your default material css
+```css
+  /* You can add global styles to this file, and also import other style files */
+  @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+```
+
+
 ## Widget Library Documentation
 
 Head over to the [library documentation README.MD](documentation/README.md) (Not Yet :-( )
