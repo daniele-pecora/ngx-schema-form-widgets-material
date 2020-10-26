@@ -181,7 +181,6 @@ const moduleProviders = [
     DialogWidgetComponent,
     DialogComponent,
     DialogFormElementComponent,
-    DialogComponent,
 
 
     //
@@ -236,8 +235,8 @@ const moduleProviders = [
     SelectButtonWidgetComponent,
     SelectCardWidgetComponent,
     DialogWidgetComponent,
-    DialogFormElementComponent,
     DialogComponent,
+    DialogFormElementComponent,
 
     //
     InputmaskComponent,
@@ -280,8 +279,8 @@ const moduleProviders = [
     SelectButtonWidgetComponent,
     SelectCardWidgetComponent,
     DialogWidgetComponent,
-    DialogFormElementComponent,
     DialogComponent,
+    DialogFormElementComponent,
 
     //
     ByteSizeFormatPipe,
