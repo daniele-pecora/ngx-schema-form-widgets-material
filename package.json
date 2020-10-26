@@ -47,7 +47,7 @@
     "firebase:publish": "npm run build:prod-server && firebase deploy",
     "-- Copy resources --": "",
     "copy:css-resources": "node -e \"var src=['./projects/ngx-schema-form-widgets-material/src/ngx-schema-form-widgets-material.css','./projects/ngx-schema-form-widgets-material/src/primeng-ui-g.css']; var dest=['./dist/ngx-schema-form-widgets-material/ngx-schema-form-widgets-material.css','./dist/ngx-schema-form-widgets-material/primeng-ui-g.css']; var fs = require('fs'); for(var i=0;i<src.length;i++){if (fs.existsSync(src[i])) { var data = fs.readFileSync(src[i], 'utf-8'); fs.writeFileSync(dest[i], data);}}\"",
-    "prepack:lib":"npm run copy:css-resources"
+    "prepack:lib": "npm run copy:css-resources"
   },
   "private": true,
   "dependencies": {

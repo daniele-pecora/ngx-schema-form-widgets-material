@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges, SimpleChange, ViewChild, TemplateRef, Output, EventEmitter } from '@angular/core'
+import { Component, Input, OnChanges, SimpleChanges, SimpleChange, ViewChild, TemplateRef, Output, EventEmitter, AfterViewInit } from '@angular/core'
 import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material/dialog'
 
 
@@ -8,7 +8,7 @@ const defaultDialogConfig = new MatDialogConfig();
     selector: 'ngx-ui-mat-dialog',
     templateUrl: './dialog.component.html'
 })
-export class DialogComponent implements OnChanges {
+export class DialogComponent implements OnChanges, AfterViewInit {
     /**
      * visible is the only input with 2 way binding
      */
@@ -56,8 +56,18 @@ export class DialogComponent implements OnChanges {
 
     @ViewChild(TemplateRef) dialogContentTemplate: TemplateRef<any>
 
+    initedView = false
     constructor(public dialog: MatDialog) {
 
+    }
+
+    ngAfterViewInit(): void {
+        this.initedView = true
+        if (this.visible) {
+            this.openDialog()
+        } else {
+            this.closeDialog()
+        }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -76,7 +86,9 @@ export class DialogComponent implements OnChanges {
              */
             if (change_visible.currentValue !== change_visible.previousValue) {
                 if (change_visible.currentValue) {
-                    this.openDialog()
+                    if (this.initedView) { // don't call if view is not yet inited
+                        this.openDialog()
+                    }
                 } else {
                     this.closeDialog()
                 }
