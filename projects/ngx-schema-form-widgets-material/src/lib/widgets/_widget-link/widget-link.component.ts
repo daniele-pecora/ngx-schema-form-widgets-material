@@ -3,6 +3,23 @@ import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser'
 import { MatDialog } from '@angular/material/dialog';
 import {WidgetLinkOverlayComponent} from './widget-link-overlay.component'
 
+export interface WidgetLinkComponentModel {
+  id: string;
+  target: string;
+  description: string;
+  href: string;
+  label: string;
+  icon: string;
+  iconPos: string;
+  /**
+   * Show content in an overlay iframe
+   */
+  overlay: boolean;
+  overlayClose: string;
+  overlayOpen: string;
+  sandbox: string
+}
+
 @Component({
   selector: 'ngx-ui-widget-link',
   template: `
@@ -91,21 +108,4 @@ export class WidgetLinkComponent implements OnInit {
       return false
     }
   }
-}
-
-export class WidgetLinkComponentModel {
-  id: string;
-  target: string;
-  description: string;
-  href: string;
-  label: string;
-  icon: string;
-  iconPos: string;
-  /**
-   * Show content in an overlay iframe
-   */
-  overlay: boolean;
-  overlayClose: string;
-  overlayOpen: string;
-  sandbox: string
 }
