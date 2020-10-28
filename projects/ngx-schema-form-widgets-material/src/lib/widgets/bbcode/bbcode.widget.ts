@@ -5,7 +5,7 @@ import simpleParser from './simple-bbcode.parser'
 import { escapeHTMLInBBCode } from '../_converters/_data/bbcode.converter';
 
 @Component({
-  selector: 'ngx-ui-bbcode-widget',
+  selector: 'vo-ui-bbcode-widget',
   templateUrl: './bbcode.widget.html'
 })
 export class BbcodeWidgetComponent extends ObjectLayoutWidget implements AfterViewInit {
@@ -31,7 +31,8 @@ export class BbcodeWidgetComponent extends ObjectLayoutWidget implements AfterVi
     }
     if (this.schema.widget.bbcode) {
       const bbcode = escapeHTMLInBBCode(this.schema.widget.bbcode)
-      content += simpleParser.parse(this.sanitizer.sanitize(SecurityContext.HTML,`${bbcode}`))
+      // should not use SecurityContext.HTML, it will remove the support for 'url=...|onclick'
+      content += simpleParser.parse(this.sanitizer.sanitize(SecurityContext.NONE,`${bbcode}`))
     }
     return content
   }
