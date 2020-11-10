@@ -1,10 +1,10 @@
 <!--
 Element 'form'
+ - asCard         : true|false (default:false) = show or don't show card layout
  - split               : true|false = set if fields should be split up in two colums
  - ignoreParentSplit   : true|false = ignores the split property of the parent .
                                       Keeps positioning the fields in columns style and
                                       avoids creating nested blocks with columns
-  - asCard             : true|false (default:false) = show or don't show card layout
   - showErrors         : true|false
                          or object of type:
                                   {
@@ -15,10 +15,10 @@ Element 'form'
                                    }
 
 - nopad            : When <code>true</code> the padding for the first level children will be removed
-- splitSizeLeft    : Defines the width of the left column when <code>"split": true</code>
+- splitLeft        : Defines the width of the left column when <code>"split": true</code>
                      The left and right column share a value of <code>12</code> so that is what
                      the total of both should max be.
-- splitSizeRight   : Defines the width of the right column when <code>"split": true</code>
+- splitRight       : Defines the width of the right column when <code>"split": true</code>
                      The left and right column share a value of <code>12</code> so that is what
                      the total of both should max be.
 
@@ -32,11 +32,25 @@ Element 'button'
  - iconPos     : left|right = primeng button icon position
  - inline      : true|false = show horizontally inlined
 
-        Element 'link'
-            see documentation of _widget-link/widget-link.component.ts
+Element 'link'
+    see documentation of _widget-link/widget-link.component.ts
 -->
 
 <ngx-ui-validation-messages *ngIf="formProperty.schema.widget?.showErrors && formProperty.schema.widget?.showErrors?.position!=='bottom'" [formComponent]="this"></ngx-ui-validation-messages>
+
+<ng-template #form_element
+  let-formprop="formprop"
+  let-parentprop="parentprop"
+  >
+  <sf-form-element
+    *ngIf="formprop"
+    [class.ui-sm-12]="!(formprop?.schema?.widget?.id==='hidden')"
+    class="ui-g-{{i%2===0 ? parentprop?.schema?.widget?.splitLeft : parentprop?.schema?.widget?.splitRight}}"
+    [class.ui-g-6]="(!parentprop?.schema?.widget?.splitLeft && !parentprop?.schema?.widget?.splitRight) && !(formprop.schema.widget.id==='hidden'||formprop.schema.widget.ignoreParentSplit)"
+    [class.ui-g-nopad]="schema?.widget?.nopad"
+    [formProperty]="formprop">
+  </sf-form-element>
+</ng-template>
 
 <div class="{{formProperty.schema?.widget?.asCard?'ui-g card card-w-title':''}}">
   <div *ngFor="let fieldset of formProperty.schema.fieldsets">
@@ -44,22 +58,20 @@ Element 'button'
       <ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
     </h3>
     <h5 class="ui-g-12" *ngIf="fieldset.description">{{fieldset.description}}</h5>
-
-    <div *ngIf="schema.widget.split===true">
+    
+    <div *ngIf="schema.widget.split===true;else formElementNoSplit">
       <div *ngFor="let fieldId of fieldset.fields;let i = index">
-        <sf-form-element
-          class="ui-sm-12 ui-g-{{i%2===0 ? formProperty?.schema?.widget?.splitLeft : formProperty?.schema?.widget?.splitRight}} test-{{i%2}}"
-          [class.ui-g-6]="(!formProperty?.schema?.widget?.splitLeft && !formProperty?.schema?.widget?.splitRight) && !(formProperty.getProperty(fieldId).schema.widget.id==='hidden'||formProperty.getProperty(fieldId).schema.widget.ignoreParentSplit)"
-          [class.ui-g-nopad]="schema?.widget?.nopad"
-          [formProperty]="formProperty.getProperty(fieldId)">
-        </sf-form-element>
+        <ng-container *ngTemplateOutlet="form_element;context:{ formprop: formProperty.getProperty(fieldId),  parentprop: formProperty}">
+        </ng-container>
       </div>
     </div>
 
-    <div *ngIf="!schema.widget.split">
+    <ng-template #formElementNoSplit>
+    <div>
       <sf-form-element *ngFor="let fieldId of fieldset.fields" [formProperty]="formProperty.getProperty(fieldId)">
       </sf-form-element>
     </div>
+    </ng-template>
 
 
   </div>

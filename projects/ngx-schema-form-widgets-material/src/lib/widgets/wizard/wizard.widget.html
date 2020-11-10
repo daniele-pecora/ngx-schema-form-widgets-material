@@ -25,8 +25,6 @@ Element 'widget:wizard':
            - iconPos  : left|right = primeng button icon position
            - actionId : the id of an action defined in the action-registry (action.ts)
                         this action will be executed before changing page (except of finish action)
-           - actionId : the id of an action defined in the action-registry (action.ts)
-                        this action will be executed before changing page (except of finish action).
                         A set of params indicating the navigation direction are provided to the action function
                           - fromPage   = Source page/section.
                                          The page on wich tha page change has been triggered.
@@ -65,7 +63,7 @@ Element 'widget:wizard':
             |
             |             this is mainly used when you want or don't want to
             |             scroll to window top when changing the current page
-
+        - separateView        = when true then the stepper, form and button will be showed in each an own card (default :false), this will ignore setting 'asCard'
         - asCard         : true|false (default:false) = show or don't show card layout
 
         - style           : 'default' or 'accordion'
@@ -79,6 +77,15 @@ Element 'widget:wizard':
                               <code>{ ..., "stepperVertical": 3}</code>
                               To set the width of the vertical stepper to 3 columns and the content will get 9 columns.
 
+
+- showErrors : true|false
+               or object of type:
+                                {
+                                    position  : top|bottom, (default:top)   // shows the messages at top or at the bottom
+                                    all       : true|false, (default:false) // show also children's error messages
+                                    firstOnly : true|false, (default:false) // show only the first error message
+                                    codes     : string[],   ([])            // show only error messages that match any of this error codes, leave empty to show all errors
+                                 }
 
 todo: when stepper in mobile version mode show title in wizard page instead
 todo: when stepper in desktop mode show name and description in wizard page
@@ -95,8 +102,32 @@ Element 'button'
  - iconPos     : left|right = primeng button icon position
  - inline      : true|false = show horizontally inlined
 
-        Element 'link'
-            see documentation of _widget-link/widget-link.component.ts
+Element 'link'
+    see documentation of _widget-link/widget-link.component.ts
+
+
+
+
+Modes of horizontal stepper:
+  
+1) wizard stepper mode: regular
+      In this mode all steps will show a number and a label.
+      (1) step --- (2) step --- (3) step --- (4) step
+
+  2) wizard stepper mode: only current step
+      This mode will be automatically activated when more than 5 steps are present.
+      In this mode only the current step will show a label,
+      all other steps will only show the number.
+      (1)-(2)-(3)- (5)step -(6)-(7)-(8)
+
+  3) wizard stepper mode: one-two-three
+      This mode will be automatically activated on small viewport.
+      In this mode the stepper will show the
+      first an last step with a number only
+      and the current with number and label.
+      All other steps are not shown.
+      (1) --- (5) step --- (8) step
+
 -->
 
 <div class="ui-g-12" *ngIf="schema.title || schema.name || schema.description">
@@ -108,6 +139,15 @@ Element 'button'
   *ngIf="formProperty.schema.widget?.showErrors && formProperty.schema.widget?.showErrors?.position!=='bottom'"
   [formComponent]="this"></ngx-ui-validation-messages>
 
+<ng-template #form_element
+  let-formprop="formprop">
+  <sf-form-element
+    *ngIf="formprop"
+    [class.ui-sm-12]="!(formprop?.schema?.widget?.id==='hidden')"
+    [ngClass]="(formprop?.schema?.widget?.id==='hidden'||formprop?.schema?.widget?.ignoreParentSplit)?'':'ui-g-6'"
+    [formProperty]="formprop">
+  </sf-form-element>
+</ng-template>
 
 <ng-template #wizardTemplateContentSteps>
     <mat-step *ngFor="let fieldset of filterHiddenItems(schema.fieldsets); let stepIndex=index"
@@ -121,20 +161,18 @@ Element 'button'
         <h5 *ngIf="fieldset.description">{{fieldset.description}}</h5>
       </div>
 
-      <div *ngIf="schema.widget.split===true">
+      <div *ngIf="schema.widget.split===true;else formElementNoSplit">
         <div *ngFor="let fieldId of fieldset.fields;let i = index">
-          <sf-form-element
-            class="ui-sm-12"
-            [ngClass]="(formProperty.getProperty(fieldId).schema.widget.id==='hidden'||formProperty.getProperty(fieldId).schema.widget.ignoreParentSplit)?'':'ui-g-6'"
-            [formProperty]="formProperty.getProperty(fieldId)">
-          </sf-form-element>
+          <ng-container *ngTemplateOutlet="form_element;context:{ formprop: formProperty.getProperty(fieldId) }">
+          </ng-container>
         </div>
       </div>
-
-      <div *ngIf="!schema.widget.split">
+      <ng-template #formElementNoSplit>
+      <div>
         <sf-form-element *ngFor="let fieldId of fieldset.fields" [formProperty]="formProperty.getProperty(fieldId)">
         </sf-form-element>
       </div>
+      </ng-template>
 
       <div>
         <button
@@ -213,20 +251,18 @@ Element 'button'
         <h5 *ngIf="fieldset.description">{{fieldset.description}}</h5>
       </div>
 
-      <div *ngIf="schema.widget.split===true">
-        <div *ngFor="let fieldId of fieldset.fields;let i = index">
-          <sf-form-element
-            class="ui-sm-12"
-            [ngClass]="(formProperty.getProperty(fieldId).schema.widget.id==='hidden'||formProperty.getProperty(fieldId).schema.widget.ignoreParentSplit)?'':'ui-g-6'"
-            [formProperty]="formProperty.getProperty(fieldId)">
-          </sf-form-element>
-        </div>
+      <div *ngIf="schema.widget.split===true;else formElementNoSplit">
+        <ng-container *ngFor="let fieldId of fieldset.fields;let i = index">
+          <ng-container *ngTemplateOutlet="form_element;context:{ formprop: formProperty.getProperty(fieldId) }">
+          </ng-container>
+        </ng-container>
       </div>
-
-      <div *ngIf="!schema.widget.split">
+      <ng-template #formElementNoSplit>
+      <div>
         <sf-form-element *ngFor="let fieldId of fieldset.fields" [formProperty]="formProperty.getProperty(fieldId)">
         </sf-form-element>
       </div>
+      </ng-template>
       <!-- //TODO put buttons into mat-(horizontal/vertical)stepper tag -->
 </ng-template>
 
@@ -506,7 +542,7 @@ Element 'button'
 
 
 <ng-template #wizardTemplateContentWizard>
-  <ng-container *ngIf="formProperty.schema?.widget?.stepperVertical;else wizardTemplateContentVertical"
+  <ng-container *ngIf="!formProperty.schema?.widget?.stepperVertical;else wizardTemplateContentVertical"
     [ngTemplateOutlet]="wizardTemplateContentHorizontal"
   >
   </ng-container>
