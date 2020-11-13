@@ -23,7 +23,12 @@ export class BBCodeTransform implements DataTransform {
     getSaveContent(bbcodeValue: string): SafeHtml {
         if (bbcodeValue) {
             const bbcode = escapeHTMLInBBCode(bbcodeValue)
-            return simpleParser.parse(this.sanitizer.sanitize(SecurityContext.HTML, `${bbcode}`))
+            // should not use SecurityContext.HTML, it will remove the support for 'url=...|onclick'
+            const parsed = simpleParser.parse(this.sanitizer.sanitize(SecurityContext.HTML, `${bbcode}`))
+            if (-1 !== bbcode.indexOf('|onclick')) {//allow only `|onclick` to be bypassed, but no other event
+                return this.sanitizer.bypassSecurityTrustHtml(parsed)
+            }
+            return parsed
         }
     }
 }

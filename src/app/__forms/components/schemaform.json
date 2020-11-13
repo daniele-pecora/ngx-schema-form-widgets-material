@@ -260,7 +260,7 @@
               },
               {
                 "label": "BBCode",
-                "value": "[b]some bold[/b]",
+                "value": "[b]some bold[/b][br][url=alert('Hello! You just clicked me')|onclick class=\"someclass\"]Click me[/url]",
                 "empty": true,
                 "transform": {
                   "type": "bbcode"
