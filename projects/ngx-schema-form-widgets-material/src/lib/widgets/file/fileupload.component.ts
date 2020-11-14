@@ -1,5 +1,6 @@
 import { Component, Input, ViewChild, ElementRef, Output, EventEmitter } from "@angular/core";
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { FileTypeHelper } from "./file-type.helper";
 
 @Component({
   selector: 'ngx-ui-mat-fileUpload',
@@ -68,8 +69,8 @@ export class FileuploadComponent {
    *
    */
 
-   @Input()
-   required
+  @Input()
+  required
 
 
   @ViewChild('fileUpload')
@@ -93,30 +94,32 @@ export class FileuploadComponent {
 
   }
 
-  onFileSelected(event) {
+  async onFileSelected(event) {
     let files = event.dataTransfer && event.dataTransfer.files ? event.dataTransfer.files : event.target.files;
     // console.log('event:::', event)
     for (let i = 0; i < files.length; i++) {
       let file = files[i];
 
       //if(!this.isFileSelected(file)){
-      if (this.validate(file)) {
-        if (this.isImage(file)) {
-          file.objectURL = this.sanitizer.bypassSecurityTrustUrl((window.URL.createObjectURL(files[i])));
-          file.sanitizedURL = file.objectURL
-        } else {
-          file.objectURL = this.sanitizer.bypassSecurityTrustResourceUrl((window.URL.createObjectURL(files[i])));
-          file.sanitizedURL = file.objectURL
-        }
-        if (!this.isMultiple()) {
-          this.files = []
-        }
-        this.files.push(files[i]);
+      const matchingFileType = await new FileTypeHelper().fileSingatureMatchesMimeType(file, this.accept)
+      if (matchingFileType)
+        if (this.validate(file)) {
+          if (this.isImage(file)) {
+            file.objectURL = this.sanitizer.bypassSecurityTrustUrl((window.URL.createObjectURL(files[i])));
+            file.sanitizedURL = file.objectURL
+          } else {
+            file.objectURL = this.sanitizer.bypassSecurityTrustResourceUrl((window.URL.createObjectURL(files[i])));
+            file.sanitizedURL = file.objectURL
+          }
+          if (!this.isMultiple()) {
+            this.files = []
+          }
+          this.files.push(files[i]);
 
-        this.uploadHandler.emit({ files: [files[i]] })
+          this.uploadHandler.emit({ files: [files[i]] })
 
-        //  }
-      }
+          //  }
+        }
       //}
     }
   }
