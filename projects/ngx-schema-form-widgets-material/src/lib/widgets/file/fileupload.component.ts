@@ -138,7 +138,7 @@ export class FileuploadComponent {
   async onFileSelected(event) {
     let files = event.dataTransfer && event.dataTransfer.files ? event.dataTransfer.files : event.target.files;
 
-    const filterInvalidFiles = await this.checkFileValidity(Array.isArray(files) ? files : Object.values(files))
+    const filterInvalidFiles = await this.checkFileValidity(Array.isArray(files) ? files : Object.keys(files).map((key) => files[key]))
     const _files = []
     for (const file of filterInvalidFiles) {
         if (this.validate(file)) {

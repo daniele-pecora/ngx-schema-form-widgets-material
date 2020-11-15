@@ -1277,48 +1277,52 @@
             ]
           }
         },
-        "file-upload-1": {
-          "widget": {
-            "id": "file",
-            "mode": "basic",
-            "maxFileSize": 10485760,
-            "invalidFileSizeMessageSummary": "File too big",
-            "invalidFileSizeMessageDetail": "Max 10MB",
-            "invalidFileTypeMessageSummary": "Incompatible file type. ",
-            "invalidFileTypeMessageDetail": " Only Images or PDF allowed.",
-            "chooseLabel": "Upload",
-            "accept": "image/gif,image/jpeg,image/jpg,image/tiff,image/png,image/bmp,application/pdf",
-            "auto": true,
-            "url": "https://www.no-real-url-necessary-here/datauri/index.php",
-            "previewWidth": 200,
-            "dataUriPrefix": true,
-            "deleteButtonLabel": "Delete",
-            "customUpload": true,
-            "previewTitle": "Preview of the uploaded image {filename} size {filesize}",
-            "noPreviewText": "No preview"
-          }
-        },
-        "file-upload-2": {
-          "widget": {
-            "id": "file",
-            "mode": "basic",
-            "maxFileSize": 10485760,
-            "invalidFileSizeMessageDetail": "File too big. Max 10MB",
-            "invalidFileTypeMessageSummary": "Incompatible file type,  ",
-            "chooseLabel": "Upload",
-            "_accept": "image/gif,image/jpeg,image/jpg,image/tif,image/tiff,image/png,image/bmp,application/pdf",
-            "accept": "image/*",
-            "auto": true,
-            "url": "https://www.no-real-url-necessary-here/datauri/index.php",
-            "previewWidth": 200,
-            "dataUriPrefix": true,
-            "__no_label_icon_only__deleteButtonLabel": "Delete",
-            "customUpload": true,
-            "inlineLabel": false,
-            "showUploadInfo": true,
-            "previewTitle": "Preview of the uploaded image {filename} size {filesize}",
-            "noPreviewText": "No preview",
-            "noPreviewIcon": "image"
+        "file": {
+          "properties": {
+            "file-upload-1": {
+              "widget": {
+                "id": "file",
+                "mode": "basic",
+                "maxFileSize": 10485760,
+                "invalidFileSizeMessageSummary": "File too big",
+                "invalidFileSizeMessageDetail": "Max 10MB",
+                "invalidFileTypeMessageSummary": "Incompatible file type. ",
+                "invalidFileTypeMessageDetail": " Only Images or PDF allowed.",
+                "chooseLabel": "Upload",
+                "accept": "image/gif,image/jpeg,image/jpg,image/tiff,image/png,image/bmp,application/pdf",
+                "auto": true,
+                "url": "https://www.no-real-url-necessary-here/datauri/index.php",
+                "previewWidth": 200,
+                "dataUriPrefix": true,
+                "deleteButtonLabel": "Delete",
+                "customUpload": true,
+                "previewTitle": "Preview of the uploaded image {filename} size {filesize}",
+                "noPreviewText": "No preview"
+              }
+            },
+            "file-upload-2": {
+              "widget": {
+                "id": "file",
+                "mode": "basic",
+                "maxFileSize": 10485760,
+                "invalidFileSizeMessageDetail": "File too big. Max 10MB",
+                "invalidFileTypeMessageSummary": "Incompatible file type,  ",
+                "chooseLabel": "Upload",
+                "_accept": "image/gif,image/jpeg,image/jpg,image/tif,image/tiff,image/png,image/bmp,application/pdf",
+                "accept": "image/*",
+                "auto": true,
+                "url": "https://www.no-real-url-necessary-here/datauri/index.php",
+                "previewWidth": 200,
+                "dataUriPrefix": true,
+                "__no_label_icon_only__deleteButtonLabel": "Delete",
+                "customUpload": true,
+                "inlineLabel": false,
+                "showUploadInfo": true,
+                "previewTitle": "Preview of the uploaded image {filename} size {filesize}",
+                "noPreviewText": "No preview",
+                "noPreviewIcon": "image"
+              }
+            }
           }
         },
         "spacer4": {
