@@ -107,14 +107,16 @@
     [maxFileSize]="schema.widget.maxFileSize||null"
     [auto]="isBoolean(schema.widget.auto)?schema.widget.auto:true"
     [withCredentials]="schema.widget.withCredentials||null"
-    [invalidFileSizeMessageSummary]="schema.widget.invalidFileSizeMessageSummary||null"
-    [invalidFileSizeMessageDetail]="schema.widget.invalidFileSizeMessageDetail||null"
-    [invalidFileTypeMessageSummary]="schema.widget.invalidFileTypeMessageSummary||null"
-    [invalidFileTypeMessageDetail]="schema.widget.invalidFileTypeMessageDetail||null"
+    [invalidFileSizeMessageSummary]="schema.widget.invalidFileSizeMessageSummary||'{0}: Invalid file size, '"
+    [invalidFileSizeMessageDetail]="schema.widget.invalidFileSizeMessageDetail||'maximum upload size is {0}.'"
+    [invalidFileTypeMessageSummary]="schema.widget.invalidFileTypeMessageSummary||'{0}: Invalid file type, '"
+    [invalidFileTypeMessageDetail]="schema.widget.invalidFileTypeMessageDetail||'allowed file types: {0}.'"
+    [invalidFileLimitMessageSummary]="schema.widget.invalidFileLimitMessageSummary||'Maximum number of files exceeded, '"
+    [invalidFileLimitMessageDetail]="schema.widget.invalidFileLimitMessageDetail||'limit is {0} at most.'"
     [previewWidth]="schema.widget.previewWidth||50"
-    [chooseLabel]="schema.widget.chooseLabel||null"
-    [uploadLabel]="schema.widget.uploadLabel||null"
-    [cancelLabel]="schema.widget.cancelLabel||null"
+    [chooseLabel]="schema.widget.chooseLabel||'Choose'"
+    [uploadLabel]="schema.widget.uploadLabel||'Upload'"
+    [cancelLabel]="schema.widget.cancelLabel||'Cancel'"
     [customUpload]="isBoolean(schema.widget.customUpload)?schema.widget.customUpload:true"
     [showUploadButton]="(schema.widget.showUploadButton && !schema.widget.auto && !schema.widget.customUpload)||null"
     [showCancelButton]="schema.widget.showCancelButton||null"
@@ -126,6 +128,8 @@
     [disabled]="schema.widget.disabled||(schema.readOnly?true:null)"
 
     [required]="(formProperty|IsRequiredAttr)"
+    
+    #fileUploadEl
     >
     </ngx-ui-mat-fileUpload>
 
