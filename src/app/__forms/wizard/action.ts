@@ -62,5 +62,41 @@ export const actions = {
 
         property.updateValueAndValidity(true, false)
         console.log('action_wizard_page_show_hide_2 after', property)
+    },
+    "action_wizard_show_invalid_fields": (property: FormProperty, parameters: any) => {
+        console.log('action_wizard_show_invalid_fields', property)
+        property['__toggle_invalid_fields'] = !property['__toggle_invalid_fields']
+        let setStyleForInvalid = (enable) => {
+            let style = document.querySelector('#style-invalid-wizard')
+            if (!style) {
+                style = document.createElement('style')
+                document.body.appendChild(style)
+                style.id = 'style-invalid-wizard'
+                style['type'] = 'text/css'
+            }
+            if (enable) {
+                style.innerHTML = `
+.ng-invalid { color: red !important; background-color: #f44336;}
+.has-error { color: red !important; background-color: #9c27b0;}
+.ng-untouched.ng-invalid { color: red !important; background-color: #03a9f4;}
+`
+            } else {
+                style.innerHTML = ''
+            }
+            document.getElementsByTagName('head')[0].appendChild(style)
+        }
+        setStyleForInvalid(property['__toggle_invalid_fields'])
+        const buttons = (property.schema.buttons || [])
+        for (const button of buttons) {
+            if (button.id === 'action_wizard_show_invalid_fields') {
+                const suff = property['__toggle_invalid_fields'] ? 'on' : 'off'
+                
+                button.icon = parameters[`icon-${suff}`]
+                button.label = parameters[`label-${suff}`]
+                button.description = parameters[`description-${suff}`]
+
+                break
+            }
+        }
     }
 }

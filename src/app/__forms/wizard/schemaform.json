@@ -1,6 +1,6 @@
 {
   "title": "wizard",
-  "readOnly": false,
+  "readOnly": true,
   "buttons": [
     {
       "id": "action_toggle_wizard_view",
@@ -19,6 +19,22 @@
       "description": "Toggle page 2",
       "label": "Toggle page 2",
       "severity": "secondary"
+    },
+    {
+      "id": "action_wizard_show_invalid_fields",
+      "icon": "ui-icon-fact-check",
+      "iconPos": "right",
+      "description": "Highlight all invalid field",
+      "label": "Show invalid field",
+      "severity": "secondary",
+      "parameters": {
+        "icon-on": "ui-icon-offline-pin",
+        "icon-off": "ui-icon-fact-check",
+        "label-on": "Hide invalid field",
+        "label-off": "Show invalid field",
+        "description-on": "Remove highlight off all invalid field",
+        "description-off": "Highlight all invalid field"
+      }
     }
   ],
   "widget": {
