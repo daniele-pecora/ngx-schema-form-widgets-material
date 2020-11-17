@@ -111,6 +111,14 @@
         "nopad": true
       }
     },
+    "property-2-spacer": {
+      "widget": {
+        "id": "bbcode",
+        "bbcode": [
+          "[hr]"
+        ]
+      }
+    },
     "property-2": {},
     "property-3": {},
     "property-4": {},
@@ -145,6 +153,7 @@
       "fields": [
         "property-0",
         "property-1",
+        "property-2-spacer",
         "property-2",
         "property-3"
       ]

@@ -76,9 +76,59 @@ export const actions = {
             }
             if (enable) {
                 style.innerHTML = `
+/*
 .ng-invalid { color: red !important; background-color: #f44336;}
 .has-error { color: red !important; background-color: #9c27b0;}
 .ng-untouched.ng-invalid { color: red !important; background-color: #03a9f4;}
+*/
+
+/* field group container */
+.has-error div.has-error {
+    __outline: solid 4px red;
+}
+
+/* field group label */
+/*.has-error ngx-ui-widget-required-mark:after {*/
+.has-error ngx-ui-widget-required-mark:not(:empty):after {
+    content: "!";
+    display: inline-block;
+    text-align: right;
+    height: 1em;
+    width: 1em;
+    line-height: 1em;
+    border-radius: 50%;
+    background: red;
+    color: white;
+    text-align: center;
+    margin-left: 0.2em;
+}
+
+/* single field container*/
+.has-error /* skip root container */ .has-error .ng-untouched.ng-invalid {
+    __color: lime !important;
+    __background-color: #9c27b0 !important;
+}
+
+/** labels */
+.has-error .has-error .ng-untouched.ng-invalid label {
+    x-font-weight: 700;
+    text-decoration: underline;
+}
+/* lable prefix icon */
+.has-error .has-error .ng-untouched.ng-invalid label:before {
+    content: "!";
+    color: white;
+    font-weight: 700;
+    background: red;
+    border-radius: 50%;
+    height: 1em;
+    width: 1em;
+    line-height: 1em;
+    margin-right: 0.2em;
+    display: inline-block;
+    text-align: center;
+    /*padding: 0.2em;*/
+}
 `
             } else {
                 style.innerHTML = ''

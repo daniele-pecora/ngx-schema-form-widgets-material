@@ -24,7 +24,7 @@
     },
     "property-1": {
       "type": "object",
-      "title": "Form title",
+      "title": "Property group title",
       "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam ",
       "properties": {
         "sub-prop-1": {
@@ -37,6 +37,9 @@
           "type": "string"
         }
       }
+    },
+    "property-2-spacer": {
+      "type": "string"
     },
     "property-2": {
       "type": "string"
