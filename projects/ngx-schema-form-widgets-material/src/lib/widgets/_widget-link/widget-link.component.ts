@@ -1,7 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core'
-import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser'
+import { Component, Input, OnInit } from '@angular/core'
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
 import { MatDialog } from '@angular/material/dialog';
-import {WidgetLinkOverlayComponent} from './widget-link-overlay.component'
+import { WidgetLinkOverlayComponent } from './widget-link-overlay.component'
+import { isMobileDevice } from '../_utils/utils'
 
 export interface WidgetLinkComponentModel {
   id: string;
@@ -43,7 +44,7 @@ export interface WidgetLinkComponentModel {
       [attr.title]="link.description||link.label||null"
       [attr.id]="link.id"
       [attr.target]="link.target||null"
-      [matTooltip]="link.description||null"
+      [matTooltip]="toolTip(link.description||null)"
       [attr.data-rel]="link.overlay?'dialog':null"
     >
 
@@ -107,5 +108,11 @@ export class WidgetLinkComponent implements OnInit {
       });
       return false
     }
+  }
+
+  toolTip(text) {
+    if (null == text || typeof text === 'undefined')
+      return text
+    return !isMobileDevice() ? text : null
   }
 }
