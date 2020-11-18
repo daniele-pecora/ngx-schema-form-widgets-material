@@ -113,6 +113,10 @@ export class WidgetLinkComponent implements OnInit {
   toolTip(text) {
     if (null == text || typeof text === 'undefined')
       return text
+    /**
+     * don't show tooltips on mobile devices.
+     * it may cause links not working on a first click.
+     */
     return !isMobileDevice() ? text : null
   }
 }
