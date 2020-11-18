@@ -23,8 +23,7 @@ export class WizardWidgetComponent extends ActionObjectLayoutWidgetComponent imp
 
   //
   items: MenuItem[]
-  readOnly: boolean
-
+  get readOnly() { return this.schema.readOnly }
 
   @ViewChild('wizardStepper') wizardStepper: MatStepper
   @ViewChild('scrollHook') scrollHook: ElementRef
@@ -64,8 +63,6 @@ export class WizardWidgetComponent extends ActionObjectLayoutWidgetComponent imp
       this.items.push(item)
     }
 
-    this.readOnly = this.schema.readOnly
-
     if (this.schema.widget.startPage && this.schema.widget.startPage > 0 && this.schema.widget.startPage < this.filterHiddenItems(this.items).length)
       this.startPage = this.schema.widget.startPage
 
@@ -75,6 +72,7 @@ export class WizardWidgetComponent extends ActionObjectLayoutWidgetComponent imp
   previousPage() {
     this.processAction('prev', this.addNavigationInfoPageIds({ fromPage: this.currentPage, toPage: this.currentPage - 1 }))
     if (this.currentPage > 0) {
+      this.wizardStepper.previous()
       --this.currentPage
     }
     this._onPageChange()
@@ -83,6 +81,7 @@ export class WizardWidgetComponent extends ActionObjectLayoutWidgetComponent imp
   nextPage() {
     this.processAction('next', this.addNavigationInfoPageIds({ fromPage: this.currentPage, toPage: this.currentPage + 1 }))
     if (this.hasNextPage()) {
+      this.wizardStepper.next()
       ++this.currentPage
     }
     this._onPageChange()
@@ -91,6 +90,7 @@ export class WizardWidgetComponent extends ActionObjectLayoutWidgetComponent imp
   finishPage() {
     this.processAction('finish', this.addNavigationInfoPageIds({ fromPage: this.currentPage, toPage: this.currentPage + 1 }))
     if (this.hasNextPage()) {
+      this.wizardStepper.next()
       ++this.currentPage
     }
     this._onPageChange()
