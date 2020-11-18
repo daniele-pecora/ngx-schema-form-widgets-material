@@ -10,6 +10,8 @@ export const actions = {
     },
     "wizard_action_next": function (property, params) {
         console.log('wizard_action_next', params)
+        if (params.fromPage === 0)
+            throw `You shall not pass page 0`
     },
     "wizard_action_finish": function (property, params) {
         console.log('wizard_action_finish', params)
@@ -62,6 +64,23 @@ export const actions = {
 
         property.updateValueAndValidity(true, false)
         console.log('action_wizard_page_show_hide_2 after', property)
+    },
+    'action_wizard_toggle_readOnly': (property: FormProperty, parameters: any) => {
+        const root = property.findRoot()
+        root.schema.readOnly = !root.schema.readOnly
+        console.log('action_wizard_toggle_readOnly after', root, root.schema.readOnly, property)
+        const buttons = (property.schema.buttons || [])
+        for (const button of buttons) {
+            if (button.id === 'action_wizard_toggle_readOnly') {
+                const suff = root.schema.readOnly ? 'on' : 'off'
+
+                button.icon = parameters[`icon-${suff}`]
+                button.label = parameters[`label-${suff}`]
+                button.description = parameters[`description-${suff}`]
+
+                break
+            }
+        }
     },
     "action_wizard_show_invalid_fields": (property: FormProperty, parameters: any) => {
         console.log('action_wizard_show_invalid_fields', property)
@@ -140,7 +159,7 @@ export const actions = {
         for (const button of buttons) {
             if (button.id === 'action_wizard_show_invalid_fields') {
                 const suff = property['__toggle_invalid_fields'] ? 'on' : 'off'
-                
+
                 button.icon = parameters[`icon-${suff}`]
                 button.label = parameters[`label-${suff}`]
                 button.description = parameters[`description-${suff}`]

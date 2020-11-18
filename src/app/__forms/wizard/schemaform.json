@@ -21,6 +21,22 @@
       "severity": "secondary"
     },
     {
+      "id": "action_wizard_toggle_readOnly",
+      "icon": "ui-icon-lock-open",
+      "iconPos": "right",
+      "description": "The wizard forms must be filled sequentially",
+      "label": "Unlock",
+      "severity": "secondary",
+      "parameters": {
+        "icon-on": "ui-icon-lock-open",
+        "icon-off": "ui-icon-lock-outline",
+        "label-on": "Unlock",
+        "label-off": "Lock",
+        "description-on": "The wizard forms can be filled freely",
+        "description-off": "The wizard forms must be filled sequentially"
+      }
+    },
+    {
       "id": "action_wizard_show_invalid_fields",
       "icon": "ui-icon-fact-check",
       "iconPos": "right",
