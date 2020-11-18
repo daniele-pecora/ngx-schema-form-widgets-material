@@ -286,12 +286,12 @@ Modes of horizontal stepper:
         <div class="ui-g-12">
           <button
             mat-raised-button
-            matStepperPrevious
+            [attr.x-matStepperPrevious]=""
             *ngIf="stepIndex>0 && isButtonVisibile(schema.widget.buttons?.prev, isCurrentPageValid(), formProperty.value)"
             [disabled]="!hasPagePrevious(stepIndex)?true:null"
             [color]="schema.widget.buttons?.prev?.severity?getSeverity(schema.widget.buttons?.prev?.severity):null"
             type="button"
-            (click)="logPage(stepIndex)"
+            (click)="logPage(stepIndex);previousPage()"
             [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.prev?.styleClass||'')]"
             [class.mat-icon-button]="!getLabel(schema.widget.labelPrev, schema.widget.buttons?.prev, 'Previous')"
           >
@@ -308,12 +308,12 @@ Modes of horizontal stepper:
           <button
             mat-raised-button
             color="primary"
-            matStepperNext
+            [attr.x-matStepperNext]=""
             *ngIf="stepIndex<filterHiddenItems(schema.fieldsets).length-1 && isButtonVisibile(schema.widget.buttons?.next, isCurrentPageValid(), formProperty.value)"
             [disabled]="(readOnly && !isPageValid(stepIndex)) || !hasPageNext(stepIndex)?true:null"
             [color]="schema.widget.buttons?.next?.severity?getSeverity(schema.widget.buttons?.next?.severity):null"
             type="button"
-            (click)="logPage(stepIndex)"
+            (click)="logPage(stepIndex);nextPage()"
             [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.next?.styleClass||'')]"
             [class.mat-icon-button]="!getLabel(schema.widget.labelNext, schema.widget.buttons?.next, 'Next')"
           >
@@ -330,12 +330,12 @@ Modes of horizontal stepper:
           <button
             mat-raised-button
             color="accent"
-            matStepperNext
+            [attr.x-matStepperNext]=""
             *ngIf="stepIndex==filterHiddenItems(schema.fieldsets).length-1 && isButtonVisibile(schema.widget.buttons?.finish, isCurrentPageValid(), formProperty.value)"
             [disabled]="(!isPageValid(stepIndex) || !formProperty.valid)?true:null"
             [color]="schema.widget.buttons?.finish?.severity?getSeverity(schema.widget.buttons?.finish?.severity):null"
             type="button"
-            (click)="logPage(stepIndex)"
+            (click)="logPage(stepIndex);finishPage()"
             [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.finish?.styleClass||'')]"
             [class.mat-icon-button]="!getLabel(schema.widget.labelFinish, schema.widget.buttons?.finish, 'Finish')"
           >
@@ -372,12 +372,12 @@ Modes of horizontal stepper:
         <div class="ui-g-12">
           <button
             mat-raised-button
-            matStepperPrevious
+            [attr.x-matStepperPrevious]=""
             *ngIf="stepIndex>0 && isButtonVisibile(schema.widget.buttons?.prev, isCurrentPageValid(), formProperty.value)"
             [disabled]="!hasPagePrevious(stepIndex)?true:null"
             [color]="schema.widget.buttons?.prev?.severity?getSeverity(schema.widget.buttons?.prev?.severity):null"
             type="button"
-            (click)="logPage(stepIndex)"
+            (click)="logPage(stepIndex);previousPage()"
             [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.prev?.styleClass||'')]"
             [class.mat-icon-button]="!getLabel(schema.widget.labelPrev, schema.widget.buttons?.prev, 'Previous')"
           >
@@ -394,12 +394,12 @@ Modes of horizontal stepper:
           <button
             mat-raised-button
             color="primary"
-            matStepperNext
+            [attr.x-matStepperNext]=""
             *ngIf="stepIndex<filterHiddenItems(schema.fieldsets).length-1 && isButtonVisibile(schema.widget.buttons?.next, isCurrentPageValid(), formProperty.value)"
             [disabled]="(readOnly && !isPageValid(stepIndex)) || !hasPageNext(stepIndex)?true:null"
             [color]="schema.widget.buttons?.next?.severity?getSeverity(schema.widget.buttons?.next?.severity):null"
             type="button"
-            (click)="logPage(stepIndex)"
+            (click)="logPage(stepIndex);nextPage()"
             [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.next?.styleClass||'')]"
             [class.mat-icon-button]="!getLabel(schema.widget.labelNext, schema.widget.buttons?.next, 'Next')"
           >
@@ -416,12 +416,12 @@ Modes of horizontal stepper:
           <button
             mat-raised-button
             color="accent"
-            matStepperNext
+            [attr.x-matStepperNext]=""
             *ngIf="stepIndex==filterHiddenItems(schema.fieldsets).length-1 && isButtonVisibile(schema.widget.buttons?.finish, isCurrentPageValid(), formProperty.value)"
             [disabled]="(!isPageValid(stepIndex) || !formProperty.valid)?true:null"
             [color]="schema.widget.buttons?.finish?.severity?getSeverity(schema.widget.buttons?.finish?.severity):null"
             type="button"
-            (click)="logPage(stepIndex)"
+            (click)="logPage(stepIndex);finishPage()"
             [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.finish?.styleClass||'')]"
             [class.mat-icon-button]="!getLabel(schema.widget.labelFinish, schema.widget.buttons?.finish, 'Finish')"
           >
