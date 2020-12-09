@@ -1,0 +1,133 @@
+{
+  "type": "object",
+  "properties": {
+    "simpleTypes": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "title": "date",
+          "description": "Presentation of the component 'date'. Autofill (cc-exp)",
+          "widget": {
+            "id": "date-picker",
+            "autofill": "cc-exp"
+          }
+        },
+        "radio": {
+          "type": "string",
+          "title": "radio",
+          "description": "Presentation of the component 'radio'.",
+          "widget": {
+            "id": "radio"
+          },
+          "oneOf": [
+            {
+              "enum": [
+                "a"
+              ],
+              "description": "A"
+            },
+            {
+              "enum": [
+                "b"
+              ],
+              "description": "B",
+              "disabled": true
+            },
+            {
+              "enum": [
+                "c"
+              ],
+              "description": "C"
+            }
+          ]
+        },
+        "select": {
+          "type": "string",
+          "title": "select",
+          "description": "Presentation of the component 'select'.",
+          "widget": {
+            "id": "select"
+          },
+          "oneOf": [
+            {
+              "enum": [
+                "one"
+              ],
+              "description": "A"
+            },
+            {
+              "enum": [
+                "two"
+              ],
+              "description": "B",
+              "disabled": true
+            },
+            {
+              "enum": [
+                "three"
+              ],
+              "description": "C"
+            }
+          ]
+        }
+      }
+    },
+    "datatable": {
+      "type": "object",
+      "properties": {}
+    },
+    "array": {
+      "type": "object",
+      "description": "Changing values here will have an impact in section 'Datatable'",
+      "properties": {
+        "simple": {
+          "title": "Simple array",
+          "description": "Array items are of a simple string type",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "title": "Item label"
+          }
+        },
+        "complex": {
+          "title": "Complex array",
+          "description": "Array items are of a complex type",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "property-1": {
+                "type": "string",
+                "title": "Property 1"
+              },
+              "property-2": {
+                "type": "object",
+                "properties": {
+                  "sub1": {
+                    "type": "string",
+                    "title": "Property 2 -> sub 1"
+                  },
+                  "sub2": {
+                    "type": "string",
+                    "title": "Property 2 -> sub 2"
+                  },
+                  "sub3": {
+                    "type": "string",
+                    "title": "Property 2 -> sub 3"
+                  }
+                }
+              },
+              "property-3": {
+                "type": "string",
+                "title": "Property 3"
+              }
+            }
+          },
+          "minItems": 2,
+          "maxItems": 5
+        }
+      }
+    }
+  }
+}
