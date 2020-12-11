@@ -19,7 +19,9 @@ Element 'array' in 'widget'
                    - `false` no counter will be prepended to the items title
                    - `true` a continous counter will be prepended to the items title. This counter type will not stop incrementing when items get deleted.
                    - `index` a counter based on the items position, starting by 1, will be prepended to the items title
-
+  - itemInline     = Possible values are `false`, `true`. 
+                     If `true` all array item within a defaultView will be horizontally aligned
+  
   - buttonAdd
   - buttonRemove
       Element for each button
@@ -44,7 +46,9 @@ Element 'array' in 'widget'
   -->
 <ngx-ui-validation-messages *ngIf="formProperty.schema.widget?.showErrors && formProperty.schema.widget?.showErrors?.position!=='bottom'" [formComponent]="this"></ngx-ui-validation-messages>
 
-<div class="widget form-group">
+<div class="widget form-group"
+  [class.array-widget-default]="schema.widget.style!=='tabview'"
+>
   <label *ngIf="schema.title && formProperty.schema.items.type==='object'" [attr.for]="id" class="horizontal control-label">
     {{ schema.title }}
   </label>
@@ -160,7 +164,7 @@ Element 'array' in 'widget'
     <ng-container *ngIf="schema?.widget?.buttonAdd?.position==='top'">
       <ng-container *ngTemplateOutlet="buttonAdd"></ng-container>
     </ng-container>
-    <div *ngFor="let itemProperty of formProperty.properties; let i=index">
+    <div *ngFor="let itemProperty of formProperty.properties; let i=index" [class.itemInline]="formProperty?.schema?.widget?.itemInline">
           <span
             *ngIf="formProperty.schema.items.type==='object'">{{(formProperty.schema.widget.itemNumeration==='index'?(i+1)+'. ':'')}}{{itemProperty.schema.title || itemProperty._path}}</span>
       <ng-template #buttonRemove>

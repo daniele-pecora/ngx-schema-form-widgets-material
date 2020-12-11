@@ -1,0 +1,53 @@
+{
+    "properties": {
+        "models__DE_1954_1970": {
+            "widget": {
+                "id": "array",
+                "itemInline": true
+            },
+            "items": [
+                {
+                    "title": "S",
+                    "type": "boolean",
+                    "widget": {
+                        "id": "checkbox"
+                    }
+                },
+                {
+                    "title": "T",
+                    "type": "boolean",
+                    "widget": {
+                        "id": "checkbox"
+                    }
+                },
+                {
+                    "title": "U",
+                    "type": "string",
+                    "widget": {
+                        "id": "string"
+                    },
+                    "pattern":"[A-Z]"
+                }
+            ],
+            "additionalItems": {
+                "title": "R",
+                "type": "number",
+                "widget": {
+                    "id": "number"
+                }
+            }
+        },
+        "models__DE_1970_1999": {
+            "widget": {
+                "id": "array",
+                "itemInline": true
+            }
+        }
+    },
+    "buttons": [
+        {
+            "id": "switch_inline_style",
+            "label": "Toggle style"
+        }
+    ]
+}

@@ -1,7 +1,8 @@
-import { Component, OnInit, Pipe, PipeTransform, Renderer2, AfterViewInit } from '@angular/core'
+import { Component, OnInit, Pipe, PipeTransform, Renderer2, AfterViewInit, ViewChild } from '@angular/core'
 import { ControlWidget } from 'ngx-schema-form'
 import {Message} from '../_domain/message'
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
+import { bytesToSizeString, FileuploadComponent } from './fileupload.component'
 
 @Component({
   selector: 'ngx-ui-file-widget',
@@ -13,6 +14,9 @@ export class FileWidgetComponent extends ControlWidget implements OnInit, AfterV
 
   uploadedFiles: any[] = []
   files: File[]
+  
+  @ViewChild('fileUploadEl')
+  fileUploadEl: FileuploadComponent
 
   /**
    * use this sanitizer to allow blob url:<br/>
@@ -196,6 +200,8 @@ export class FileWidgetComponent extends ControlWidget implements OnInit, AfterV
       this.uploadedFiles.push(this.sanitizeURL(file))
     }
     this.updateFromPropertyUploadedFiles()
+
+    this.checkForMessages()
   }
 
   onUpload(event) {
@@ -210,6 +216,29 @@ export class FileWidgetComponent extends ControlWidget implements OnInit, AfterV
     this.msgs.push({ severity: 'info', summary: 'Success', detail: 'File Uploaded' })
 
     this.updateFromPropertyUploadedFiles()
+
+    this.checkForMessages()
+  }
+
+  checkForMessages() {
+    const msgs = [].concat(this.fileUploadEl.msgs||[]).concat(this.msgs||[])
+    if ((msgs || []).length) {
+      const _msg = msgs[0]
+      const errMsg = {
+        code: 'OBJECT_MISSING_REQUIRED_PROPERTY',
+        path: `#${this.formProperty.path}`,
+        message: `${_msg.summary||''}${_msg.detail||''}`,
+        params: [],
+        severity: _msg.severity,
+        title: _msg.summary
+      }
+      const control = this.control
+      control.markAsDirty()
+      control.markAsTouched()
+      control.setErrors([errMsg], { emitEvent: true })
+      control.setValue('', { emitEvent: true })
+      this.formProperty.extendErrors([errMsg])
+    }
   }
 
   onBeforeSend(event) {
@@ -232,7 +261,7 @@ export class FileWidgetComponent extends ControlWidget implements OnInit, AfterV
   }
 
   onSelect(event) {
-
+    this.checkForMessages()
   }
 
   onError(event) {
@@ -295,11 +324,6 @@ export class ByteSizeFormatPipe implements PipeTransform {
   }
 
   bytesToSize(bytes: any) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const dm = 2;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    return bytesToSizeString(bytes)
   }
 }
