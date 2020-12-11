@@ -10,6 +10,8 @@
     "app/__forms/captcha/action.ts",
     "app/__forms/captcha/bindings.ts",
     "app/__forms/captcha/validation.ts",
+    "app/__forms/checkbox/action.ts",
+    "app/__forms/checkbox/validation.ts",
     "app/__forms/components/action.ts",
     "app/__forms/components/bindings.ts",
     "app/__forms/components/validation.ts",

@@ -1,4 +1,15 @@
 /** 
+ * This enhances the alignment of the buttons to the outer border of an array item,
+ * so it doesn't overlap with the label of any following item
+ */
+ .array-widget-default > div {
+  padding: 0.5em;
+
+  &.itemInline {
+    display: inline-block;
+  }
+}
+/** 
  * This enhances the alignment of the close buttons 
  * when displaying as tab view
  */

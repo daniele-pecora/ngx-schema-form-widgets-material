@@ -1,0 +1,47 @@
+{
+    "type": "object",
+    "properties": {
+        "models__DE_1954_1970": {
+            "type": "array",
+            "title": "Models 1954-1970",
+            "items": [
+                {
+                    "title": "S",
+                    "type": "boolean"
+                },
+                {
+                    "title": "T",
+                    "type": "boolean"
+                },
+                {
+                    "title": "U",
+                    "type": "boolean"
+                }
+            ],
+            "minItems": 1,
+            "maxItems": 4,
+            "default": [
+                false,
+                false,
+                "aaaa",
+                10
+            ]
+        },
+        "models__DE_1970_1999": {
+            "type": "array",
+            "title": "Models 1970-1999",
+            "items": {
+                "title": "Model-Item",
+                "type": "boolean"
+            },
+            "minItems": 4,
+            "maxItems": 4,
+            "default": [
+                false,
+                false,
+                false,
+                false
+            ]
+        }
+    }
+}
