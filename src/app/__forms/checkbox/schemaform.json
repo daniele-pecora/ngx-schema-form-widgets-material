@@ -40,7 +40,7 @@
         "models__DE_1970_1999": {
             "widget": {
                 "id": "array",
-                "inline": true
+                "itemInline": true
             }
         }
     },
