@@ -1,7 +1,7 @@
 /**
  * Created by daniele on 14.04.19.
  */
-import { Component, Injectable, OnDestroy } from '@angular/core'
+import { Component, Injectable, OnDestroy, ElementRef, Inject } from '@angular/core'
 import { ObjectLayoutWidget, FormProperty, ArrayProperty } from 'ngx-schema-form'
 import { Subject, Subscription } from 'rxjs'
 import { SafeHtml } from '@angular/platform-browser'
@@ -10,6 +10,7 @@ import { DataConverterRegistryPipe, Converter } from '../_converters/_data/data-
 import { DataConverterTransformerRegistry } from '../_converters/_data/data-converter-transformer.registry'
 import { MatTable } from '@angular/material/table'
 import { MatSortHeaderIntl } from '@angular/material/sort'
+import { DOCUMENT } from "@angular/common";
 
 @Injectable()
 export class CustomMatSortHeaderIntl {
@@ -55,8 +56,16 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
         [key: string]: Subscription
     } = {}
 
+    /** col-group */
+    get colGroupWidth(): number {
+        return this.calculateColGroupWidth()
+    }
+    colGroupWidthCalculated: boolean
+    
     constructor(private dataConverterTransformerRegistry: DataConverterTransformerRegistry
-        , private matSortService: MatSortHeaderIntl) {
+        , private matSortService: MatSortHeaderIntl
+        , @Inject(DOCUMENT) private document: Document
+        , private elementRef: ElementRef) {
         super()
     }
 
@@ -317,5 +326,92 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
         }
 
         table.renderRows()
+    }
+
+    /**
+     * should only be called if `this.formProperty.schema.widget.keyColGroup` is set
+     */
+    calculateColGroupWidth(largestOrSmallest: boolean = true) {
+        // console.log('this.elementRef.nativeElement', this.elementRef.nativeElement)
+        const els = this.elementRef.nativeElement.querySelectorAll(`[data-colGroup=${this.formProperty.schema.widget.keyColGroup}]`)
+        let width = -1
+        if (els) {
+            for (let i = 0; i < els.length; i++) {
+                // console.log('els[i].offsetWidth', els[i].offsetWidth)
+                if (largestOrSmallest) {
+                    width = els[i].offsetWidth > width ? els[i].offsetWidth : width
+                } else {
+                    width = width > 0 && els[i].offsetWidth < width ? els[i].offsetWidth : width
+                }
+            }
+        }
+        return width
+    }
+
+    getGlobalStyleDef(): HTMLElement {
+        const head = this.document.getElementsByTagName('head')[0];
+        let style = head.querySelector(`[data-globalStyleColGroup=${this.formProperty.schema.widget.keyColGroup}]`) as HTMLElement
+        if (!style) {
+            style = this.document.createElement('style');
+            style.setAttribute('data-globalStyleColGroup', `${this.formProperty.schema.widget.keyColGroup}`)
+            style['type'] = 'text/css'
+            head.appendChild(style)
+
+            // convenience...
+            style['getColWidth'] = () => {
+                return Number.parseInt(style.getAttribute('data-globalStyleColGroupWidth') || '-1')
+            }
+            style['updateColWidth'] = (colWidth: number) => {
+                style.setAttribute('data-globalStyleColGroupWidth', `${colWidth}`)
+                style.innerHTML = `
+                .dataColGroupTable [data-colGroup=${this.formProperty.schema.widget.keyColGroup}]{
+                    width: ${colWidth}px;
+                }
+            `
+            }
+            style['colWidthStyleBackup'] = () => {
+                style.innerHTML = style.innerHTML.replace(
+                    `[data-styleColGroup=${this.formProperty.schema.widget.keyColGroup}]`,
+                    `[data-styleColGroup=____${this.formProperty.schema.widget.keyColGroup}]`
+                )
+            }
+            style['colWidthStyleRestore'] = () => {
+                style.innerHTML = style.innerHTML.replace(
+                    `[data-styleColGroup=____${this.formProperty.schema.widget.keyColGroup}]`,
+                    `[data-styleColGroup=${this.formProperty.schema.widget.keyColGroup}]`
+                )
+            }
+        }
+
+        return style
+    }
+
+    calculateColGroupStyle() {
+        const keyColWidth = `${this.formProperty.schema.widget.keyColWidth}`
+        if ('max' !== keyColWidth && 'min' !== keyColWidth) {
+            return ''
+        }
+
+        const largestOrSmallestCol = 'max' === keyColWidth
+
+        const style = this.getGlobalStyleDef() as any
+
+        // 1. deactivate global style definition
+        style.colWidthStyleBackup()
+
+        // 2. calculate col cell width
+        const _colwidth = this.calculateColGroupWidth()
+
+        // 3. set col width
+        if (largestOrSmallestCol && _colwidth > style.getColWidth()) {
+            style.updateColWidth(_colwidth)
+        } else if (!largestOrSmallestCol && (_colwidth < style.getColWidth() || style.getColWidth() < 0)) {
+            style.updateColWidth(_colwidth)
+        } else {
+            // ... or restore
+            style.colWidthStyleRestore()
+        }
+        this.colGroupWidthCalculated = true
+        return ''
     }
 }
