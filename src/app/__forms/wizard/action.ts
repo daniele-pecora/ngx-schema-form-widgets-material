@@ -131,10 +131,11 @@ export const actions = {
 /** labels */
 .has-error .has-error .ng-untouched.ng-invalid label {
     x-font-weight: 700;
-    text-decoration: underline;
+    x-text-decoration: underline;
 }
 /* lable prefix icon */
-.has-error .has-error .ng-untouched.ng-invalid label:before {
+/*.has-error .has-error .ng-untouched.ng-invalid label:before {*/
+.has-error .has-error /*.ng-untouched*/.ng-invalid label:after {
     content: "!";
     color: white;
     font-weight: 700;
