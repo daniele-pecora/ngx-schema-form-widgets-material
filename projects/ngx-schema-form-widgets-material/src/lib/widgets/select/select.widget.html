@@ -103,7 +103,7 @@ Element 'widget':
          *ngIf="!autoWidth || ((this.schema.widget || {}).size && 'auto'!==(this.schema.widget || {}).size)"
          type="text"
          pInputText
-         placeholder="HiddenSizeHolder" [attr.size]="sizeFieldControlValue||null"
+         [attr.data-placeholder]="'HiddenSizeHolder'" [attr.size]="sizeFieldControlValue||null"
          [ngClass]="hiddenSizeHolderClass" tabindex="-1" aria-hidden="true">
 <mat-error *ngIf="control?.errors">
   <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
