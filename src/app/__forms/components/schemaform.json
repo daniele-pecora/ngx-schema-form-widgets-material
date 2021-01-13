@@ -1768,6 +1768,13 @@
                     "parameters": {}
                   }
                 ]
+              },
+              "properties": {
+                "prop4": {
+                  "widget": {
+                    "id": "select"
+                  }
+                }
               }
             },
             "dialogTriggerInput": {
