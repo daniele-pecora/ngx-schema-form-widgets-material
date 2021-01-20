@@ -48,7 +48,7 @@ import {ValidationMessagesComponent} from './widgets/_validation-messages/_valid
 import { SelectCardWidgetComponent } from './widgets/select-card/select-card.widget'
 
 import {SchemaFormModule, SchemaValidatorFactory, WidgetRegistry} from 'ngx-schema-form'
-import { NgxQRCodeModule } from 'ngx-qrcode2'
+import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode'
 
 import {WidgetComponentApiService} from './widgets/_service/api.service'
 import {WidgetComponentHttpApiService, } from './widgets/_service/widget-component-http-api.service'
