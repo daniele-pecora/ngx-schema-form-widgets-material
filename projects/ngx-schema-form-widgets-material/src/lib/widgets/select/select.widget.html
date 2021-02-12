@@ -73,7 +73,9 @@ Element 'widget':
 -->
 <mat-form-field
 [class.ngx-ui-widget-full-width]="!schema.widget?.size"
->
+[hideRequiredMarker]="true"
+><!--we use own required marker-->
+<mat-label>{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark></mat-label>
   <ngx-ui-widget-addon *ngIf="schema?.widget?.prefix" [addons]="schema.widget.prefix"></ngx-ui-widget-addon>
 <mat-select
   [attr.id]="id"
@@ -83,11 +85,14 @@ Element 'widget':
 
   [formControl]="control"
 
-  placeholder="{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }} {{formProperty|IsRequiredAsterisk}}"
+  
   floatPlaceholder="auto"
 
   [required]="(formProperty|IsRequiredAttr)"
 >
+<!-- moved to mat-label
+  placeholder="{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }} {{formProperty|IsRequiredAsterisk}}"
+-->
   <mat-option
     *ngFor="let option of createOptionsModel"
     [value]="option.value"

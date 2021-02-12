@@ -59,7 +59,7 @@
     (click)="onOptionClick($event, item)"
     [ngStyle]="button.inline===false?{display:'block'}:null"
     [disabled]="schema?.widget?.card?.readOnly||item.readOnly"
-    [attr.role]="button"
+    [attr.role]="'button'"
     ></button> -->
     <ngx-ui-button-component [formProperty]="formProperty" [button]="button" (onClick)="onOptionClick($event, item)"
         [disabled]="schema?.widget?.card?.readOnly||item.readOnly"
@@ -79,7 +79,7 @@
     [ngStyle]="button.inline===false?{display:'block'}:null"
     [disabled]="schema?.widget?.card?.readOnly||item.readOnly"
     [class.resetButtonInline]="schema?.widget?.resetButton?.inCard"
-    [attr.role]="button"
+    [attr.role]="'button'"
     ></button> -->
     <ngx-ui-button-component [formProperty]="formProperty" [button]="button" (onClick)="onOptionClick($event, item)"
         [disabled]="schema?.widget?.card?.readOnly||item.readOnly"
@@ -101,7 +101,7 @@
         [ngStyle]="button.inline===false?{display:'block'}:null"
         [disabled]="schema?.widget?.card?.readOnly||item.readOnly"
         [class.selectedButtonInline]="schema?.widget?.selectedButton?.inCard"
-        [attr.role]="button"
+        [attr.role]="'button'"
         ></button> -->
     <ngx-ui-button-component [formProperty]="formProperty" [button]="button" (onClick)="onOptionClick($event, item)"
         [disabled]="schema?.widget?.card?.readOnly||item.readOnly"

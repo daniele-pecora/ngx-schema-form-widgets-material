@@ -139,7 +139,7 @@ Element 'array' in 'widget'
               [matTooltip]="schema.widget?.buttonRemove?.description||null"
               (click)="removeItem(i)"
               class="mat-tab-label--button-close"
-              [attr.role]="button"
+              [attr.role]="'button'"
             >
             <mat-icon class="mat-tab-label--icon-close">close</mat-icon>
           </button>
@@ -208,7 +208,7 @@ Element 'array' in 'widget'
       *ngIf="!(schema.hasOwnProperty('minItems') && schema.hasOwnProperty('maxItems') && schema.minItems === schema.maxItems)"
       [ngClass]="['ngx-ui-widget-button', ''+getButtonType(button), 'ui-button-'+(getSeverity(button?.severity)||'primary'), (button?.styleClass||'')]"
       [color]="button?.severity?getSeverity(button?.severity):'primary'"
-      [attr.role]="button"
+      [attr.role]="'button'"
     >
     <mat-icon *ngIf="button?.iconPos==='left'" class="mat-24" aria-label="">
       {{(button?.icon||'ui-icon-add')|IconName}}
@@ -232,7 +232,7 @@ Element 'array' in 'widget'
       *ngIf="!(schema.hasOwnProperty('minItems') && schema.hasOwnProperty('maxItems') && schema.minItems === schema.maxItems)"
       [ngClass]="['ngx-ui-widget-button', ''+getButtonType(button), 'ui-button-'+(getSeverity(button?.severity)||'primary'), (button?.styleClass||'')]"
       [color]="button?.severity?getSeverity(button?.severity):'primary'"
-      [attr.role]="button"
+      [attr.role]="'button'"
     >
     <mat-icon *ngIf="button?.iconPos==='left'" class="mat-24" aria-label="">
       {{(button?.icon||'ui-icon-add')|IconName}}
@@ -259,7 +259,7 @@ Element 'array' in 'widget'
     *ngIf="!(schema.hasOwnProperty('minItems') && schema.hasOwnProperty('maxItems') && schema.minItems === schema.maxItems)"
     [ngClass]="['ngx-ui-widget-button', ''+getButtonType(button), 'ui-button-'+getSeverity(button?.severity||'secondary'), (button?.styleClass||'')]"
     [color]="button?.severity?getSeverity(button?.severity):'secondary'"
-    [attr.role]="button"
+    [attr.role]="'button'"
   >
       <mat-icon *ngIf="button?.iconPos==='left'" class="mat-24" aria-label="">
         {{(button?.icon||'ui-icon-close')|IconName}}
@@ -283,7 +283,7 @@ Element 'array' in 'widget'
       *ngIf="!(schema.hasOwnProperty('minItems') && schema.hasOwnProperty('maxItems') && schema.minItems === schema.maxItems)"
       [ngClass]="['ngx-ui-widget-button', ''+getButtonType(button), 'ui-button-'+getSeverity(button?.severity||'secondary'), (button?.styleClass||'')]"
       [color]="button?.severity?getSeverity(button?.severity):'secondary'"
-      [attr.role]="button"
+      [attr.role]="'button'"
     >
         <mat-icon *ngIf="button?.iconPos==='left'" class="mat-24" aria-label="">
           {{(button?.icon||'ui-icon-close')|IconName}}

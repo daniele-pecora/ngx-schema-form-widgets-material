@@ -20,8 +20,8 @@ Element 'widget'
 
   [required]="(formProperty|IsRequiredAttr)"
 >
-  {{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
-  {{formProperty|IsRequiredAsterisk}}
+  {{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+  <!-- {{formProperty|IsRequiredAsterisk}} -->
 </mat-slide-toggle>
 
 <mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>

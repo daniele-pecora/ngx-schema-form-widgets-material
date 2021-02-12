@@ -33,8 +33,8 @@ Element 'widget':
     [attr.aria-required]="(formProperty|IsRequiredAttr)"
   >
   <ngx-ui-widget-addon *ngIf="schema?.widget?.suffix" [addons]="schema.widget.suffix" [suffix]="true"></ngx-ui-widget-addon>
-  <mat-label>{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
-    {{formProperty|IsRequiredAsterisk}}
+  <mat-label>{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+    <!-- {{formProperty|IsRequiredAsterisk}} -->
   </mat-label>
 
   <mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>

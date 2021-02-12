@@ -53,8 +53,8 @@ Element 'schema':
     [attr.aria-required]="(formProperty|IsRequiredAttr)"
     >
 
-    <label for="select-button-label-{{id}}">{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
-        {{formProperty|IsRequiredAsterisk}}
+    <label for="select-button-label-{{id}}">{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+        <!-- {{formProperty|IsRequiredAsterisk}} -->
       </label>
 <div class="select-buttons">
     <mat-button-toggle-group

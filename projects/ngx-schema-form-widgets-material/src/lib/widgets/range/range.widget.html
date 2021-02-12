@@ -41,8 +41,8 @@ Element 'p-slider' all from primeng documentation (except 'disable')
   >
   </mat-slider>
 
-  <mat-label>{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
-    {{formProperty|IsRequiredAsterisk}}
+  <mat-label>{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+    <!-- {{formProperty|IsRequiredAsterisk}} -->
   </mat-label>
 
   <mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>

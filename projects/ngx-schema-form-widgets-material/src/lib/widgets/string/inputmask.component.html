@@ -33,8 +33,8 @@
          [attr.autocomplete]="originField?.schema?.widget?.autofill"
   >
   <ngx-ui-widget-addon *ngIf="originField.schema?.widget?.suffix" [addons]="originField.schema.widget.suffix" [suffix]="true"></ngx-ui-widget-addon>
-  <mat-label>{{ originField.schema.hasOwnProperty('title') ? originField.schema.title : originField.formProperty.path }}
-      {{originField.formProperty|IsRequiredAsterisk}}
+  <mat-label>{{ originField.schema.hasOwnProperty('title') ? originField.schema.title : originField.formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="originField.formProperty"></ngx-ui-widget-required-mark>
+      <!-- {{originField.formProperty|IsRequiredAsterisk}} -->
     </mat-label>
   <mat-hint align="start" *ngIf="originField.schema.description">{{originField.schema.description}}</mat-hint>
 

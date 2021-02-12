@@ -47,7 +47,7 @@ export interface WidgetLinkComponentModel {
       [matTooltip]="toolTip(link.description||null)"
       [attr.data-rel]="link.overlay?'dialog':null"
 
-      [attr.role]="link"
+      [attr.role]="'link'"
     >
 
       <mat-icon *ngIf="link.icon && link.iconPos==='left'" class="mat-24" aria-label="">{{link.icon | IconName}}
