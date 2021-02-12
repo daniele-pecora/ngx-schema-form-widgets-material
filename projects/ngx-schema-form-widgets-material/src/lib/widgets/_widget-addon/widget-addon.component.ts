@@ -30,9 +30,9 @@ import {Component, Input} from '@angular/core'
     </ng-template>
 
     <ng-template #addonTemplate let-addon>
-      <i *ngIf="(addon.icon && !addon.ligature); else ligatureIcon" class="{{addon.icon}}"></i>
+      <i [attr.tabindex]="-1" [attr.aria-hidden]="true" *ngIf="(addon.icon && !addon.ligature); else ligatureIcon" class="{{addon.icon}}"></i>
       <ng-template #ligatureIcon>
-        <i *ngIf="addon.icon" class="material-icons">{{addon.icon}}</i>
+        <i [attr.tabindex]="-1" [attr.aria-hidden]="true" *ngIf="addon.icon" class="material-icons">{{addon.icon}}</i>
       </ng-template>
       <span *ngIf="addon.text">{{addon.text}}</span>
     </ng-template>
