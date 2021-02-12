@@ -16,14 +16,14 @@ import {Component, Input} from '@angular/core'
              }]
     -->
     <ng-container *ngIf="!suffix;else suffixTemplate">
-      <span matPrefix *ngFor="let addon of addons" class="ui-inputgroup-addon">
+      <span [attr.tabindex]="-1" [attr.aria-hidden]="true" matPrefix *ngFor="let addon of addons" class="ui-inputgroup-addon">
       <ng-container *ngTemplateOutlet="addonTemplate;context:{$implicit:addon, addon:addon}">
       </ng-container>
     </span>
     </ng-container>
 
     <ng-template #suffixTemplate>
-      <span matSuffix *ngFor="let addon of addons" class="ui-inputgroup-addon">
+      <span [attr.tabindex]="-1" [attr.aria-hidden]="true" matSuffix *ngFor="let addon of addons" class="ui-inputgroup-addon">
         <ng-container *ngTemplateOutlet="addonTemplate;context:{$implicit:addon, addon:addon}">
         </ng-container>
       </span>
@@ -34,7 +34,7 @@ import {Component, Input} from '@angular/core'
       <ng-template #ligatureIcon>
         <i [attr.tabindex]="-1" [attr.aria-hidden]="true" *ngIf="addon.icon" class="material-icons">{{addon.icon}}</i>
       </ng-template>
-      <span *ngIf="addon.text">{{addon.text}}</span>
+      <span [attr.tabindex]="-1" [attr.aria-hidden]="true" *ngIf="addon.text">{{addon.text}}</span>
     </ng-template>
   `
 })
