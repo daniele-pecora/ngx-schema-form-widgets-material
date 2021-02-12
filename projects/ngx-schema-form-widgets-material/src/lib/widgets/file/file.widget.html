@@ -231,6 +231,8 @@
           mat-icon-button
           color="secondary"
           (click)="deleteFileInBasicUpload($event,file)"
+
+          [attr.role]="button"
           >
           <mat-icon>{{schema.widget?.deleteButtonIcon||'clear'}}</mat-icon>
         </button>
@@ -241,6 +243,8 @@
           mat-raised-button
           color="secondary"
           (click)="deleteFileInBasicUpload($event,file)"
+
+          [attr.role]="button"
           >
           <mat-icon>{{schema.widget?.deleteButtonIcon||'clear'}}</mat-icon>
           {{schema.widget?.deleteButtonLabel}}
