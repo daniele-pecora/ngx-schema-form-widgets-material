@@ -35,14 +35,14 @@
     <aol-content>
       <div *ngIf="showControlsZoom" class="ol-overlaycontainer-stopevent">
         <div class="ol-zoom ol-unselectable ol-control">
-          <button [title]="titleZoomIn" class="ol-zoom-in" type="button" title="Zoom in" (click)="increaseZoom()">+</button>
-          <button [title]="titleZoomOut" class="ol-zoom-out" type="button" title="Zoom out" (click)="decreaseZoom()">−</button>
+          <button [title]="titleZoomIn" class="ol-zoom-in" type="button" title="Zoom in" (click)="increaseZoom()" [attr.role]="'button'">+</button>
+          <button [title]="titleZoomOut" class="ol-zoom-out" type="button" title="Zoom out" (click)="decreaseZoom()" [attr.role]="'button'">−</button>
         </div>
         <div *ngIf="showControlsCurrentLocation && position" class="ol-rotate ol-unselectable ol-control">
-          <button [title]="titleCurrentLocation" (click)="setCurrentLocation($event)">&#8982;</button>
+          <button [title]="titleCurrentLocation" (click)="setCurrentLocation($event)" [attr.role]="'button'">&#8982;</button>
         </div>
         <div class="ol-attribution ol-unselectable ol-control ol-uncollapsible">
-          <ul><li>© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a></li></ul>
+          <ul><li>© <a href="https://www.openstreetmap.org/copyright" target="_blank" role="link" rel="noopener noreferrer">OpenStreetMap</a></li></ul>
         </div>
       </div>
     </aol-content>

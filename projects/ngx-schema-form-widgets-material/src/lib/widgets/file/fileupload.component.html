@@ -21,6 +21,7 @@
           color="primary"
           [attr.title]="deleteButtonLabel?deleteButtonLabel:null"
           (click)="removeFile(event,f)"
+          [attr.role]="'button'"
   >
     <mat-icon>{{deleteButtonIcon}}</mat-icon>
   </button>

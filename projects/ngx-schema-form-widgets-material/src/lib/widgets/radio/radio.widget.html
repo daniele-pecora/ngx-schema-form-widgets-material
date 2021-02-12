@@ -13,8 +13,8 @@ Element 'schema':
   <!-- Placeholder input required for usage of mat-form-field to format the mat-hint right -->
   <input matInput data-hidden="placeholder" aria-hidden="true" class="ngx-ui-mat-form-field-placeholder" style="display:none" tabindex="-1">
 
-  <label for="radio-group-label-{{id}}">{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
-      {{formProperty|IsRequiredAsterisk}}
+  <label for="radio-group-label-{{id}}">{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+      <!-- {{formProperty|IsRequiredAsterisk}} -->
     </label>
 
 <mat-radio-group [formControl]="control" class="ngx-ui-mat-radio-group"

@@ -101,8 +101,8 @@ Element 'widget':
 <mat-form-field [appearance]="schema?.widget?.filled?'fill':'standard'"
   [class.ngx-ui-widget-full-width]="!schema.widget?.size"
 >
-  <mat-label>{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
-    {{formProperty|IsRequiredAsterisk}}
+  <mat-label>{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+    <!-- {{formProperty|IsRequiredAsterisk}} -->
   </mat-label>
   <ngx-ui-widget-addon *ngIf="schema?.widget?.prefix" [addons]="schema.widget.prefix"></ngx-ui-widget-addon>
 
