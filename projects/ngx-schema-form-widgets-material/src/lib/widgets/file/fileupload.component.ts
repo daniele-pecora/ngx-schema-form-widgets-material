@@ -1,5 +1,7 @@
 import { Component, Input, ViewChild, ElementRef, Output, EventEmitter } from "@angular/core";
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
+import { LogService } from "ngx-schema-form";
+import { ImageInfo, ImageRules, ImageValidationResult, ImageValidator } from "./file-image-validator";
 import { FileTypeHelper } from "./file-type.helper";
 
 export const bytesToSizeString = (bytes: any) => {
@@ -15,7 +17,7 @@ export const bytesToSizeString = (bytes: any) => {
   selector: 'ngx-ui-mat-fileUpload',
   templateUrl: './fileupload.component.html',
   styleUrls: ['./fileupload.component.scss'],
-  providers: [FileTypeHelper]
+  providers: [FileTypeHelper, ImageValidator]
 })
 export class FileuploadComponent {
   @Input()
@@ -110,7 +112,7 @@ export class FileuploadComponent {
   @Input()
   fileLimit
 
-  uploadedFileCount:number = 0
+  uploadedFileCount: number = 0
 
   @ViewChild('fileUpload')
   fileUpload: ElementRef
@@ -122,7 +124,17 @@ export class FileuploadComponent {
 
   msgs: Message[]
 
-  constructor(private sanitizer: DomSanitizer, private fileTypeHelper: FileTypeHelper) {
+  @Input()
+  imageRules: ImageRules // schema.widget.imageRules
+  @Input()
+  invalidImageDimensionsMessageSummary = 'Image doesn\'t match requirements, '//schema.widget.invalidImageDimensionsMessageSummary
+  @Input()
+  invalidImageDimensionsMessageDetail = 'it\'s either too big, too small or has the wrong orientation.' //schema.widget.invalidImageDimensionsMessageDetail
+
+
+  constructor(private sanitizer: DomSanitizer, private fileTypeHelper: FileTypeHelper
+    , private imageValidator: ImageValidator
+    , private logService: LogService) {
 
   }
 
@@ -141,24 +153,24 @@ export class FileuploadComponent {
     const filterInvalidFiles = await this.checkFileValidity(Array.isArray(files) ? files : Object.keys(files).map((key) => files[key]))
     const _files = []
     for (const file of filterInvalidFiles) {
-        if (this.validate(file)) {
-          if (this.isImage(file)) {
-            file.objectURL = this.sanitizer.bypassSecurityTrustUrl((window.URL.createObjectURL(file)));
-            file.sanitizedURL = file.objectURL
-          } else {
-            file.objectURL = this.sanitizer.bypassSecurityTrustResourceUrl((window.URL.createObjectURL(file)));
-            file.sanitizedURL = file.objectURL
-          }
-          if (!this.isMultiple()) {
-            this.files = []
-          }
-          this.files.push(file);
-          _files.push(file)
+      if (this.validate(file)) {
+        if (this.isImage(file)) {
+          file.objectURL = this.sanitizer.bypassSecurityTrustUrl((window.URL.createObjectURL(file)));
+          file.sanitizedURL = file.objectURL
+        } else {
+          file.objectURL = this.sanitizer.bypassSecurityTrustResourceUrl((window.URL.createObjectURL(file)));
+          file.sanitizedURL = file.objectURL
         }
+        if (!this.isMultiple()) {
+          this.files = []
+        }
+        this.files.push(file);
+        _files.push(file)
+      }
     }
 
     this.onSelect.emit({ files: _files })
-    
+
     this.upload(_files)
   }
 
@@ -167,7 +179,8 @@ export class FileuploadComponent {
       this.uploadHandler.emit({ files: files })
     } else {
       // TODO http upload
-      console.warn('WARNING: HTTP upload not yet implemented!')
+      // console.warn('WARNING: HTTP upload not yet implemented!')
+      this.logService.warn('WARNING: HTTP upload not yet implemented!')
     }
   }
 
@@ -195,12 +208,56 @@ export class FileuploadComponent {
 
         removeFile(file, this.files)
       } else {
-        filteredFiles.push(file)
+        let addFile = true
+        if (this.isImage(file)) {
+          const vRes = await this.checkImageDimensions(file)
+          file['______vRes'] = vRes
+          if (!vRes.validationResult.valid) {
+            addFile = false
+
+            msgs.push({
+              severity: 'error',
+              summary: (this.invalidImageDimensionsMessageSummary || '').replace('{0}', ''),
+              detail: (this.invalidImageDimensionsMessageDetail || '').replace('{0}', '')
+            })
+
+            removeFile(file, this.files)
+          }
+          this.logService.error('Rejecting image because of validation result:', vRes, 'and rules:', this.imageRules)
+        }
+        if (addFile)
+          filteredFiles.push(file)
       }
     }
 
     this.msgs = msgs
     return filteredFiles
+  }
+
+  async checkImageDimensions(file: File): Promise<{ imageInfo: ImageInfo, imageSrc: any, validationResult: ImageValidationResult }> {
+    const imageSrc = await new Promise<any>((resolve1, reject1) => {
+      const reader = new FileReader()
+      reader.onload = async (event) => {
+        resolve1(reader.result)
+      }
+      reader.onerror = (event) => {
+        reject1(event)
+      }
+      reader.onabort = (event) => {
+        reject1(event)
+      }
+      reader.readAsDataURL(file)
+    })
+    const imageInfo = await this.imageValidator.getImageInfo(imageSrc)
+    return new Promise<{ imageInfo: ImageInfo, imageSrc: any, validationResult: ImageValidationResult }>((resolve, reject) => {
+      const imageRules = this.imageRules || { oneOf: [], allOf: [] }
+      const validationResult: ImageValidationResult = this.imageValidator.validate(imageRules as ImageRules, imageInfo)
+      resolve({
+        imageInfo: imageInfo,
+        imageSrc: imageSrc,
+        validationResult: validationResult
+      })
+    })
   }
 
   isImage(file: File): boolean {

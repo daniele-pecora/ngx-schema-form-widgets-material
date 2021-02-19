@@ -73,6 +73,39 @@
 
   Element 'widget'
        - inlineLabel  : <code>false</code> will display the upload button below the label
+
+
+  Element 'widget'
+       - imageRules : Image validation rules:
+           - oneOf
+                      - orientation : 'landscape', 'portrait' or 'square'
+                      - unit        : 'px' for pixel, 'in' for inch or 'cm' for centimeter
+                      - minWidth    : Minimal width
+                      - maxWidth    : Maximum widht
+                      - minHeight   : Minimal height 
+                      - maxHeight   : Maximum height
+
+                      Any of this property may stand alone.
+           - allOf
+                      - orientation : 'landscape', 'portrait' or 'square'
+                      - unit        : 'px' for pixel, 'in' for inch or 'cm' for centimeter
+                      - minWidth    : Minimal width
+                      - maxWidth    : Maximum widht
+                      - minHeight   : Minimal height 
+                      - maxHeight   : Maximum height
+
+                      Any of this property may stand alone.
+      - invalidImageDimensionsMessageSummary : Summary for the errormessage if dimension doesn't match requirements
+      - invalidImageDimensionsMessageDetail  : Detail for the errormessage if dimension doesn't match requirements
+
+      - previewTitleImageDimensions         : Text template for the `title` and `alt` attribute if file is an image.
+                                              Can be used inside `previewTitle` as placeholder like `{previewTitleImageDimensions}`
+                                              Can contain placeholders:
+                                                  - {imageDimensionPixelW}, {imageDimensionPixelH}
+                                                  - {imageDimensionInchesW}, {imageDimensionInchesH}
+                                                  - {imageDimensionCentimetersW}, {imageDimensionCentimetersH}
+                                              e.g: 
+                                                  { "previewTitleImageDimensions" : " ({imageDimensionPixelW}x{imageDimensionPixelH})" }
 -->
 
 <div class="ui-g-12">
@@ -128,7 +161,11 @@
     [disabled]="schema.widget.disabled||(schema.readOnly?true:null)"
 
     [required]="(formProperty|IsRequiredAttr)"
-    
+
+    [imageRules]="schema.widget.imageRules"
+    [invalidImageDimensionsMessageSummary]="schema.widget.invalidImageDimensionsMessageSummary||'Image doesn\'t match requirements, '"
+    [invalidImageDimensionsMessageDetail]="schema.widget.invalidImageDimensionsMessageDetail||'it\'s either too big, too small or has the wrong orientation.'"
+
     #fileUploadEl
     >
     </ngx-ui-mat-fileUpload>

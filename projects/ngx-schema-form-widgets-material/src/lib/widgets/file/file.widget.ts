@@ -307,6 +307,27 @@ export class FileWidgetComponent extends ControlWidget implements OnInit, AfterV
     if (previewTitle) {
       previewTitle = previewTitle.replace(new RegExp('{filename}', 'ig'), file.name)
       previewTitle = previewTitle.replace(new RegExp('{filesize}', 'ig'), this.bytesToSize(file.size).toUpperCase())
+
+      let previewTitleImageDimensions = this.schema.widget.previewTitleImageDimensions || ''
+      if (previewTitleImageDimensions) {
+        if (file['______vRes']) {
+          const a: any = file['______vRes']
+          if (a) {
+            previewTitleImageDimensions = previewTitleImageDimensions.replace(new RegExp('{imageDimensionPixelW}', 'ig'), `${a.imageInfo.dimensions.px.w}`)
+            previewTitleImageDimensions = previewTitleImageDimensions.replace(new RegExp('{imageDimensionPixelH}', 'ig'), `${a.imageInfo.dimensions.px.h}`)
+            previewTitleImageDimensions = previewTitleImageDimensions.replace(new RegExp('{imageDimensionInchesW}', 'ig'), `${a.imageInfo.dimensions.in.w}`)
+            previewTitleImageDimensions = previewTitleImageDimensions.replace(new RegExp('{imageDimensionInchesH}', 'ig'), `${a.imageInfo.dimensions.in.h}`)
+            previewTitleImageDimensions = previewTitleImageDimensions.replace(new RegExp('{imageDimensionCentimetersW}', 'ig'), `${a.imageInfo.dimensions.cm.w}`)
+            previewTitleImageDimensions = previewTitleImageDimensions.replace(new RegExp('{imageDimensionCentimetersH}', 'ig'), `${a.imageInfo.dimensions.cm.h}`)
+
+            // set into preview title
+            previewTitle = previewTitle.replace(new RegExp('{previewTitleImageDimensions}', 'ig'), previewTitleImageDimensions)
+          }
+        }
+      }
+      // clean preview title if it wasn't an image
+      previewTitle = previewTitle.replace(new RegExp('{previewTitleImageDimensions}', 'ig'), '')
+
       file['_previewTitle'] = previewTitle
       return file['_previewTitle']
     }
