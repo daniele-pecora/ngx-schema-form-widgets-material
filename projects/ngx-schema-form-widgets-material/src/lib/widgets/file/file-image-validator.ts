@@ -163,7 +163,7 @@ export class ImageValidator {
                 result.orientation = 'square'
             } else if (currW > currH) {
                 result.orientation = 'landscape'
-            } else if (currW > currH) {
+            } else if (currW < currH) {
                 result.orientation = 'portrait'
             }
 
@@ -184,33 +184,38 @@ export class ImageValidator {
         if (rules && ((rules.oneOf || []).length || (rules.allOf || []).length)) {
             if ((rules.oneOf || []).length) {
                 for (const rule of rules.oneOf) {
-                    const unit = `${rule.unit || defaultUnit}`.toLowerCase()
-                    const unitc = imageInfo.dimensions[unit] || {}
-                    const currWidth = unitc.w
-                    const currHeight = unitc.h
+                    if (rule) {
+                        const unit = `${rule.unit || defaultUnit}`.toLowerCase()
+                        const unitc = imageInfo.dimensions[unit] || {}
+                        const currWidth = unitc.w
+                        const currHeight = unitc.h
 
-                    const vr = validate(rule.minWidth, rule.maxWidth, rule.minHeight, rule.maxHeight, currWidth, currHeight, rule.orientation)
-                    if (vr.valid) {
-                        // does match - return matching rule
-                        result.valid = true
-                        result.rule = rule
-                        break
+                        const vr = validate(rule.minWidth, rule.maxWidth, rule.minHeight, rule.maxHeight, currWidth, currHeight, rule.orientation)
+                        if (vr.valid) {
+                            // does match - return matching rule
+                            result.valid = true
+                            result.rule = rule
+                            break
+                        }
                     }
                 }
             }
             if ((rules.allOf || []).length) {
                 for (const rule of rules.allOf) {
-                    const unit = `${rule.unit || defaultUnit}`.toLowerCase()
-                    const unitc = imageInfo.dimensions[unit] || {}
-                    const currWidth = unitc.w
-                    const currHeight = unitc.h
+                    if (rule) {
+                        result.valid = true
+                        const unit = `${rule.unit || defaultUnit}`.toLowerCase()
+                        const unitc = imageInfo.dimensions[unit] || {}
+                        const currWidth = unitc.w
+                        const currHeight = unitc.h
 
-                    const vr = validate(rule.minWidth, rule.maxWidth, rule.minHeight, rule.maxHeight, currWidth, currHeight, rule.orientation)
-                    if (!vr.valid) {
-                        // doesn't match - return not matching rule
-                        result.valid = false
-                        result.rule = rule
-                        break
+                        const vr = validate(rule.minWidth, rule.maxWidth, rule.minHeight, rule.maxHeight, currWidth, currHeight, rule.orientation)
+                        if (!vr.valid) {
+                            // doesn't match - return not matching rule
+                            result.valid = false
+                            result.rule = rule
+                            break
+                        }
                     }
                 }
             }
