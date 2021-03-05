@@ -144,7 +144,10 @@
             <div class="ui-g-nopad ui-g-12">
                 <img *ngIf="item.image||schema?.widget?.card?.image" class="ui-g-2 card_container-image"
                     [src]="item.image||schema?.widget?.card?.image"
-                    [ngStyle]="item.imageStyle||schema?.widget?.card?.imageStyle">
+                    [ngStyle]="item.imageStyle||schema?.widget?.card?.imageStyle"
+                    [attr.aria-hidden]="true"
+                    [attr.alt]="''"
+                    >
                 <div class="ui-g-nopad ui-g-10 card_container-title">
                     <h3 [innerHTML]="getSaveContent(item.description||schema?.widget?.card?.description)">
                         - {{item.description||schema?.widget?.card?.description}} -
