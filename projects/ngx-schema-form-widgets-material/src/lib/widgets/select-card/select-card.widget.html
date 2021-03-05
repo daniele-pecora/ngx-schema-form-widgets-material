@@ -149,9 +149,9 @@
                     [attr.alt]="''"
                     >
                 <div class="ui-g-nopad ui-g-10 card_container-title">
-                    <h3 [innerHTML]="getSaveContent(item.description||schema?.widget?.card?.description)">
+                    <span [innerHTML]="getSaveContent(item.description||schema?.widget?.card?.description)">
                         - {{item.description||schema?.widget?.card?.description}} -
-                    </h3>
+                    </span>
                 </div>
             </div>
             <div *ngIf="showSummary; else noSummary" class="ui-g-12 card_container-summary"
