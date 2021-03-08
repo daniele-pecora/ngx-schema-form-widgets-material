@@ -186,6 +186,7 @@ export class DateWidgetComponent extends ControlWidget implements OnInit, AfterV
   dateValueConverter: DateValueToStringConverter = null;
 
   @ViewChild('dateInputField') dateInputField: ElementRef
+  @ViewChild('pickerToggle') pickerToggle: ElementRef
   /** testing only , see ngAfterInitView method ... **/
   disableTestDateValidation = true;
 
@@ -319,8 +320,18 @@ export class DateWidgetComponent extends ControlWidget implements OnInit, AfterV
     }
 
     this.setupPresetValue()
-  }
 
+    this.setMissingAriaAttributes()
+  }
+  setMissingAriaAttributes() {
+    const button = this.pickerToggle && this.pickerToggle['_button'] && this.pickerToggle['_button']['_elementRef'] ? this.pickerToggle['_button']['_elementRef'].nativeElement : null
+    if (button) {
+        const val = this.schema.widget.iconDescription || 'Open calendar'
+        button.setAttribute('aria-label', val)
+        button.setAttribute('title', val)
+        button.setAttribute('aria-haspopup', 'dialog')
+    }
+}
   setupPresetValue() {
     if (this.schema.widget['preset']) {
       const newDate = this.getDateFromAge(this.schema.widget['preset']);

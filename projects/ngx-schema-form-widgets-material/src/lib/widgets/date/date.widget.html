@@ -96,6 +96,13 @@ Element 'widget':
   - size  = when not set the widget will be set to full width of available space
             set this to 'default' to use defaults width
             set to a positive number value to set a value like on input element
+
+  - iconDescription = Set the text for the attribute `title`, `aria-label` for the icon button
+-->
+<!--
+  Event Binding
+    - change
+    - input
 -->
 
 <mat-form-field [appearance]="schema?.widget?.filled?'fill':'standard'"
@@ -124,7 +131,7 @@ Element 'widget':
   >
 
   <ngx-ui-widget-addon *ngIf="schema?.widget?.suffix" [addons]="schema.widget.suffix" [suffix]="true"></ngx-ui-widget-addon>
-  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker-toggle matSuffix [for]="picker" #pickerToggle></mat-datepicker-toggle>
   <mat-datepicker #picker></mat-datepicker>
 
   <mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>
