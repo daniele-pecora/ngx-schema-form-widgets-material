@@ -84,17 +84,17 @@ var simpleParser = new BBCode({
   '\\[img( class=.+?)?( alt=.+?)?( title=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*( width=.+?)?( height=.+?)?\\](.+?)\\[/img\\]': '<img src="$8" $1$2$3$4$5$6$7>',
   '\\[img=(.+?)( class=.+?)?( alt=.+?)?( title=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*( width=.+?)?( height=.+?)?\\]': '<img src="$1" $2$3$4$5$6$7$8>',
 
-  '\\[email( class=.+?)?( target=[\\S]+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/email\\]': '<a rel="noopener noreferrer" href="mailto:$5" $1$2$3$4>$5</a>',
-  '\\[email=(.+?)( class=.+?)?( target=[\\S]+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/email\\]': '<a rel="noopener noreferrer" href="mailto:$1" $2$3$4$5>$6</a>',
+  '\\[email( class=.+?)?( target=[\\S]+?)?( title=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/email\\]': '<a rel="noopener noreferrer" href="mailto:$6" $1$2$3$4$5>$6</a>',
+  '\\[email=(.+?)( class=.+?)?( target=[\\S]+?)?( title=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/email\\]': '<a rel="noopener noreferrer" href="mailto:$1" $2$3$4$5$6>$7</a>',
 
-  '\\[url( class=.+?)?( target=[\\S]+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\](.+?)\\[/url\\]': '<a href="$5" rel="noopener noreferrer" $1$2$3$4>$5</a>',
+  '\\[url( class=.+?)?( target=[\\S]+?)?( title=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\](.+?)\\[/url\\]': '<a href="$6" rel="noopener noreferrer" $1$2$3$4$5>$6</a>',
   '\\[url=(.+?)\\|onclick\\](.+?)\\[/url\\]': '<a rel="noopener noreferrer" href="#" onclick="$1;return false;">$2</a>',
-  '\\[url=(.+?)\\|onclick( class=.+?)?( target=[\\S]+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/url\\]': '<a rel="noopener noreferrer" href="#" onclick="$1;return false;"$2$3$4$5>$6</a>',
-  '\\[url=([\\S]+?)\\starget=([\\S]+?)( class=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/url\\]': '<a rel="noopener noreferrer" href="$1" target="$2"$3$4$5>$6</a>',
-  '\\[url=([\\S]+?)( class=.+?)?( target=[\\S]+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/url\\]': '<a rel="noopener noreferrer" href="$1"$2$3$4$5>$6</a>',
+  '\\[url=(.+?)\\|onclick( class=.+?)?( target=[\\S]+?)?( title=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/url\\]': '<a rel="noopener noreferrer" href="#" onclick="$1;return false;"$2$3$4$5$6>$7</a>',
+  '\\[url=([\\S]+?)\\starget=([\\S]+?)( title=.+?)?( class=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/url\\]': '<a rel="noopener noreferrer" href="$1" target="$2"$3$4$5$6>$7</a>',
+  '\\[url=([\\S]+?)( class=.+?)?( target=[\\S]+?)?( title=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/url\\]': '<a rel="noopener noreferrer" href="$1"$2$3$4$5$6>$7</a>',
 
-  '\\[a( class=.+?)?( target=[\\S]+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\](.+?)\\[/a\\]': '<a href="$5" rel="noopener noreferrer" $1$2$3$4>$5</a>',
-  '\\[a=(.+?)( class=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*( target=[\\S]+?)?\\](.+?)\\[/a\\]': '<a rel="noopener noreferrer" href="$1" name="$6"$2$3$4$5>$6</a>',
+  '\\[a( class=.+?)?( target=[\\S]+?)?( title=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\](.+?)\\[/a\\]': '<a href="$6" rel="noopener noreferrer" $1$2$3$4$5>$6</a>',
+  '\\[a=(.+?)( class=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*( target=[\\S]+?)?( title=.+?)?\\](.+?)\\[/a\\]': '<a rel="noopener noreferrer" href="$1" name="$7"$2$3$4$5$6>$7</a>',
 
   '\\[list( class=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/list\\]': '<ul$1$2$3>$4</ul>',
   '\\[\\*( class=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/\\*\\]': '<li$1$2$3>$4</li>'

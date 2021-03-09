@@ -605,7 +605,8 @@
         "date-picker": {
           "widget": {
             "id": "date-picker",
-            "filled": true
+            "filled": true,
+            "iconDescription": "Test Open Calendar"
           }
         },
         "date-native": {
