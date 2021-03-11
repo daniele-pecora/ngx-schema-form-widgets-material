@@ -326,12 +326,16 @@ export class DateWidgetComponent extends ControlWidget implements OnInit, AfterV
   setMissingAriaAttributes() {
     const button = this.pickerToggle && this.pickerToggle['_button'] && this.pickerToggle['_button']['_elementRef'] ? this.pickerToggle['_button']['_elementRef'].nativeElement : null
     if (button) {
+        if (!this.schema.widget.iconDescription) {
+          button.setAttribute('aria-hidden', 'true')
+          button.setAttribute('tabindex', '-1')
+        }
         const val = this.schema.widget.iconDescription || 'Open calendar'
         button.setAttribute('aria-label', val)
         button.setAttribute('title', val)
         button.setAttribute('aria-haspopup', 'dialog')
     }
-}
+  }
   setupPresetValue() {
     if (this.schema.widget['preset']) {
       const newDate = this.getDateFromAge(this.schema.widget['preset']);
