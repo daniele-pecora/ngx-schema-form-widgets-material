@@ -1,7 +1,7 @@
 /**
  * Created by daniele on 27.09.17
  */
-import { AfterViewInit, Component, OnInit, ViewChild, ElementRef, Injectable } from '@angular/core'
+import { AfterViewInit, Component, OnInit, ViewChild, ElementRef, Injectable, Renderer2 } from '@angular/core'
 import {ControlWidget} from 'ngx-schema-form';
 import { DateAdapter, MAT_DATE_FORMATS, NativeDateAdapter } from '@angular/material/core';
 import { MatDatepicker } from '@angular/material/datepicker';
@@ -190,7 +190,10 @@ export class DateWidgetComponent extends ControlWidget implements OnInit, AfterV
   /** testing only , see ngAfterInitView method ... **/
   disableTestDateValidation = true;
 
-  constructor(private dateAdapter: DateAdapter<Date>) {
+  constructor(
+      private dateAdapter: DateAdapter<Date>
+    , private renderer: Renderer2
+    , private elRef: ElementRef) {
     super();
     this.disableTestDateValidation = false
   }
@@ -321,19 +324,19 @@ export class DateWidgetComponent extends ControlWidget implements OnInit, AfterV
 
     this.setupPresetValue()
 
-    this.setMissingAriaAttributes()
+    this.__aria_setMissingAriaAttributes()
   }
-  setMissingAriaAttributes() {
+  __aria_setMissingAriaAttributes() {
     const button = this.pickerToggle && this.pickerToggle['_button'] && this.pickerToggle['_button']['_elementRef'] ? this.pickerToggle['_button']['_elementRef'].nativeElement : null
     if (button) {
         if (!this.schema.widget.iconDescription) {
-          button.setAttribute('aria-hidden', 'true')
-          button.setAttribute('tabindex', '-1')
+          this.renderer.setAttribute(button, 'aria-hidden', 'true')
+          this.renderer.setAttribute(button, 'tabindex', '-1')
         }
         const val = this.schema.widget.iconDescription || 'Open calendar'
-        button.setAttribute('aria-label', val)
-        button.setAttribute('title', val)
-        button.setAttribute('aria-haspopup', 'dialog')
+        this.renderer.setAttribute(button, 'aria-label', val)
+        this.renderer.setAttribute(button, 'title', val)
+        this.renderer.setAttribute(button, 'aria-haspopup', 'dialog')
     }
   }
   setupPresetValue() {
