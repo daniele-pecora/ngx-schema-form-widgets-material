@@ -324,9 +324,9 @@ export class DateWidgetComponent extends ControlWidget implements OnInit, AfterV
 
     this.setupPresetValue()
 
-    this.setMissingAriaAttributes()
+    this.__aria_setMissingAriaAttributes()
   }
-  setMissingAriaAttributes() {
+  __aria_setMissingAriaAttributes() {
     const button = this.pickerToggle && this.pickerToggle['_button'] && this.pickerToggle['_button']['_elementRef'] ? this.pickerToggle['_button']['_elementRef'].nativeElement : null
     if (button) {
         if (!this.schema.widget.iconDescription) {
