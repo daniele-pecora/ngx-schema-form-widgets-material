@@ -23,7 +23,7 @@ export class AutocompleteAsyncHelper implements OnDestroy {
 
   private createErrorLog(propertyName, actionName, expressionString, result, err): any[] {
     return [
-      `Failed to ${actionName} expression property "${propertyName}" in 'selection.widget'
+      `Failed to ${actionName} expression property "${propertyName}" in 'selection.widget' 
     for path ${this.formProperty.path} in field ${this.name}`
       , '\n'
       , `Expression: ${expressionString}`, '\n'
@@ -204,9 +204,9 @@ export class AutocompleteAsyncHelper implements OnDestroy {
     for (const p of Object.keys(options.params || {})) {
       v.push(options.params[p])
     }
-    v = []
+    //v = []
     for (const p of Object.keys(options.headers || {})) {
-      v.push(options.params[p])
+      v.push(options.headers[p])
     }
     if (v.length) {
       replacements = Object.assign(replacements, this.findValues(v.join(';;')))
