@@ -1,6 +1,6 @@
 {
   "name": "ngx-schema-form-widgets-material-app",
-  "version": "0.0.0",
+  "version": "9.0.37",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --ssl true --host 0.0.0.0 --port 4321",
