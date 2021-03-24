@@ -111,6 +111,7 @@
     "tslint": "5.17.0",
     "typedoc": "^0.8.0",
     "typescript": "3.6.4",
+    "typescript-require": "^0.3.0",
     "webpack": "^4.39.1",
     "webpack-bundle-analyzer": "^3.8.0"
   }
