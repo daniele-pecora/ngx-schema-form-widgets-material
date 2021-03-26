@@ -49,7 +49,7 @@ export class AutocompleteAsyncHelper implements OnDestroy {
     const values = {}
     for (const path of list) {
       values[path] = ''
-      const p: FormProperty = this.formProperty.findRoot().getProperty(path.replace('.', '/'))
+      const p: FormProperty = this.formProperty.findRoot().getProperty(path.replace(new RegExp('\\.','ig'), '/'))
       if (p) {
         values[path] = p.value
       }
