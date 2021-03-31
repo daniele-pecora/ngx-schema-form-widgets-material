@@ -1,7 +1,7 @@
-import {HttpApiServiceOptions, WidgetComponentHttpApiService} from '../_service/widget-component-http-api.service'
-import {Subscription} from 'rxjs'
-import {OnDestroy} from '@angular/core'
-import {FormProperty} from 'ngx-schema-form'
+import { HttpApiServiceOptions, WidgetComponentHttpApiService } from '../_service/widget-component-http-api.service'
+import { Subscription } from 'rxjs'
+import { OnDestroy } from '@angular/core'
+import { FormProperty } from 'ngx-schema-form'
 import { ExpressionCompiler } from '../_service/expression-complier.service'
 
 export class AutocompleteAsyncHelper implements OnDestroy {
@@ -27,7 +27,7 @@ export class AutocompleteAsyncHelper implements OnDestroy {
     for path ${this.formProperty.path} in field ${this.name}`
       , '\n'
       , `Expression: ${expressionString}`, '\n'
-      ,  'From context: ' , result
+      , 'From context: ', result
       , err
     ]
   }
@@ -49,7 +49,7 @@ export class AutocompleteAsyncHelper implements OnDestroy {
     const values = {}
     for (const path of list) {
       values[path] = ''
-      const p: FormProperty = this.formProperty.findRoot().getProperty(path.replace(new RegExp('\\.','ig'), '/'))
+      const p: FormProperty = this.formProperty.findRoot().getProperty(path.replace(new RegExp('\\.', 'ig'), '/'))
       if (p) {
         values[path] = p.value
       }
@@ -113,7 +113,7 @@ export class AutocompleteAsyncHelper implements OnDestroy {
       throw new Error('Missing property serviceUrl in selection.widget')
     }
 
-    if(this.schema.widget.precheckExpressions) {
+    if (this.schema.widget.precheckExpressions) {
       this.precheckExpressions()
     }
 
@@ -126,12 +126,15 @@ export class AutocompleteAsyncHelper implements OnDestroy {
         try {
           _results = this.expressionCompiler.evaluate(this.schema.widget.resultExpression, { data: data })
         } catch (err) {
-          this.logExpressionError('resultExpression', 'execute', this.schema.widget.resultExpression, data,  err)
+          this.logExpressionError('resultExpression', 'execute', this.schema.widget.resultExpression, data, err)
           throw new Error('Failed to execute expression property \'resultExpression\' in \'autocomplete.widget\'')
         }
       } else {
         _results = data
       }
+
+      // prevent null or undefined
+      _results = _results || []
 
       for (const _item of _results) {
         let labelValue = null
@@ -140,7 +143,7 @@ export class AutocompleteAsyncHelper implements OnDestroy {
           try {
             labelValue = this.expressionCompiler.evaluate(this.schema.widget.labelExpression, { item: _item })
           } catch (err) {
-            this.logExpressionError('labelExpression', 'execute', this.schema.widget.labelExpression, _item,  err)
+            this.logExpressionError('labelExpression', 'execute', this.schema.widget.labelExpression, _item, err)
             throw new Error('Failed to execute expression property \'labelExpression\' in \'selection.widget\'')
           }
         } else {
@@ -161,7 +164,7 @@ export class AutocompleteAsyncHelper implements OnDestroy {
          */
         if (-1 === keys.indexOf(labelValue)) {
           keys.push(labelValue)
-          keyValues.push({key: labelValue, value: valueValue})
+          keyValues.push({ key: labelValue, value: valueValue })
         }
       }
       if (onComplete) {
@@ -186,14 +189,13 @@ export class AutocompleteAsyncHelper implements OnDestroy {
         })
   }
 
-  private updateValues(url: string, requestOptions: any, additionalReplacements: { [key: string]: string } = {}):
-    {
-      url: string,
-      options: {
-        params?: { [key: string]: string | string[] },
-        headers?: { [key: string]: string | string[] }
-      }, replacements: { [key: string]: string }
-    } {
+  private updateValues(url: string, requestOptions: any, additionalReplacements: { [key: string]: string } = {}): {
+    url: string,
+    options: {
+      params?: { [key: string]: string | string[] },
+      headers?: { [key: string]: string | string[] }
+    }, replacements: { [key: string]: string }
+  } {
 
     const options = JSON.parse(JSON.stringify(requestOptions))
 
@@ -202,17 +204,17 @@ export class AutocompleteAsyncHelper implements OnDestroy {
 
     let v = []
     for (const p of Object.keys(options.params || {})) {
-      v.push(options.params[p])
+      v.push(null != options.params[p] ? options.params[p] : '')
     }
-    //v = []
+
     for (const p of Object.keys(options.headers || {})) {
-      v.push(options.headers[p])
+      v.push(null != options.headers[p] ? options.headers[p] : '')
     }
     if (v.length) {
       replacements = Object.assign(replacements, this.findValues(v.join(';;')))
     }
     for (const placeholder of Object.keys(additionalReplacements || {})) {
-      replacements[placeholder] = additionalReplacements[placeholder] || ''
+      replacements[placeholder] = null != additionalReplacements[placeholder] ? additionalReplacements[placeholder] : ''
     }
 
     const serviceUrl = this.makeReplacement(url, replacements)
@@ -223,7 +225,7 @@ export class AutocompleteAsyncHelper implements OnDestroy {
     for (const p of Object.keys(options.headers || {})) {
       options.headers[p] = this.makeReplacement(options.headers[p], replacements)
     }
-    return {url: serviceUrl, options: options, replacements: replacements}
+    return { url: serviceUrl, options: options, replacements: replacements }
   }
 
   ngOnDestroy(): void {
