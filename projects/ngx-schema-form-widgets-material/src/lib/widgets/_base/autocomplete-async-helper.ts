@@ -50,7 +50,7 @@ export class AutocompleteAsyncHelper implements OnDestroy {
     for (const path of list) {
       values[path] = ''
       const p: FormProperty = this.formProperty.findRoot().getProperty(path.replace(new RegExp('\\.', 'ig'), '/'))
-      if (p) {
+      if (p) {// && p.value
         values[path] = p.value
       }
     }
@@ -61,7 +61,7 @@ export class AutocompleteAsyncHelper implements OnDestroy {
     let generatedValue = stringValue
     for (const key of Object.keys(replacements)) {
       const _regKey = '{' + key + '}'
-      generatedValue = generatedValue.replace(new RegExp(_regKey, 'g'), replacements[key])
+      generatedValue = generatedValue.replace(new RegExp(_regKey, 'g'), replacements[key]||'')
     }
     return generatedValue
   }
