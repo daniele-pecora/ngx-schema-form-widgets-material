@@ -1,6 +1,6 @@
 {
   "name": "ngx-schema-form-widgets-material",
-  "version": "9.0.43",
+  "version": "9.0.44",
   "peerDependencies": {
     "@angular/animations": "^9.1.11",
     "@angular/cdk": "9.2.4",
