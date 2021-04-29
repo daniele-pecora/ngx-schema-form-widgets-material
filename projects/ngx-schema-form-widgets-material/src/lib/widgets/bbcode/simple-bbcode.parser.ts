@@ -61,12 +61,12 @@ var simpleParser = new BBCode({
   '\\[u( class=.+?)?( role=.+?)?( tabindex=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/u\\]': '<u$1$2$3$4$5>$6</u>',
 
   // extra codes for jump marks
-  '\\[h1a( class=.+?)?( role=.+?)?( tabindex=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/h1a\\]': '<h1$1$2$3$4$5><a rel="noopener noreferrer" href="$5" name="$6">$6</a></h1>',
-  '\\[h2a( class=.+?)?( role=.+?)?( tabindex=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/h2a\\]': '<h2$1$2$3$4$5><a rel="noopener noreferrer" href="$5" name="$6">$6</a></h2>',
-  '\\[h3a( class=.+?)?( role=.+?)?( tabindex=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/h3a\\]': '<h3$1$2$3$4$5><a rel="noopener noreferrer" href="$5" name="$6">$6</a></h3>',
-  '\\[h4a( class=.+?)?( role=.+?)?( tabindex=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/h4a\\]': '<h4$1$2$3$4$5><a rel="noopener noreferrer" href="$5" name="$6">$6</a></h4>',
-  '\\[h5a( class=.+?)?( role=.+?)?( tabindex=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/h5a\\]': '<h5$1$2$3$4$5><a rel="noopener noreferrer" href="$5" name="$6">$6</a></h5>',
-  '\\[h6a( class=.+?)?( role=.+?)?( tabindex=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/h6a\\]': '<h6$1$2$3$4$5><a rel="noopener noreferrer" href="$5" name="$6">$6</a></h6>',
+  '\\[h1a( class=.+?)?( role=.+?)?( tabindex=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/h1a\\]': '<h1$1$2$3$4$5><a rel="noopener noreferrer" href="" name="$6">$6</a></h1>',
+  '\\[h2a( class=.+?)?( role=.+?)?( tabindex=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/h2a\\]': '<h2$1$2$3$4$5><a rel="noopener noreferrer" href="" name="$6">$6</a></h2>',
+  '\\[h3a( class=.+?)?( role=.+?)?( tabindex=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/h3a\\]': '<h3$1$2$3$4$5><a rel="noopener noreferrer" href="" name="$6">$6</a></h3>',
+  '\\[h4a( class=.+?)?( role=.+?)?( tabindex=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/h4a\\]': '<h4$1$2$3$4$5><a rel="noopener noreferrer" href="" name="$6">$6</a></h4>',
+  '\\[h5a( class=.+?)?( role=.+?)?( tabindex=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/h5a\\]': '<h5$1$2$3$4$5><a rel="noopener noreferrer" href="" name="$6">$6</a></h5>',
+  '\\[h6a( class=.+?)?( role=.+?)?( tabindex=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/h6a\\]': '<h6$1$2$3$4$5><a rel="noopener noreferrer" href="" name="$6">$6</a></h6>',
 
   '\\[h1( class=.+?)?( role=.+?)?( tabindex=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/h1\\]': '<h1$1$2$3$4$5>$6</h1>',
   '\\[h2( class=.+?)?( role=.+?)?( tabindex=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/h2\\]': '<h2$1$2$3$4$5>$6</h2>',
