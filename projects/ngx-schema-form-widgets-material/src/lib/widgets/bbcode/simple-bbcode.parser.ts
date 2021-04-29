@@ -87,10 +87,10 @@ var simpleParser = new BBCode({
   '\\[email=(.+?)( class=.+?)?( role=.+?)?( tabindex=.+?)?( target=[\\S]+?)?( title=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/email\\]': '<a rel="noopener noreferrer" href="mailto:$1" $2$3$4$5$6$7$8>$9</a>',
 
   '\\[url( class=.+?)?( role=.+?)?( tabindex=.+?)?( target=[\\S]+?)?( title=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\](.+?)\\[/url\\]': '<a href="$7" rel="noopener noreferrer" $1$2$3$4$5$6$7>$8</a>',
-  '\\[url=(.+?)\\|onclick\\](.+?)\\[/url\\]': '<a rel="noopener noreferrer" href="#" onclick="$1;return false;">$2</a>',
-  '\\[url=(.+?)\\|onclick( class=.+?)?( role=.+?)?( tabindex=.+?)?( target=[\\S]+?)?( title=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/url\\]': '<a rel="noopener noreferrer" href="#" onclick="$1;return false;"$2$3$4$5$6$7$8>$9</a>',
   '\\[url=([\\S]+?)\\starget=([\\S]+?)( title=.+?)?( class=.+?)?( role=.+?)?( tabindex=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/url\\]': '<a rel="noopener noreferrer" href="$1" target="$2"$3$4$5$6$7$8>$9</a>',
   '\\[url=([\\S]+?)( class=.+?)?( role=.+?)?( tabindex=.+?)?( target=[\\S]+?)?( title=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/url\\]': '<a rel="noopener noreferrer" href="$1"$2$3$4$5$6$7$8>$9</a>',
+  '\\[url=(.+?)\\|onclick\\](.+?)\\[/url\\]': '<a rel="noopener noreferrer" href="#" onclick="$1;return false;">$2</a>',
+  '\\[url=(.+?)\\|onclick( class=.+?)?( role=.+?)?( tabindex=.+?)?( target=[\\S]+?)?( title=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/url\\]': '<a rel="noopener noreferrer" href="#" onclick="$1;return false;"$2$3$4$5$6$7$8>$9</a>',
 
   '\\[a( class=.+?)?( role=.+?)?( tabindex=.+?)?( target=[\\S]+?)?( title=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\](.+?)\\[/a\\]': '<a href="$8" rel="noopener noreferrer" $1$2$3$4$5$6$7>$8</a>',
   '\\[a=(.+?)( class=.+?)?( role=.+?)?( tabindex=.+?)?( target=[\\S]+?)?( title=.+?)?( data-[\\S]+?=??.*?)*( aria-[\\S]+?=??.*?)*\\](.+?)\\[/a\\]': '<a rel="noopener noreferrer" href="$1" name="$8"$2$3$4$5$6$7$8>$9</a>',
