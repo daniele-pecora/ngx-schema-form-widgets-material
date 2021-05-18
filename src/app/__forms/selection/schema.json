@@ -6,7 +6,7 @@
       "oneOf": [
         {
           "enum": [
-            "a"
+            ""
           ],
           "description": "Loading..."
         }
