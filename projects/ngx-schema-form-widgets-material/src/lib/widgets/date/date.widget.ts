@@ -8,7 +8,7 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import {DateFormatHelper} from './date-format-helper'
 import {DateValueToStringConverter} from './date-value.converter'
 import {DateValueConverter} from './date-value.converter'
-import { inputDateAutoComplete } from './date.autocomplete'
+import { inputDateAutoComplete, setDateInputEditListener } from './date.autocomplete'
 
 import * as moment_ from 'moment'
 const moment = moment_
@@ -325,6 +325,10 @@ export class DateWidgetComponent extends ControlWidget implements OnInit, AfterV
     this.setupPresetValue()
 
     this.__aria_setMissingAriaAttributes()
+
+    if (false !== this.formProperty.schema.widget.formatFilter) {
+      setDateInputEditListener(this.elRef.nativeElement.querySelector(`.mat-form-field-infix input`))
+    }
   }
   __aria_setMissingAriaAttributes() {
     const button = this.pickerToggle && this.pickerToggle['_button'] && this.pickerToggle['_button']['_elementRef'] ? this.pickerToggle['_button']['_elementRef'].nativeElement : null
