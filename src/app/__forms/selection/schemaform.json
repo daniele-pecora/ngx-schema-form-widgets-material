@@ -1,0 +1,36 @@
+{
+    "type": "object",
+    "properties": {
+        "select_async": {
+            "type": "string",
+            "title": "title",
+            "description": "Async dropdown with loading indicator text",
+            "default": "",
+            "widget": {
+                "id": "select",
+                "filter": true,
+                "size": 25,
+                "validationMessage": "Please choose a city",
+                "serviceUrl": "https://nominatim.openstreetmap.org/search/d?key=iTzWSiYpGxDvhATNtSrqx5gDcnMOkntL&format=json&addressdetails=1&limit=100&countrycodes=de",
+                "resultExpression": "data",
+                "labelExpression": "item.address.city?item.address.city + ' ': '- Please choose -'",
+                "valueExpression": "item.address.city?item.address.city + ' ': ''"
+            }
+        },
+        "radio": {
+            "widget": "radio"
+        },
+        "select": {
+            "widget": "select"
+        },
+        "select_button": {
+            "widget": "select-button"
+        },
+        "select_readonly": {
+            "widget": "select"
+        },
+        "select_button_readonly": {
+            "widget": "select-button"
+        }
+    }
+}
