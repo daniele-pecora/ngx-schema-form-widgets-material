@@ -98,6 +98,7 @@ import { ButtonTypeTransformerMaterialService } from './widgets/_converters/_but
 
 import {ValidationFieldMessagesComponent} from './widgets/_validation-field-messages/_validation-field-messages.component'
 import {FixOptionalEmptyFieldsZSchemaValidatorFactory} from './fix-optional-empty-fields-z-schema-validator-factory'
+import { MatPaginatorModule } from '@angular/material/paginator'
 
 const moduleProviders = [
   {provide: WidgetRegistry, useClass: WidgetRegistryMaterial},
@@ -135,6 +136,7 @@ const moduleProviders = [
     MatTableModule,
     MatSortModule,
     MatChipsModule,
+    MatPaginatorModule,
     // ngx-recaptcha
     NgxRecaptchaModule,
     // angular2-text-mask

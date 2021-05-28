@@ -44,12 +44,24 @@
           "title": "Simple key value table",
           "description": "Created with static values, value expressions and converted values",
           "widget": {
+            "paging": {
+              "size": 3,
+              "sizeOptions":[1,2,3],
+              "labels": {
+                "first": "First page",
+                "last": "Last page",
+                "prev": "Previous page",
+                "next": "Next page",
+                "report": "currentPage:{currentPage},totalPages:{totalPages},rows:{rows},first:{first},last:{last} and totalRecords:{totalRecords}",
+                "perPage": "Entries per page"
+              }
+            },
             "id": "table",
             "style": "keyValue",
             "no_caption": "Datatable",
             "collapsed": true,
-            "keyColGroup": "colGroup1",
-            "keyColWidth": "max",
+            "_keyColGroup": "colGroup1",
+            "_keyColWidth": "max",
             "keyValue": [
               {
                 "label": "Example: Date transform",
@@ -58,7 +70,8 @@
                   "type": "dateFormat",
                   "from": "dd.MM.yyyy",
                   "to": "yyyy-MM-dd"
-                }
+                },
+                "empty": "false"
               },
               {
                 "label": "Example: Label transform",
@@ -142,13 +155,24 @@
           "type": "object",
           "title": "Simple key value table",
           "description": "Created with static values, value expressions and converted values",
+          "_widget": "hidden",
           "widget": {
+            "paging": {
+              "size": 4,
+              "sizeOptions": [
+                2,
+                3,
+                4,
+                5
+              ],
+              "report": "Showing {first} to {last} of {totalRecords} entries"
+            },
             "id": "table",
             "style": "keyValue",
             "no_caption": "Datatable",
             "collapsed": true,
-            "keyColGroup": "colGroup1",
-            "keyColWidth": "max",
+            "_keyColGroup": "colGroup1",
+            "_keyColWidth": "max",
             "keyValue": [
               {
                 "label": "Large of a very large cell content copied a Large of a very large cell content",
@@ -245,6 +269,7 @@
           "type": "object",
           "title": "Simple key value table with divs",
           "description": "Created with static values and value expressions",
+          "_widget": "hidden",
           "widget": {
             "id": "table",
             "style": "keyValueLight",
@@ -342,7 +367,13 @@
           "type": "object",
           "title": "Multi column table",
           "description": "Created by a model path. Change values in section 'Array' to see results here.",
+          "_widget": "hidden",
           "widget": {
+            "paging": {
+              "size": 2,
+              "sizeOptions": [],
+              "report": "Showing {first} to {last} of {totalRecords} entries"
+            },
             "id": "table",
             "model": {
               "path": "/array/complex",
@@ -373,7 +404,12 @@
           "type": "object",
           "title": "Multi column table",
           "description": "Created with a predefined static model object",
+          "_widget": "hidden",
           "widget": {
+            "paging": {
+              "size": 2,
+              "report": "Showing {first} to {last} of {totalRecords} entries"
+            },
             "id": "table",
             "caption": "Datatable",
             "collapsed": true,

@@ -1,16 +1,82 @@
 /**
  * Created by daniele on 14.04.19.
  */
-import { Component, Injectable, OnDestroy, ElementRef, Inject } from '@angular/core'
+import { Component, Injectable, OnDestroy, ElementRef, Inject, ViewChild } from '@angular/core'
 import { ObjectLayoutWidget, FormProperty, ArrayProperty } from 'ngx-schema-form'
 import { Subject, Subscription } from 'rxjs'
 import { SafeHtml } from '@angular/platform-browser'
 import { JEXLExpressionCompiler } from '../_service/expression-complier.service'
 import { DataConverterRegistryPipe, Converter } from '../_converters/_data/data-converter-registry.pipe'
 import { DataConverterTransformerRegistry } from '../_converters/_data/data-converter-transformer.registry'
-import { MatTable } from '@angular/material/table'
+import { MatTable, MatTableDataSource } from '@angular/material/table'
 import { MatSortHeaderIntl } from '@angular/material/sort'
 import { DOCUMENT } from "@angular/common";
+import { MatPaginator, MatPaginatorIntl, PageEvent } from '@angular/material/paginator'
+
+@Injectable()
+export class CustomMatPaginatorIntl extends MatPaginatorIntl {
+    // /**
+    //  * Stream to emit from when labels are changed. Use this to notify components when the labels have
+    //  * changed after initialization.
+    //  */
+    // readonly changes: Subject<void>
+    /** A label for the page size selector. */
+    itemsPerPageLabel: string = '->Items per page'
+    /** A label for the button that increments the current page. */
+    nextPageLabel: string = '->Next page'
+    /** A label for the button that decrements the current page. */
+    previousPageLabel: string = '->Previous page'
+    /** A label for the button that moves to the first page. */
+    firstPageLabel: string = '->First page'
+    /** A label for the button that moves to the last page. */
+    lastPageLabel: string = '->Last page'
+    /** A label for the range of items within the current page and the length of the whole list. */
+    getRangeLabel = (page: number, pageSize: number, length: number) => {
+        if (this.report) {
+            /**
+             Available placeholders are:
+            `{currentPage}`  the index of the current page
+            `{totalPages}`   the amount of total pages
+            `{rows}`         the amount of entry per page
+            `{first}`        the index of the first entry of the current page
+            `{last}`         the index of the last entry of the current page
+            `{totalRecords}` the number of total entries
+             */
+            let value = this.report
+            const currentPage = page + 1 // make index start at 1 and not 0 
+            const lastPageEntries = length % pageSize
+            const totalPages = Math.floor((length / pageSize) + (lastPageEntries > 0 ? 1 : 0))
+            const first = ((currentPage * pageSize) - pageSize) + 1 // make index start at 1 and not 0 
+            const last = currentPage === totalPages && lastPageEntries !== 0
+                ? ((pageSize * (totalPages - 1)) + lastPageEntries) // all full pages + the rest of the last page
+                : (currentPage * pageSize) // only even full pages present :-)
+            const rows = currentPage === totalPages && lastPageEntries !== 0 ? lastPageEntries : pageSize // of current page
+
+            value = value
+                .replace(new RegExp('{currentPage}', 'ig'), `${currentPage}`)
+                .replace(new RegExp('{totalPages}', 'ig'), `${totalPages}`)
+                .replace(new RegExp('{rows}', 'ig'), `${rows}`)
+                .replace(new RegExp('{first}', 'ig'), `${first}`)
+                .replace(new RegExp('{last}', 'ig'), `${last}`)
+                .replace(new RegExp('{totalRecords}', 'ig'), `${length}`)
+            return value
+        }
+        return `->page:${page} pageSize:${pageSize} length:${length}`
+    }
+
+    // Template of the current page report element. Available placeholders are {currentPage},{totalPages},{rows},{first},{last} and {totalRecords}
+    // eg: "Showing {first} to {last} of {totalRecords} entries"
+    report: string
+
+    load(options: { next: string, prev: string, first: string, last: string, perPage?: string, report?: string }) {
+        this.nextPageLabel = options.next
+        this.previousPageLabel = options.prev
+        this.firstPageLabel = options.first
+        this.lastPageLabel = options.last
+        this.itemsPerPageLabel = options.perPage
+        this.report = options.report
+    }
+}
 
 @Injectable()
 export class CustomMatSortHeaderIntl {
@@ -61,7 +127,13 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
         return this.calculateColGroupWidth()
     }
     colGroupWidthCalculated: boolean
-    
+
+    @ViewChild(MatPaginator) paginator!: MatPaginator
+    @ViewChild('tableDefault') tableDefault: MatTable<any>
+    @ViewChild('tableKeyValue') tableKeyValue: MatTable<any>
+    tableDataSource: MatTableDataSource<any> = new MatTableDataSource<any>([])
+    tableDataSourceKeyValue: MatTableDataSource<any> = new MatTableDataSource<any>([])
+
     constructor(private dataConverterTransformerRegistry: DataConverterTransformerRegistry
         , private matSortService: MatSortHeaderIntl
         , @Inject(DOCUMENT) private document: Document
@@ -69,17 +141,47 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
         super()
     }
 
+    syncPrimaryPaginator(event: PageEvent) {
+        this.paginator.pageIndex = event.pageIndex;
+        this.paginator.pageSize = event.pageSize;
+        this.paginator.page.emit(event);
+    }
+
     ngAfterViewInit() {
         super.ngAfterViewInit()
 
-        // init model
         const style = ((this.schema || {}).widget || {}).style
-        if (!style || style === 'default' || style === 'normal') {
-            this.initModel()
+        const isModelBasedTable = !style || style === 'default' || style === 'normal'
+
+
+        const callbackAfterPreparedModel = () => {
+            if (this.paginator && this.schema.widget.paging && this.schema.widget.paging.labels) {
+                const _intl = new CustomMatPaginatorIntl()
+                _intl.load(this.schema.widget.paging.labels)
+                this.paginator._intl = _intl
+            }
+            if (isModelBasedTable) {
+                this.tableDataSource = new MatTableDataSource<any>(this.model.values)
+                if (this.paginator)
+                    this.tableDataSource.paginator = this.paginator
+            } else {
+                const keyValue = ((this.schema || {}).widget || {}).keyValue || {}
+                this.tableDataSourceKeyValue = new MatTableDataSource<any>(keyValue)
+                if (this.paginator)
+                    this.tableDataSourceKeyValue.paginator = this.paginator
+            }
+        }
+
+        // init model
+        if (isModelBasedTable) {
+            this.initModel(callbackAfterPreparedModel)
+        } else {
+            // init datasource for key value table
+            callbackAfterPreparedModel()
         }
     }
 
-    initModel(): any {
+    initModel(callback?: () => void): any {
 
         this.unsubscribe()
 
@@ -92,20 +194,23 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
              */
             const modelProperty = this.formProperty.searchProperty(modelPath)
             this.subs.push(modelProperty.valueChanges.subscribe(() => {
-                this.getModelFromPath(modelProperty, modelPath)
+                this.getModelFromPath(modelProperty, modelPath, callback)
             }))
         } else if (modelTable) {
-            this.getModelFromTableModel(modelTable)
+            this.getModelFromTableModel(modelTable, callback)
         } else {
             console.warn('No model.path or model.table defined')
         }
     }
 
-    private getModelFromTableModel(modelTable: any) {
+    private getModelFromTableModel(modelTable: any, callback?: () => void) {
         this.model.cols = this.processIncludesExcludes(modelTable.columns)
         this.model.values = modelTable.data
 
         this.updateColIds()
+        if (callback) {
+            callback()
+        }
     }
 
     private processIncludesExcludes(columns: any) {
@@ -123,7 +228,7 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
         return cols
     }
 
-    private getModelFromPath(modelProperty: FormProperty, modelPath: string) {
+    private getModelFromPath(modelProperty: FormProperty, modelPath: string, callback?: () => void) {
         const getColsInfo = (modelFormProp) => {
 
             const createPath = (path: string): string => {
@@ -203,6 +308,10 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
         this.model.values = values
 
         this.updateColIds()
+
+        if (callback) {
+            callback()
+        }
     }
 
     isEmptyRow(index: number, item: any) {
@@ -218,11 +327,13 @@ export class TableWidgetComponent extends ObjectLayoutWidget implements OnDestro
 
     updateColIds() {
         const msortservice = this.matSortService as CustomMatSortHeaderIntl
-        msortservice.mappings = msortservice.mappings || {} as {[column:string]:{
-            sortAriaLabel: string
-            sortAriaLabelAsc: string
-            sortAriaLabelDesc: string
-        }}
+        msortservice.mappings = msortservice.mappings || {} as {
+            [column: string]: {
+                sortAriaLabel: string
+                sortAriaLabelAsc: string
+                sortAriaLabelDesc: string
+            }
+        }
         const colIds = []
         for (const col of this.model.cols) {
             colIds.push(col.field)

@@ -133,6 +133,55 @@
                                 - `max` = will use the width of the largest possible key column of all tables (only with `keyColGroup`)
                                 - `min` = will use the width of the smallest possible key column of all tables (only with `keyColGroup`)
 
+
+        Paging
+            Table types/modes supporting paging are `default` and `keyValue`. (The table mode `keyValueLight` DOES NOT support paging.)
+            - paging = Setting any value will enable paging for this table
+                - size        = Set the amount of items per page (default all)
+                - sizeOptions = An array of numbers defining the page sizes the use can select from
+                - position    = Position of the paginator, options are "top", "bottom" (default), "both" (NOT YET SUPPORTED WILL COME IN FUTURE RELEASE)
+            Note:
+                When using paginator im may come to unexpected behavour when counting pages
+                if empty rows are hidden by using the `keyValue.empty` feature.
+                So it is explicitly NOT RECOMMENDED to activate that feature when using a paginator.
+                
+
+                - labels
+                    - next      =  Tooltip for the lint to the next page
+                    - prev      =  Tooltip for the lint to the previous page
+                    - first     =  Tooltip for the lint to the first page
+                    - last      =  Tooltip for the lint to the last page
+                    - perPage   =  Label to show besides the selection or number of items per page
+                    - report    =  Template of the current page report element. 
+                                    Available placeholders are:
+                                    `{currentPage}`  the index of the current page
+                                    `{totalPages}`   the amount of total pages
+                                    `{rows}`         the amount of entry per page
+                                    `{first}`        the index of the first entry of the current page
+                                    `{last}`         the index of the last entry of the current page
+                                    `{totalRecords}` the number of total entries
+                                     all index do start at 1
+            Example:
+            ```
+            "widget": {
+                "id": "table",
+                "paging": {
+                    "size": 4,
+                    "sizeOptions": [2, 3, 4, 5 ],
+                    "labels": {
+                        "first": "First page",
+                        "last": "Last page",
+                        "prev": "Previous page",
+                        "next": "Next page",
+                        "report": "Showing {first} to {last} of {totalRecords} entries. Current page:{currentPage} of {totalPages} showing {rows} entries",
+                        "perPage": "Entries per page"
+                    }
+                },
+                ...
+            }
+            ```
+
+
             ------------------------------------------------
             Currentyl supported transformers
             ------------------------------------------------
@@ -273,6 +322,34 @@
 
 
 -->
+<ng-template #bottomPaginator>
+    <mat-paginator 
+    #paginator
+    *ngIf="schema?.widget?.paging && -1!==['both', 'bottom'].indexOf(schema?.widget?.paging?.position||'bottom')" 
+    [hidePageSize]="false"
+    [pageSize]="schema?.widget?.paging?.size" 
+    [pageSizeOptions]="schema?.widget?.paging?.sizeOptions" 
+    showFirstLastButtons></mat-paginator>
+</ng-template>
+<!-- TODO add feature paginator position `top` and `both` (see:https://stackblitz.com/edit/angular-vj293b?file=app%2Ftable-pagination-example.html)
+<mat-paginator 
+    (page)="syncPrimaryPaginator($event)" 
+    *ngIf="bottomPaginator.paginator && schema?.widget?.paging && 'both'===(schema?.widget?.paging?.position||'bottom')" 
+    [hidePageSize]="bottomPaginator.paginator?bottomPaginator.paginator.hidePageSize:false"
+    [pageSize]="bottomPaginator.paginator?bottomPaginator.paginator.pageSize:schema?.widget?.paging?.size" 
+    [pageSizeOptions]="bottomPaginator.paginator?bottomPaginator.paginator.pageSizeOptions:schema?.widget?.paging?.sizeOptions" 
+    showFirstLastButtons
+    [length]="bottomPaginator.paginator.length" 
+    [pageIndex]="bottomPaginator.paginator.pageIndex"
+    ></mat-paginator>
+
+<mat-paginator 
+    *ngIf="schema?.widget?.paging && 'top'===(schema?.widget?.paging?.position||'bottom')" 
+    [hidePageSize]="false"
+    [pageSize]="schema?.widget?.paging?.size" 
+    [pageSizeOptions]="schema?.widget?.paging?.sizeOptions" 
+    showFirstLastButtons></mat-paginator>
+-->
 <div [class.ngx-ui-table-no-border]="schema.widget.collapsed">
     <h4 *ngIf="schema.title">{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}</h4>
     <h5 *ngIf="schema.description">{{schema.description}}</h5>
@@ -284,7 +361,10 @@
     </ng-container>
 
     <ng-template #templateTableKeyValue>
-        <table mat-table [dataSource]="schema?.widget?.keyValue" class="mat-elevation-z8"
+        <!--schema?.widget?.keyValue-->
+        <table #tableKeyValue mat-table 
+        [dataSource]="tableDataSourceKeyValue" 
+        class="mat-elevation-z8"
         matSort
         #tableKeyValue
         [class.dataColGroupTable]="colGroupWidthCalculated"
@@ -363,6 +443,9 @@
             <!-- <ng-container mat-row *matRowDef="let item; columns: [];when: isEmptyRow"></ng-container> -->
 
         </table>
+        <!--
+        <mat-paginator *ngIf="schema?.widget?.pagingEnabled" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        -->
     </ng-template>
     <!-- template for KEY cell -->
     <ng-template #rowTemplateKeyValue_Label let-value="value" let-label="label" let-empty="empty" let-transform="transform" let-transformLabel="transformLabel">
@@ -456,9 +539,11 @@
     </ng-template>
 
     <ng-template #templateTableDefault>
+        <!--model?.values-->
         <mat-table 
         #tableDefault
-        [dataSource]="model?.values" class="mat-elevation-z8 ngx-mat-responsive-table"
+        [dataSource]="tableDataSource" 
+        class="mat-elevation-z8 ngx-mat-responsive-table"
         matSort
         (matSortChange)="onMatSortChange($event, tableDefault)"
         >
@@ -526,6 +611,9 @@
             <mat-header-row *matHeaderRowDef="model?.colIds"></mat-header-row>
             <mat-row *matRowDef="let item;let index; columns: model?.colIds"></mat-row>
         </mat-table>
+        <!--
+        <mat-paginator *ngIf="schema?.widget?.pagingEnabled" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        -->
     </ng-template>
 
 
@@ -558,3 +646,5 @@
     *ngIf="formProperty?.schema?.widget?.keyColGroup && -1==formProperty?.schema?.widget?.keyColWidth.indexOf('%') && ('max'===formProperty?.schema?.widget?.keyColWidth || 'min'===formProperty?.schema?.widget?.keyColWidth)">
     <ng-container *ngIf="calculateColGroupStyle()"></ng-container>
 </ng-container>
+
+<ng-container [ngTemplateOutlet]="bottomPaginator"></ng-container>
