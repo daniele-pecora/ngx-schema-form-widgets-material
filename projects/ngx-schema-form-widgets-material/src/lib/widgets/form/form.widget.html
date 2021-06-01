@@ -1,6 +1,7 @@
 <!--
 Element 'form'
- - asCard         : true|false (default:false) = show or don't show card layout
+ - heading             : `1-6` = Set the number of the html heading type (H1-H6) to use for the title
+ - asCard              : true|false (default:false) = show or don't show card layout
  - split               : true|false = set if fields should be split up in two colums
  - ignoreParentSplit   : true|false = ignores the split property of the parent .
                                       Keeps positioning the fields in columns style and
@@ -54,9 +55,10 @@ Element 'link'
 
 <div class="{{formProperty.schema?.widget?.asCard?'ui-g card card-w-title':''}}">
   <div *ngFor="let fieldset of formProperty.schema.fieldsets">
-    <h3 class="ui-g-12" *ngIf="fieldset.title || fieldset.name">{{fieldset.title || fieldset.name}}
+    <ngx-ui-widget-title *ngIf="fieldset.title || fieldset.name" cssClass="ui-g-12" [formProperty]="formProperty"
+      [title]="fieldset.title || fieldset.name">
       <ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
-    </h3>
+    </ngx-ui-widget-title>
     <h5 class="ui-g-12" *ngIf="fieldset.description">{{fieldset.description}}</h5>
     
     <div *ngIf="schema.widget.split===true;else formElementNoSplit">

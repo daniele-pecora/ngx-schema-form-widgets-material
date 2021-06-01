@@ -15,6 +15,7 @@ Element 'fieldset':
                         for the <code>wizard<code> widget
 
 Element 'widget:wizard':
+        - heading     : `1-6` = Set the number of the html heading type (H1-H6) to use for the title
         - startPage    = index of the page to start with (default 0)
         - live         = true|false. allows hiding/showing pages by settings the property <code>hidden</code> at the corresponding fieldset
         - buttons.prev, buttons.next ,buttons.finish
@@ -131,7 +132,9 @@ Modes of horizontal stepper:
 -->
 
 <div class="ui-g-12" *ngIf="schema.title || schema.name || schema.description">
-  <h3 *ngIf="schema.title || schema.name">{{schema.title || schema.name}}</h3>
+  <ngx-ui-widget-title [formProperty]="formProperty" [title]="schema.title || schema.name || schema.description">
+    <ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+  </ngx-ui-widget-title>
   <h5 *ngIf="schema.description">{{schema.description}}</h5>
 </div>
 
