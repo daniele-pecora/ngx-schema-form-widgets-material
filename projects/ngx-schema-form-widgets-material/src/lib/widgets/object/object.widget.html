@@ -1,5 +1,6 @@
 <!--
 Element 'object'
+  - heading     : `1-6` = Set the number of the html heading type (H1-H6) to use for the title
   - asCard             : true|false (default:false) = show or don't show card layout
   - showErrors         : true|false
                          or object of type:
@@ -19,10 +20,10 @@ Element 'object'
   <ngx-ui-validation-messages *ngIf="formProperty.schema.widget?.showErrors && formProperty.schema.widget?.showErrors?.position!=='bottom'" [formComponent]="this"></ngx-ui-validation-messages>
 
   <div class="{{formProperty.schema?.widget?.asCard?'card card-w-title':''}}" *ngFor="let fieldset of formProperty.schema.fieldsets">
-
-    <h3 *ngIf="fieldset.title || fieldset.name">{{fieldset.title || fieldset.name}}
+    <ngx-ui-widget-title *ngIf="fieldset.title || fieldset.name" [formProperty]="formProperty"
+      [title]="fieldset.title || fieldset.name">
       <ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
-    </h3>
+    </ngx-ui-widget-title>
     <h5 *ngIf="fieldset.description">{{fieldset.description}}</h5>
 
     <div *ngFor="let fieldId of fieldset.fields">
