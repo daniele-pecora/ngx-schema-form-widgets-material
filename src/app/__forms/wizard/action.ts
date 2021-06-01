@@ -62,5 +62,29 @@ export const actions = {
 
         property.updateValueAndValidity(true, false)
         console.log('action_wizard_page_show_hide_2 after', property)
+    },
+    'action_toggle_title': (property: FormProperty, parameters: any) => {
+        property['title_org'] = property['title_org'] || property.schema.title || property.schema.name
+
+        let button = property.schema.buttons.filter(element => 'action_toggle_title' === element.id)[0]
+        property['action_toggle_title'] = property['action_toggle_title'] || button['label']
+
+        property['headings'] = property['headings'] || [1, 2, 3, 4, 5, 6, 'default', 'none', '', '1', '2', '3', '4', '5', '6']
+        property['headings_titles'] = property['headings_titles'] || ['Number 1', 'Number 2', 'Number 3', 'Number 4', 'Number 5', 'Number 6', 'String "default"', 'String "none"', 'Empty string', 'String "1"', 'String "2"', 'String "3"', 'String "4"', 'String "5"', 'String "6"']
+        const index = property['headings_current_index'] = property['headings_current_index'] || 0
+        property.schema.widget.heading = property['headings'][index]
+
+        // update wizard title text
+        property['headings_titles_el'] = property['headings_titles_el'] || ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'default "default"', 'default "none"', 'default ""', '"H1"', '"H2"', '"H3"', '"H4"', '"H5"', '"H6"']
+        property.schema.title = property['title_org'] + ' (' + property['headings_titles_el'][index] + ')'
+        // update button label
+        button['label'] = property['action_toggle_title'] + '. Actual: ' + property['headings_titles'][index]
+
+        // prepare next value
+        property['headings_current_index']++
+        if (property['headings_current_index'] > property['headings'].length) {
+            property['headings_current_index'] = 0
+        }
+
     }
 }

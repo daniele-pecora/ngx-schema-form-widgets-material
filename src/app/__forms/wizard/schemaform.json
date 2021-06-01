@@ -19,6 +19,14 @@
       "description": "Toggle page 2",
       "label": "Toggle page 2",
       "severity": "secondary"
+    },
+    {
+      "id": "action_toggle_title",
+      "icon": "ui-icon-title",
+      "iconPos": "right",
+      "description": "Toggle title size",
+      "label": "Toggle title size",
+      "severity": "secondary"
     }
   ],
   "widget": {
@@ -93,7 +101,17 @@
       "widget": {
         "id": "form",
         "nopad": true
-      }
+      },
+      "buttons": [
+        {
+          "id": "action_toggle_title",
+          "icon": "ui-icon-title",
+          "iconPos": "right",
+          "description": "Toggle title size",
+          "label": "Toggle title size",
+          "severity": "secondary"
+        }
+      ]
     },
     "property-2": {},
     "property-3": {},
