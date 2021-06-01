@@ -561,7 +561,7 @@
                     }" >
                     </ng-container>
                     <ng-template #noConverterLabel>
-                        <span class="_vo-mat-responsive-table-cell-label">{{col.header}}</span>
+                        <span class="_ngx-ui-mat-responsive-table-cell-label">{{col.header}}</span>
                     </ng-template>
                 </ng-template>
                 <ng-container *ngIf="col.sort">
@@ -632,12 +632,12 @@
     <ng-template #valueTH let-value="value" let-transformer="transformer" let-formProperty="formProperty">
         <ng-container *ngIf="value && transformerStatus(transformer);else noBBCode">
             <!-- safe html for bbcode --><!-- unfortunately with angular material we must use an inner SPAN element -->
-            <span class="_vo-mat-responsive-table-cell-label" [innerHTML]="calculateValue(value, formProperty, transformer)"></span>
+            <span class="_ngx-ui-mat-responsive-table-cell-label" [innerHTML]="calculateValue(value, formProperty, transformer)"></span>
         </ng-container>
         <ng-template #noBBCode>
             <!-- use <code>calculateValue</code> instead to trigger change detection
                 {{value|DataConverter:formProperty:transformer}} -->
-            <span class="_vo-mat-responsive-table-cell-label">{{calculateValue(value, formProperty, transformer)}}</span>
+            <span class="_ngx-ui-mat-responsive-table-cell-label">{{calculateValue(value, formProperty, transformer)}}</span>
         </ng-template>
     </ng-template>
 </div>
