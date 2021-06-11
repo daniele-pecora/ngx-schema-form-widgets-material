@@ -1,0 +1,329 @@
+{
+    "type": "object",
+    "properties": {
+        "form": {
+            "type": "object",
+            "widget": {
+                "id": "form",
+                "split": true
+            },
+            "properties": {
+                "chk1": {
+                    "type": "boolean",
+                    "widget": {
+                        "id": "checkbox"
+                    }
+                },
+                "chk2": {
+                    "type": "boolean",
+                    "widget": {
+                        "id": "checkbox"
+                    }
+                },
+                "input1": {
+                    "type": "string"
+                },
+                "input2": {
+                    "type": "string"
+                },
+                "chk3": {
+                    "type": "string",
+                    "widget": {
+                        "id": "checkbox"
+                    },
+                    "default": "asfda"
+                },
+                "input3": {
+                    "type": "string",
+                    "pattern": "[A-Z]"
+                },
+                "switch1": {
+                    "type": "string",
+                    "widget": {
+                        "id": "switch"
+                    },
+                    "default": "asfda"
+                },
+                "input4": {
+                    "type": "string",
+                    "pattern": "[A-Z]"
+                },
+                "switch2": {
+                    "type": "string",
+                    "widget": {
+                        "id": "switch"
+                    },
+                    "default": "asfda"
+                },
+                "chk4": {
+                    "type": "string",
+                    "widget": {
+                        "id": "checkbox"
+                    },
+                    "default": "asfda"
+                }
+            }
+        },
+        "hr0": {
+            "title": " ",
+            "type": "string",
+            "widget": {
+                "id": "bbcode",
+                "bbcode": "[hr]"
+            }
+        },
+        "input": {
+            "widget": {
+                "id": "string",
+                "noSpacer": true
+            }
+        },
+        "input2": {
+            "widget": {
+                "id": "string",
+                "noSpacer": true
+            }
+        },
+        "input3": {
+            "widget": {
+                "id": "string",
+                "noSpacer": "always"
+            }
+        },
+        "input4": {
+            "widget": {
+                "id": "string"
+            }
+        },
+        "hr1": {
+            "title": " ",
+            "type": "string",
+            "widget": {
+                "id": "bbcode",
+                "bbcode": "[hr]"
+            }
+        },
+        "checkboxes1": {
+            "type": "array",
+            "widget": {
+                "id": "array",
+                "itemInline": false
+            },
+            "maxItems": 10,
+            "minItems": 10,
+            "default": [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "items": [
+                {
+                    "title": "a",
+                    "type": "boolean",
+                    "description": "has helpertext",
+                    "widget": {
+                        "id": "checkbox",
+                        "noSpacer": true
+                    }
+                },
+                {
+                    "title": "b (click to show error)",
+                    "type": "string",
+                    "widget": {
+                        "id": "checkbox",
+                        "noSpacer": true,
+                        "validationMessage": "has an error"
+                    },
+                    "default": true
+                },
+                {
+                    "title": "c",
+                    "type": "string",
+                    "description": "has helpertext and error",
+                    "widget": {
+                        "id": "checkbox",
+                        "noSpacer": true,
+                        "validationMessage": "has an error"
+                    },
+                    "default": true
+                },
+                {
+                    "title": "d",
+                    "type": "boolean",
+                    "widget": {
+                        "id": "checkbox",
+                        "noSpacer": true
+                    }
+                },
+                {
+                    "title": "e (default)",
+                    "type": "boolean",
+                    "widget": {
+                        "id": "checkbox"
+                    }
+                },
+                {
+                    "title": "f (default)",
+                    "type": "boolean",
+                    "widget": {
+                        "id": "checkbox"
+                    }
+                },
+                {
+                    "title": "g",
+                    "type": "boolean",
+                    "widget": {
+                        "id": "checkbox",
+                        "noSpacer": true
+                    }
+                },
+                {
+                    "title": "h (off)",
+                    "type": "boolean",
+                    "widget": {
+                        "id": "checkbox",
+                        "noSpacer": true
+                    }
+                },
+                {
+                    "title": "i",
+                    "type": "boolean",
+                    "widget": {
+                        "id": "checkbox",
+                        "noSpacer": true
+                    }
+                },
+                {
+                    "title": "j",
+                    "type": "boolean",
+                    "widget": {
+                        "id": "checkbox",
+                        "noSpacer": true
+                    }
+                }
+            ]
+        },
+        "hr2": {
+            "title": " ",
+            "type": "string",
+            "widget": {
+                "id": "bbcode",
+                "bbcode": "[hr]"
+            }
+        },
+        "checkboxes2": {
+            "type": "array",
+            "widget": {
+                "id": "array",
+                "itemInline": true
+            },
+            "maxItems": 10,
+            "minItems": 10,
+            "default": [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "items": [
+                {
+                    "title": "I",
+                    "type": "boolean",
+                    "description": "has helpertext",
+                    "widget": {
+                        "id": "checkbox",
+                        "noSpacer": true
+                    }
+                },
+                {
+                    "title": "II (click to show error)",
+                    "type": "string",
+                    "widget": {
+                        "id": "checkbox",
+                        "noSpacer": true,
+                        "validationMessage": "has an error"
+                    },
+                    "default": true
+                },
+                {
+                    "title": "III",
+                    "type": "string",
+                    "description": "has helpertext and error",
+                    "widget": {
+                        "id": "checkbox",
+                        "noSpacer": true,
+                        "validationMessage": "has an error"
+                    },
+                    "default": true
+                },
+                {
+                    "title": "IV",
+                    "type": "boolean",
+                    "widget": {
+                        "id": "checkbox",
+                        "noSpacer": true
+                    }
+                },
+                {
+                    "title": "V (default)",
+                    "type": "boolean",
+                    "widget": {
+                        "id": "checkbox"
+                    }
+                },
+                {
+                    "title": "VI (default)",
+                    "type": "boolean",
+                    "widget": {
+                        "id": "checkbox"
+                    }
+                },
+                {
+                    "title": "VII",
+                    "type": "boolean",
+                    "widget": {
+                        "id": "checkbox",
+                        "noSpacer": true
+                    }
+                },
+                {
+                    "title": "VIII(off)",
+                    "type": "boolean",
+                    "widget": {
+                        "id": "checkbox",
+                        "noSpacer": true
+                    }
+                },
+                {
+                    "title": "IX",
+                    "type": "boolean",
+                    "widget": {
+                        "id": "checkbox",
+                        "noSpacer": true
+                    }
+                },
+                {
+                    "title": "X",
+                    "type": "boolean",
+                    "widget": {
+                        "id": "checkbox",
+                        "noSpacer": true
+                    }
+                }
+            ]
+        }
+    }
+}

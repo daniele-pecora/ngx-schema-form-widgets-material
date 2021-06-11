@@ -3,11 +3,12 @@
  */
 import {Component} from '@angular/core';
 import {ControlWidget} from 'ngx-schema-form';
+import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.widget';
 
 @Component({
   selector: 'ngx-ui-textarea-widget',
   templateUrl: './textarea.widget.html',
-  styleUrls: ['./textarea.widget.scss']
+  styleUrls: ['./textarea.widget.scss', NoHelperTextSpacer.RELATIVE_STYLE_URL]
 })
-export class TextAreaWidgetComponent extends ControlWidget {
+export class TextAreaWidgetComponent extends NoHelperTextSpacer {
 }

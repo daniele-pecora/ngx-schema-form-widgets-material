@@ -1,14 +1,19 @@
 <!--
 Element 'schema':
-        - title
-        - name
-        - description
+  - title
+  - name
+  - description
 Element 'widget'
-        - severity = primary|accent|warn
-        - labelPlacement = before|after
+  - severity = primary|accent|warn
+  - labelPlacement = before|after
+  - noSpacer = Allows to hide the preserved free space where the helper-text and validation message are displayed.
+              `false` (default) = shows the preserved space
+              `true` = hides the preserved space when no helper-text and validation message is present.
+              'always' , will hide the space completely and will never display a helper-text or validation message
 -->
-
-
+<mat-form-field [appearance]="schema?.widget?.filled?'fill':'standard'" class="fieldSpacerFix">
+<!-- hidden field so mat-form-field can be used-->
+<input matInput [formControl]="control" [hidden]="true" aria-hidden="true" [attr.size]="schema.widget?.size||null">
 <mat-slide-toggle
   [id]="id"
   [attr.name]="name"
@@ -26,6 +31,7 @@ Element 'widget'
 
 <mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>
 <mat-error *ngIf="control?.errors">
-  <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
+  <ngx-ui-field-validation-messages [formComponent]="this" [validationErrors]="control.errors"></ngx-ui-field-validation-messages>
 </mat-error>
 <input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="control">
+</mat-form-field>

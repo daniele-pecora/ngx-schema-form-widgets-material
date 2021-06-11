@@ -12,13 +12,14 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes'
 import { MatChipInputEvent, MatChipList } from '@angular/material/chips'
 import { FormControl } from '@angular/forms'
 import { ValidationFieldMessagesComponent } from '../_validation-field-messages/_validation-field-messages.component'
+import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.widget'
 
 @Component({
   selector: 'ngx-ui-autocomplete-widget',
   templateUrl: './autocomplete.widget.html',
-  styleUrls: ['./autocomplete.widget.scss']
+  styleUrls: ['./autocomplete.widget.scss', NoHelperTextSpacer.RELATIVE_STYLE_URL]
 })
-export class AutoCompleteWidgetComponent extends ControlWidget implements OnInit, AfterViewInit, OnDestroy {
+export class AutoCompleteWidgetComponent extends NoHelperTextSpacer implements OnInit, AfterViewInit, OnDestroy {
 
   text: string
   results: string[]

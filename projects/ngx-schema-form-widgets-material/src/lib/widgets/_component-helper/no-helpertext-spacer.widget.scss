@@ -1,0 +1,43 @@
+/**
+ * Don't show any space below the input field, checkbox etc.
+ * when no helpertext or error message is present
+ */
+
+::ng-deep {
+
+    .noSpacer {/* material */
+        .mat-form-field-underline {
+            bottom: unset;
+        }
+        .mat-form-field-wrapper {
+            padding-bottom: unset;
+        }
+    }
+    .noSpacerAlways {/* material */
+        @extend .noSpacer;
+        .mat-form-field-hint-wrapper,
+        .mat-form-field-subscript-wrapper {
+            display: none;
+        }
+    }
+
+    .noSpacerSet {/* ui widgets */
+        ngx-ui-field-validation-messages.ngx-ui-htSpacer:empty {
+            padding: unset;
+            display: block;
+        }
+    }
+
+    .noSpacer {/* ui widgets */
+        ngx-ui-field-validation-messages:empty {
+            padding: unset;
+            display: block;
+        }
+    }
+
+    .noSpacerAlways {/* ui widgets */
+        ngx-ui-field-validation-messages {
+            display: none;
+        }
+    }
+}

@@ -107,7 +107,13 @@
                                               e.g: 
                                                   { "previewTitleImageDimensions" : " ({imageDimensionPixelW}x{imageDimensionPixelH})" }
 -->
-
+<!--
+Element 'widget'
+  - noSpacer = Allows to hide the preserved free space where the helper-text and validation message are displayed.
+              `false` (default) = shows the preserved space
+              `true` = hides the preserved space when no helper-text and validation message is present.
+              'always' , will hide the space completely and will never display a helper-text or validation message
+-->
 <div class="ui-g-12">
   <div class="mat-inputfield_upload">
 
@@ -293,5 +299,5 @@
 
 <mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>
 <mat-error *ngIf="control?.errors">
-  <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
+  <ngx-ui-field-validation-messages [formComponent]="this" [validationErrors]="control.errors"></ngx-ui-field-validation-messages>
 </mat-error>

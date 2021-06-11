@@ -11,6 +11,7 @@ import {DateValueConverter} from './date-value.converter'
 import { inputDateAutoComplete, setDateInputEditListener } from './date.autocomplete'
 
 import * as moment_ from 'moment'
+import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.widget';
 const moment = moment_
 
 @Injectable()
@@ -129,7 +130,7 @@ export class DateWidgetComponentDateAdapter extends NativeDateAdapter {
 @Component({
   selector: 'ngx-ui-date-widget',
   templateUrl: './date.widget.html',
-  styleUrls: ['./date.widget.scss'],
+  styleUrls: ['./date.widget.scss', NoHelperTextSpacer.RELATIVE_STYLE_URL],
 
   providers: [{provide: DateAdapter, useClass: DateWidgetComponentDateAdapter}, {
     provide: MAT_DATE_FORMATS,
@@ -138,7 +139,7 @@ export class DateWidgetComponentDateAdapter extends NativeDateAdapter {
 
 })
 // TODO when typing the date we must check the format to make the input match
-export class DateWidgetComponent extends ControlWidget implements OnInit, AfterViewInit {
+export class DateWidgetComponent extends NoHelperTextSpacer implements OnInit, AfterViewInit {
 
   // TODO extend locales
   locales = {

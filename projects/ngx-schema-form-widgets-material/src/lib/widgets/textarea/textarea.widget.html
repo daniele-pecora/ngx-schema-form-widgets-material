@@ -14,7 +14,13 @@
               - cols        = HTML standard attribute for textarea
               - filled = filled background for the input section of the widget
 -->
-
+<!--
+Element 'widget'
+  - noSpacer = Allows to hide the preserved free space where the helper-text and validation message are displayed.
+              `false` (default) = shows the preserved space
+              `true` = hides the preserved space when no helper-text and validation message is present.
+              'always' , will hide the space completely and will never display a helper-text or validation message
+-->
 <mat-form-field [appearance]="schema?.widget?.filled?'fill':'standard'"
 [class.ngx-ui-widget-full-width]="!schema.widget?.size"
 >
