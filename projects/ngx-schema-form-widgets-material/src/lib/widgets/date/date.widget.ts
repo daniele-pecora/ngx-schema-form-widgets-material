@@ -130,7 +130,7 @@ export class DateWidgetComponentDateAdapter extends NativeDateAdapter {
 @Component({
   selector: 'ngx-ui-date-widget',
   templateUrl: './date.widget.html',
-  styleUrls: ['./date.widget.scss', NoHelperTextSpacer.RELATIVE_STYLE_URL],
+  styleUrls: ['./date.widget.scss', '../_component-helper/no-helpertext-spacer.widget.scss'],
 
   providers: [{provide: DateAdapter, useClass: DateWidgetComponentDateAdapter}, {
     provide: MAT_DATE_FORMATS,

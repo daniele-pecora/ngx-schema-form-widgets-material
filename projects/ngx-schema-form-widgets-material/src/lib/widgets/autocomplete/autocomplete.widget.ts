@@ -17,7 +17,7 @@ import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.wi
 @Component({
   selector: 'ngx-ui-autocomplete-widget',
   templateUrl: './autocomplete.widget.html',
-  styleUrls: ['./autocomplete.widget.scss', NoHelperTextSpacer.RELATIVE_STYLE_URL]
+  styleUrls: ['./autocomplete.widget.scss', '../_component-helper/no-helpertext-spacer.widget.scss']
 })
 export class AutoCompleteWidgetComponent extends NoHelperTextSpacer implements OnInit, AfterViewInit, OnDestroy {
 

@@ -9,7 +9,7 @@ import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.wi
 @Component({
   selector: 'ngx-ui-integer-widget',
   templateUrl: './integer.widget.html',
-  styleUrls: ['./integer.widget.scss', NoHelperTextSpacer.RELATIVE_STYLE_URL]
+  styleUrls: ['./integer.widget.scss', '../_component-helper/no-helpertext-spacer.widget.scss']
 })
 export class IntegerWidgetComponent extends NoHelperTextSpacer {
 }

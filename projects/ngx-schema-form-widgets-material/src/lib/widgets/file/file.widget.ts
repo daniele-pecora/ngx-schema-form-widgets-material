@@ -8,7 +8,7 @@ import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.wi
 @Component({
   selector: 'ngx-ui-file-widget',
   templateUrl: './file.widget.html',
-  styleUrls: ['./file.widget.scss', NoHelperTextSpacer.RELATIVE_STYLE_URL]
+  styleUrls: ['./file.widget.scss', '../_component-helper/no-helpertext-spacer.widget.scss']
 })
 export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, AfterViewInit {
   msgs: Message[]

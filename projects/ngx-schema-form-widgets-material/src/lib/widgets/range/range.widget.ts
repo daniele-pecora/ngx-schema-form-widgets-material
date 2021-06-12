@@ -6,7 +6,7 @@ import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.wi
 @Component({
   selector: 'ngx-ui-range-widget',
   templateUrl: './range.widget.html',
-  styleUrls: ['./range.widget.scss', NoHelperTextSpacer.RELATIVE_STYLE_URL]
+  styleUrls: ['./range.widget.scss', '../_component-helper/no-helpertext-spacer.widget.scss']
 })
 export class RangeWidgetComponent extends NoHelperTextSpacer {
 }

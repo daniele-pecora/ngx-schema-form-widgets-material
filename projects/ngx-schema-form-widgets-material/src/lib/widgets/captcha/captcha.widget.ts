@@ -14,7 +14,7 @@ import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.wi
 @Component({
   selector: 'ngx-ui-captcha-widget',
   templateUrl: './captcha.widget.html',
-  styleUrls: [NoHelperTextSpacer.RELATIVE_STYLE_URL]
+  styleUrls: ['../_component-helper/no-helpertext-spacer.widget.scss']
 })
 export class CaptchaWidgetComponent extends NoHelperTextSpacer implements OnInit {
 

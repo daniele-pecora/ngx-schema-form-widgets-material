@@ -6,7 +6,7 @@ import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.wi
 @Component({
   selector: 'ngx-ui-radio-widget',
   templateUrl: './radio.widget.html',
-  styleUrls: ['./radio.widget.scss', NoHelperTextSpacer.RELATIVE_STYLE_URL]
+  styleUrls: ['./radio.widget.scss', '../_component-helper/no-helpertext-spacer.widget.scss']
 })
 export class RadioWidgetComponent extends NoHelperTextSpacer {
   createRadioId(radioValue: any) {
