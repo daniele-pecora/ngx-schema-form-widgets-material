@@ -1,0 +1,39 @@
+/**
+ * Fix:
+ * Use the same space for checkbox and switch as for input fields so they align well in a form
+ */
+::ng-deep {
+    mat-form-field.mat-form-field.fieldSpacerFix .mat-form-field-underline {
+        height: unset;
+    }
+
+    mat-form-field.mat-form-field.fieldSpacerFix:not(.mat-form-field-invalid) .mat-form-field-underline {
+        .mat-form-field-ripple {
+            background-color: unset;
+        }
+    }
+
+    mat-form-field.mat-form-field.fieldSpacerFix {
+        width: 100%;
+        .mat-form-field-infix {
+            padding: 0.31em 0;
+        }
+    }
+
+    .noSpacer {
+        mat-form-field.mat-form-field.fieldSpacerFix {
+            width: 100%;
+            /* remove unnecessary padding */
+            .mat-form-field-flex {
+                padding-top: unset;
+                .mat-form-field-infix {
+                    padding: unset;
+                    border-top: none;
+                }
+            }
+            .mat-form-field-label-wrapper {
+                display: none;
+            }
+        }
+    }
+}

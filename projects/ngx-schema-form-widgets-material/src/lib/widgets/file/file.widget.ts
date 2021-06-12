@@ -3,13 +3,14 @@ import { ControlWidget } from 'ngx-schema-form'
 import {Message} from '../_domain/message'
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
 import { bytesToSizeString, FileuploadComponent } from './fileupload.component'
+import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.widget'
 
 @Component({
   selector: 'ngx-ui-file-widget',
   templateUrl: './file.widget.html',
-  styleUrls: ['./file.widget.scss']
+  styleUrls: ['./file.widget.scss', NoHelperTextSpacer.RELATIVE_STYLE_URL]
 })
-export class FileWidgetComponent extends ControlWidget implements OnInit, AfterViewInit {
+export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, AfterViewInit {
   msgs: Message[]
 
   uploadedFiles: any[] = []

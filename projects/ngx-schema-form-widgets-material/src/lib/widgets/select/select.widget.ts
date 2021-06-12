@@ -7,12 +7,13 @@ import {triggerBinding} from '../bindings-registry-helper'
 import {AsyncSelectionWidgetComponent} from "../_base/async-selection-widget.component";
 import {WidgetComponentHttpApiService} from "../_service/widget-component-http-api.service";
 import { ExpressionCompiler } from '../_service/expression-complier.service';
+import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.widget';
 
 
 @Component({
   selector: 'ngx-ui-select-widget',
   templateUrl: './select.widget.html',
-  styleUrls: ['./select.widget.scss']
+  styleUrls: ['./select.widget.scss', NoHelperTextSpacer.RELATIVE_STYLE_URL]
 })
 export class SelectWidgetComponent extends AsyncSelectionWidgetComponent implements OnInit, AfterViewInit, OnDestroy {
 

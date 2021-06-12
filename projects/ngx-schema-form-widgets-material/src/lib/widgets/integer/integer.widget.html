@@ -9,9 +9,13 @@ Element 'input' in 'widget' field do represent the same as in the primeng docume
   - size
 
 Element 'widget':
-        - prefix [ {icon, text }]
-        - suffix  [ {icon, text }]
-        - filled = filled background for the input section of the widget
+  - prefix [ {icon, text }]
+  - suffix  [ {icon, text }]
+  - filled = filled background for the input section of the widget
+  - noSpacer = Allows to hide the preserved free space where the helper-text and validation message are displayed.
+              `false` (default) = shows the preserved space
+              `true` = hides the preserved space when no helper-text and validation message is present.
+              'always' , will hide the space completely and will never display a helper-text or validation message
 -->
 <mat-form-field [appearance]="schema?.widget?.filled?'fill':'standard'"
 [class.ngx-ui-widget-full-width]="!schema.widget?.size"
@@ -28,7 +32,7 @@ Element 'widget':
     [min]="schema.minimum||null"
     [max]="schema.maximum||null"
     [step]="schema.widget?.step||1"
-
+    [size]="schema?.widget?.size"
     [attr.required]="(formProperty|IsRequiredAttrString)"
     [attr.aria-required]="(formProperty|IsRequiredAttr)"
   >

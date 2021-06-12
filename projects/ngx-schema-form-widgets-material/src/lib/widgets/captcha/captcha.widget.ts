@@ -9,12 +9,14 @@ import simpleParser from '../bbcode/simple-bbcode.parser'
 import { escapeHTMLInBBCode } from '../_converters/_data/bbcode.converter';
 import { SecurityContext } from '@angular/core'
 import { DOCUMENT } from '@angular/common'
+import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.widget'
 
 @Component({
   selector: 'ngx-ui-captcha-widget',
-  templateUrl: './captcha.widget.html'
+  templateUrl: './captcha.widget.html',
+  styleUrls: [NoHelperTextSpacer.RELATIVE_STYLE_URL]
 })
-export class CaptchaWidgetComponent extends ControlWidget implements OnInit {
+export class CaptchaWidgetComponent extends NoHelperTextSpacer implements OnInit {
 
   captchaloaded: boolean
   captchaloadingerror: boolean

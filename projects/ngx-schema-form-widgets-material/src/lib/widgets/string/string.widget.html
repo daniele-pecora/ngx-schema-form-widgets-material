@@ -15,7 +15,13 @@ Element 'widget'
         - suffix  [ {icon, text }]
         - filled = filled background for the input section of the widget
 -->
-
+<!--
+Element 'widget'
+  - noSpacer = Allows to hide the preserved free space where the helper-text and validation message are displayed.
+              `false` (default) = shows the preserved space
+              `true` = hides the preserved space when no helper-text and validation message is present.
+              'always' , will hide the space completely and will never display a helper-text or validation message
+-->
 <!-- due to a misconcetion in ReactiveForm setting '[disabled]' doesn't visualize the 'disabled' state, so also '[attr.disabled]' must be set -->
 <input *ngIf="this.getInputType()==='hidden'; else notHiddenFieldBlock"
        matInput
