@@ -13,7 +13,7 @@ import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.wi
 @Component({
   selector: 'ngx-ui-select-widget',
   templateUrl: './select.widget.html',
-  styleUrls: ['./select.widget.scss', NoHelperTextSpacer.RELATIVE_STYLE_URL]
+  styleUrls: ['./select.widget.scss', '../_component-helper/no-helpertext-spacer.widget.scss']
 })
 export class SelectWidgetComponent extends AsyncSelectionWidgetComponent implements OnInit, AfterViewInit, OnDestroy {
 

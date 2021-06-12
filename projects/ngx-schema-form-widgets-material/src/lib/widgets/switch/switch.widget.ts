@@ -9,7 +9,7 @@ import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.wi
 @Component({
   selector: 'ngx-ui-switch-widget',
   templateUrl: './switch.widget.html',
-  styleUrls: ['./switch.widget.scss',  '../checkbox/space.fix.scss', NoHelperTextSpacer.RELATIVE_STYLE_URL]
+  styleUrls: ['./switch.widget.scss',  '../checkbox/space.fix.scss', '../_component-helper/no-helpertext-spacer.widget.scss']
 })
 export class SwitchWidgetComponent extends NoHelperTextSpacer {
 }

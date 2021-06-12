@@ -8,7 +8,7 @@ import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.wi
 @Component({
   selector: 'ngx-ui-textarea-widget',
   templateUrl: './textarea.widget.html',
-  styleUrls: ['./textarea.widget.scss', NoHelperTextSpacer.RELATIVE_STYLE_URL]
+  styleUrls: ['./textarea.widget.scss', '../_component-helper/no-helpertext-spacer.widget.scss']
 })
 export class TextAreaWidgetComponent extends NoHelperTextSpacer {
 }

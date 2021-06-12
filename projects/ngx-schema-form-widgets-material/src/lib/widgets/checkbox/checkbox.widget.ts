@@ -8,7 +8,7 @@ import { NoHelperTextSpacer } from "../_component-helper/no-helpertext-spacer.wi
 @Component({
   selector: 'ngx-ui-checkbox-widget',
   templateUrl: './checkbox.widget.html',
-  styleUrls: ['./checkbox.widget.scss', './space.fix.scss', NoHelperTextSpacer.RELATIVE_STYLE_URL]
+  styleUrls: ['./checkbox.widget.scss', './space.fix.scss', '../_component-helper/no-helpertext-spacer.widget.scss']
 })
 export class CheckboxWidgetComponent extends NoHelperTextSpacer {
 }

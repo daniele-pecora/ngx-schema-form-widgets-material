@@ -9,7 +9,7 @@ import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.wi
   selector: 'ngx-ui-string-widget',
   templateUrl: './string.widget.html',
   styleUrls: ['./string.widget.scss', 
-  NoHelperTextSpacer.RELATIVE_STYLE_URL]
+  '../_component-helper/no-helpertext-spacer.widget.scss']
 })
 export class StringWidgetComponent extends NoHelperTextSpacer {//ControlWidget {
 
