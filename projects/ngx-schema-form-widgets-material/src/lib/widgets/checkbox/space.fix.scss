@@ -12,17 +12,22 @@
             background-color: unset;
         }
     }
-
-    mat-form-field.mat-form-field.fieldSpacerFix {
+    mat-form-field.mat-form-field.ngx-ui-widget-full-width.fieldSpacerFix {
         width: 100%;
+    }
+    mat-form-field.mat-form-field.fieldSpacerFix {
+        //width: 100%;
         .mat-form-field-infix {
             padding: 0.31em 0;
         }
     }
 
     .noSpacer {
-        mat-form-field.mat-form-field.fieldSpacerFix {
+        mat-form-field.mat-form-field.ngx-ui-widget-full-width.fieldSpacerFix {
             width: 100%;
+        }
+        mat-form-field.mat-form-field.fieldSpacerFix {
+            // width: 100%;
             /* remove unnecessary padding */
             .mat-form-field-flex {
                 padding-top: unset;

@@ -1,5 +1,9 @@
 {
     "type": "object",
+    "widget": {
+        "id": "form",
+        "split": true
+    },
     "properties": {
         "select_async": {
             "type": "string",
@@ -31,6 +35,12 @@
         },
         "select_button_readonly": {
             "widget": "select-button"
+        },
+        "chk1": {
+            "type": "boolean"
+        },
+        "chk2": {
+            "type": "boolean"
         }
     }
 }
