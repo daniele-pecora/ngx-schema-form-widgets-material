@@ -15,6 +15,7 @@ Element 'fieldset':
                         for the <code>wizard<code> widget
 
 Element 'widget:wizard':
+        - heading     : `1-6` = Set the number of the html heading type (H1-H6) to use for the title
         - startPage    = index of the page to start with (default 0)
         - live         = true|false. allows hiding/showing pages by settings the property <code>hidden</code> at the corresponding fieldset
         - buttons.prev, buttons.next ,buttons.finish
@@ -131,7 +132,9 @@ Modes of horizontal stepper:
 -->
 
 <div class="ui-g-12" *ngIf="schema.title || schema.name || schema.description">
-  <h3 *ngIf="schema.title || schema.name">{{schema.title || schema.name}}</h3>
+  <ngx-ui-widget-title [formProperty]="formProperty" [title]="schema.title || schema.name || schema.description">
+    <ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+  </ngx-ui-widget-title>
   <h5 *ngIf="schema.description">{{schema.description}}</h5>
 </div>
 
@@ -185,6 +188,7 @@ Modes of horizontal stepper:
           (click)="logPage(stepIndex)"
           [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.prev?.styleClass||'')]"
           [class.mat-icon-button]="!getLabel(schema.widget.labelPrev, schema.widget.buttons?.prev, 'Previous')"
+          [attr.role]="'button'"
         >
           <mat-icon *ngIf="schema.widget.buttons?.prev?.icon && schema.widget.buttons?.prev?.iconPos==='left'"
                     class="mat-24"
@@ -207,6 +211,7 @@ Modes of horizontal stepper:
           (click)="logPage(stepIndex)"
           [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.next?.styleClass||'')]"
           [class.mat-icon-button]="!getLabel(schema.widget.labelNext, schema.widget.buttons?.next, 'Next')"
+          [attr.role]="'button'"
         >
           <mat-icon *ngIf="schema.widget.buttons?.next?.icon && schema.widget.buttons?.next?.iconPos==='left'"
                     class="mat-24"
@@ -229,6 +234,7 @@ Modes of horizontal stepper:
           (click)="logPage(stepIndex)"
           [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.finish?.styleClass||'')]"
           [class.mat-icon-button]="!getLabel(schema.widget.labelFinish, schema.widget.buttons?.finish, 'Finish')"
+          [attr.role]="'button'"
         >
           <mat-icon *ngIf="schema.widget.buttons?.finish?.icon && schema.widget.buttons?.finish?.iconPos==='left'"
                     class="mat-24" aria-label="">{{schema.widget.buttons?.finish?.icon|IconName}}
@@ -294,6 +300,7 @@ Modes of horizontal stepper:
             (click)="logPage(stepIndex);previousPage()"
             [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.prev?.styleClass||'')]"
             [class.mat-icon-button]="!getLabel(schema.widget.labelPrev, schema.widget.buttons?.prev, 'Previous')"
+            [attr.role]="'button'"
           >
             <mat-icon *ngIf="schema.widget.buttons?.prev?.icon && schema.widget.buttons?.prev?.iconPos==='left'"
                       class="mat-24"
@@ -316,6 +323,7 @@ Modes of horizontal stepper:
             (click)="logPage(stepIndex);nextPage()"
             [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.next?.styleClass||'')]"
             [class.mat-icon-button]="!getLabel(schema.widget.labelNext, schema.widget.buttons?.next, 'Next')"
+            [attr.role]="'button'"
           >
             <mat-icon *ngIf="schema.widget.buttons?.next?.icon && schema.widget.buttons?.next?.iconPos==='left'"
                       class="mat-24"
@@ -338,6 +346,7 @@ Modes of horizontal stepper:
             (click)="logPage(stepIndex);finishPage()"
             [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.finish?.styleClass||'')]"
             [class.mat-icon-button]="!getLabel(schema.widget.labelFinish, schema.widget.buttons?.finish, 'Finish')"
+            [attr.role]="'button'"
           >
             <mat-icon *ngIf="schema.widget.buttons?.finish?.icon && schema.widget.buttons?.finish?.iconPos==='left'"
                       class="mat-24" aria-label="">{{schema.widget.buttons?.finish?.icon|IconName}}
@@ -380,6 +389,7 @@ Modes of horizontal stepper:
             (click)="logPage(stepIndex);previousPage()"
             [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.prev?.styleClass||'')]"
             [class.mat-icon-button]="!getLabel(schema.widget.labelPrev, schema.widget.buttons?.prev, 'Previous')"
+            [attr.role]="'button'"
           >
             <mat-icon *ngIf="schema.widget.buttons?.prev?.icon && schema.widget.buttons?.prev?.iconPos==='left'"
                       class="mat-24"
@@ -402,6 +412,7 @@ Modes of horizontal stepper:
             (click)="logPage(stepIndex);nextPage()"
             [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.next?.styleClass||'')]"
             [class.mat-icon-button]="!getLabel(schema.widget.labelNext, schema.widget.buttons?.next, 'Next')"
+            [attr.role]="'button'"
           >
             <mat-icon *ngIf="schema.widget.buttons?.next?.icon && schema.widget.buttons?.next?.iconPos==='left'"
                       class="mat-24"
@@ -424,6 +435,7 @@ Modes of horizontal stepper:
             (click)="logPage(stepIndex);finishPage()"
             [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.finish?.styleClass||'')]"
             [class.mat-icon-button]="!getLabel(schema.widget.labelFinish, schema.widget.buttons?.finish, 'Finish')"
+            [attr.role]="'button'"
           >
             <mat-icon *ngIf="schema.widget.buttons?.finish?.icon && schema.widget.buttons?.finish?.iconPos==='left'"
                       class="mat-24" aria-label="">{{schema.widget.buttons?.finish?.icon|IconName}}
@@ -480,6 +492,7 @@ Modes of horizontal stepper:
             (click)="logPage(stepIndex);previousPage()"
             [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.prev?.styleClass||'')]"
             [class.mat-icon-button]="!getLabel(schema.widget.labelPrev, schema.widget.buttons?.prev, 'Previous')"
+            [attr.role]="'button'"
           >
             <mat-icon *ngIf="schema.widget.buttons?.prev?.icon && schema.widget.buttons?.prev?.iconPos==='left'"
                       class="mat-24"
@@ -502,6 +515,7 @@ Modes of horizontal stepper:
             (click)="logPage(stepIndex);nextPage()"
             [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.next?.styleClass||'')]"
             [class.mat-icon-button]="!getLabel(schema.widget.labelNext, schema.widget.buttons?.next, 'Next')"
+            [attr.role]="'button'"
           >
             <mat-icon *ngIf="schema.widget.buttons?.next?.icon && schema.widget.buttons?.next?.iconPos==='left'"
                       class="mat-24"
@@ -524,6 +538,7 @@ Modes of horizontal stepper:
             (click)="logPage(stepIndex);finishPage()"
             [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.finish?.styleClass||'')]"
             [class.mat-icon-button]="!getLabel(schema.widget.labelFinish, schema.widget.buttons?.finish, 'Finish')"
+            [attr.role]="'button'"
           >
             <mat-icon *ngIf="schema.widget.buttons?.finish?.icon && schema.widget.buttons?.finish?.iconPos==='left'"
                       class="mat-24" aria-label="">{{schema.widget.buttons?.finish?.icon|IconName}}
@@ -597,6 +612,7 @@ Modes of horizontal stepper:
           [matTooltip]="button.description||null"
 
           mat-raised-button
+          [attr.role]="'button'"
         >
         <mat-icon *ngIf="button.icon && button.iconPos==='left'" class="mat-24">{{button.icon|IconName}}</mat-icon>
         <ng-container *ngIf="button.label">{{button.label}}</ng-container>

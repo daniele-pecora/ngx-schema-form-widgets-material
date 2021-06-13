@@ -4,6 +4,7 @@ import { AutocompleteAsyncHelper, KeyValuePair } from "./autocomplete-async-help
 import { WidgetComponentHttpApiService } from "../index"
 import { FormProperty } from "ngx-schema-form"
 import { ExpressionCompiler } from '../_service/expression-complier.service';
+import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.widget'
 
 /**
  * Support selection of items based on schema's <code>oneOf</code> property.<br/>
@@ -76,7 +77,7 @@ import { ExpressionCompiler } from '../_service/expression-complier.service';
  </pre>
  </code>
  */
-export abstract class AsyncSelectionWidgetComponent extends ControlWidget implements OnInit, OnDestroy {
+export abstract class AsyncSelectionWidgetComponent extends NoHelperTextSpacer implements OnInit, OnDestroy {
 
   selectOptions: Array<any>
   selectedOption: string

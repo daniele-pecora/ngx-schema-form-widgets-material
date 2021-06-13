@@ -64,7 +64,7 @@ export const inputDateAutoComplete = (srcElement: any, formProperty: FormPropert
                     for (let i = 0; i < separatorPositions.length; i++) {
                         if (srcElement.value.length <= separatorPositions[i]) {
                             if (separatorCount !== separatorPositions.length - 1) {
-                                separatorChar = separatorChars[i] 
+                                separatorChar = separatorChars[i]
                                 separatorPos = separatorPositions[i]
                                 dateFormatPart = dateFormatParts[i]
                                 separatorCount = i
@@ -167,4 +167,82 @@ export const inputDateAutoComplete = (srcElement: any, formProperty: FormPropert
     }
     if (srcElement)
         formProperty['dateFormatSettings'].transformValue(formProperty, srcElement)
+}
+
+export const setDateInputEditListener = (el) => {
+    const useTimeout = true
+    const getSelectedText = () => {
+        const doc = el.ownerDocument
+        const win = doc.defaultView || doc.parentWindow
+        if (win.getSelection) {
+            return win.getSelection().toString();
+        } else if (doc.selection) {
+            return doc.selection.createRange().text
+        }
+        return ''
+    }
+
+    const isValidPosition = () => {
+        return !(el.selectionStart === el.value.length)
+    }
+    /**
+     * Always select all content on mouseup
+     */
+    el.addEventListener('mouseup', (event) => {
+        if (!isValidPosition())
+            return
+        if (event.target.value) {
+            event.target.setSelectionRange(0, el.value.length)
+        }
+    })
+    /**
+     * Always select all content on click
+     */
+    el.addEventListener('click', (event) => {
+        if (!isValidPosition())
+            return
+        if (useTimeout) {
+            /** select all must be done timed out otherwise caret remains but text is not selected*/
+            setTimeout(() => {
+                if (event.target.value) {
+                    event.target.setSelectionRange(0, el.value.length)
+                }
+            }, 0)
+        } else {
+            if (event.target.value) {
+                event.target.setSelectionRange(0, el.value.length)
+            }
+        }
+    })
+    /**
+     * Always select all content when using arrow keys or setting the cursor manually
+     */
+    el.addEventListener('keyup', (event) => {
+        if (!isValidPosition())
+            return
+        const key = event.keyCode || event.charCode;
+        const keys = [/*del*/8, 46 /*arrows*/, 37, 38, 39, 40]
+        let selectedText
+        if (-1 != keys.indexOf(key) && event.target.value) {
+            event.target.setSelectionRange(0, el.value.length)
+        } else if ((selectedText = getSelectedText())) {
+            event.target.setSelectionRange(0, el.value.length)
+        }
+    })
+    /**
+     * Makes sure content gets all deleted when using DEL or BACKSPACE key 
+     * when setting the cursor manually
+     * -- not needed if 'click' listener uses timeout --
+     */
+    el.addEventListener('keydown', (event) => {
+        if (useTimeout)
+            return
+        if (!isValidPosition())
+            return
+        const key = event.keyCode || event.charCode;
+        const keys = [/*del*/8, 46 /*arrows*/, 37, 38, 39, 40]
+        if (-1 != keys.indexOf(key) && event.target.value) {
+            event.target.setSelectionRange(0, el.value.length)
+        }
+    })
 }

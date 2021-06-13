@@ -9,6 +9,13 @@ Element :
 Element 'p-slider' all from primeng documentation (except 'disable')
 
 -->
+<!--
+Element 'widget'
+  - noSpacer = Allows to hide the preserved free space where the helper-text and validation message are displayed.
+              `false` (default) = shows the preserved space
+              `true` = hides the preserved space when no helper-text and validation message is present.
+              'always' , will hide the space completely and will never display a helper-text or validation message
+-->
 <mat-form-field class="ngx-ui-mat-form-field"
   [class.ngx-ui-widget-full-width]="!schema.widget?.size"
 >
@@ -41,8 +48,8 @@ Element 'p-slider' all from primeng documentation (except 'disable')
   >
   </mat-slider>
 
-  <mat-label>{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
-    {{formProperty|IsRequiredAsterisk}}
+  <mat-label>{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+    <!-- {{formProperty|IsRequiredAsterisk}} -->
   </mat-label>
 
   <mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>

@@ -26,6 +26,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
          href="#"
          rel="noopener noreferrer"
          [matTooltip]="link.overlayClose||null"
+
+         [attr.role]="'link'"
       >
         <mat-icon class="mat-24" aria-label="">close</mat-icon>
       </a>
@@ -43,6 +45,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
          rel="noopener noreferrer"
          target="_blank"
          [matTooltip]="link.overlayOpen||null"
+
+         [attr.role]="'link'"
       >
         <mat-icon class="mat-24" aria-label="">open_in_new</mat-icon>
       </a>

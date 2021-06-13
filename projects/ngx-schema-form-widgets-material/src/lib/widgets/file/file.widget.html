@@ -73,8 +73,47 @@
 
   Element 'widget'
        - inlineLabel  : <code>false</code> will display the upload button below the label
--->
 
+
+  Element 'widget'
+       - imageRules : Image validation rules:
+           - oneOf
+                      - orientation : 'landscape', 'portrait' or 'square'
+                      - unit        : 'px' for pixel, 'in' for inch or 'cm' for centimeter
+                      - minWidth    : Minimal width
+                      - maxWidth    : Maximum widht
+                      - minHeight   : Minimal height 
+                      - maxHeight   : Maximum height
+
+                      Any of this property may stand alone.
+           - allOf
+                      - orientation : 'landscape', 'portrait' or 'square'
+                      - unit        : 'px' for pixel, 'in' for inch or 'cm' for centimeter
+                      - minWidth    : Minimal width
+                      - maxWidth    : Maximum widht
+                      - minHeight   : Minimal height 
+                      - maxHeight   : Maximum height
+
+                      Any of this property may stand alone.
+      - invalidImageDimensionsMessageSummary : Summary for the errormessage if dimension doesn't match requirements
+      - invalidImageDimensionsMessageDetail  : Detail for the errormessage if dimension doesn't match requirements
+
+      - previewTitleImageDimensions         : Text template for the `title` and `alt` attribute if file is an image.
+                                              Can be used inside `previewTitle` as placeholder like `{previewTitleImageDimensions}`
+                                              Can contain placeholders:
+                                                  - {imageDimensionPixelW}, {imageDimensionPixelH}
+                                                  - {imageDimensionInchesW}, {imageDimensionInchesH}
+                                                  - {imageDimensionCentimetersW}, {imageDimensionCentimetersH}
+                                              e.g: 
+                                                  { "previewTitleImageDimensions" : " ({imageDimensionPixelW}x{imageDimensionPixelH})" }
+-->
+<!--
+Element 'widget'
+  - noSpacer = Allows to hide the preserved free space where the helper-text and validation message are displayed.
+              `false` (default) = shows the preserved space
+              `true` = hides the preserved space when no helper-text and validation message is present.
+              'always' , will hide the space completely and will never display a helper-text or validation message
+-->
 <div class="ui-g-12">
   <div class="mat-inputfield_upload">
 
@@ -128,7 +167,11 @@
     [disabled]="schema.widget.disabled||(schema.readOnly?true:null)"
 
     [required]="(formProperty|IsRequiredAttr)"
-    
+
+    [imageRules]="schema.widget.imageRules"
+    [invalidImageDimensionsMessageSummary]="schema.widget.invalidImageDimensionsMessageSummary||'Image doesn\'t match requirements, '"
+    [invalidImageDimensionsMessageDetail]="schema.widget.invalidImageDimensionsMessageDetail||'it\'s either too big, too small or has the wrong orientation.'"
+
     #fileUploadEl
     >
     </ngx-ui-mat-fileUpload>
@@ -231,6 +274,8 @@
           mat-icon-button
           color="secondary"
           (click)="deleteFileInBasicUpload($event,file)"
+
+          [attr.role]="'button'"
           >
           <mat-icon>{{schema.widget?.deleteButtonIcon||'clear'}}</mat-icon>
         </button>
@@ -241,6 +286,8 @@
           mat-raised-button
           color="secondary"
           (click)="deleteFileInBasicUpload($event,file)"
+
+          [attr.role]="'button'"
           >
           <mat-icon>{{schema.widget?.deleteButtonIcon||'clear'}}</mat-icon>
           {{schema.widget?.deleteButtonLabel}}
@@ -252,5 +299,5 @@
 
 <mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>
 <mat-error *ngIf="control?.errors">
-  <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
+  <ngx-ui-field-validation-messages [formComponent]="this" [validationErrors]="control.errors"></ngx-ui-field-validation-messages>
 </mat-error>

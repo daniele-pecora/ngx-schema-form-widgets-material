@@ -35,6 +35,7 @@ export {
   MessagesWidgetComponent,
   WidgetLinkComponent,
   WidgetAddonComponent,
+  WidgetTitleComponent,
   OsmViewComponent,
   OsmViewAddressModel,
   OSMWidgetComponent,

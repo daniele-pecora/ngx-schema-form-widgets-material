@@ -9,7 +9,7 @@ import {AppFormTemplateService} from './app.form-template-loader.service';
 import {ApplicationComponent} from './view/application/application.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
-import {SchemaFormModule, SchemaValidatorFactory, WidgetRegistry, ZSchemaValidatorFactory} from 'ngx-schema-form';
+import {LogLevel, LOG_LEVEL, SchemaFormModule, SchemaValidatorFactory, WidgetRegistry} from 'ngx-schema-form';
 import {UIFormViewModule} from 'ngx-schema-form-view';
 import {
   FixOptionalEmptyFieldsZSchemaValidatorFactory,
@@ -18,7 +18,6 @@ import {
 } from '../../projects/ngx-schema-form-widgets-material/src/lib';
 // TODO change the above to this in production, the above allows hot-reload for development
 //} from 'ngx-schema-form-ui-material';
-import { MatCardModule } from '@angular/material/card';
 import { ResizeComponent } from './view/resize/resize.component';
 import { ThemerComponent } from './view/themer/themer.component';
 
@@ -31,6 +30,10 @@ import { ThemerComponent } from './view/themer/themer.component';
     },
     {provide: WidgetRegistry, useClass: WidgetRegistryMaterial},
     {provide: SchemaValidatorFactory, useClass: FixOptionalEmptyFieldsZSchemaValidatorFactory},
+    {
+      provide: LOG_LEVEL,
+      useValue: LogLevel.all
+    },
     AppFormTemplateService
   ],
   declarations: [

@@ -53,6 +53,7 @@ export class ApplicationComponent {
     this.onChangeFormViewModel = event;
     console.log('onModelChanged(event: UIFormViewModel):', event);
     this.finalModelObject = new UIFormViewHelper().createFinalModelObject(event)
+    console.log('this.finalModelObject', this.finalModelObject)
   }
 
   actionTrigger(action) {

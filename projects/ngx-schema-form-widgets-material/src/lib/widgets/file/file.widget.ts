@@ -3,13 +3,14 @@ import { ControlWidget } from 'ngx-schema-form'
 import {Message} from '../_domain/message'
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
 import { bytesToSizeString, FileuploadComponent } from './fileupload.component'
+import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.widget'
 
 @Component({
   selector: 'ngx-ui-file-widget',
   templateUrl: './file.widget.html',
-  styleUrls: ['./file.widget.scss']
+  styleUrls: ['./file.widget.scss', '../_component-helper/no-helpertext-spacer.widget.scss']
 })
-export class FileWidgetComponent extends ControlWidget implements OnInit, AfterViewInit {
+export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, AfterViewInit {
   msgs: Message[]
 
   uploadedFiles: any[] = []
@@ -307,6 +308,27 @@ export class FileWidgetComponent extends ControlWidget implements OnInit, AfterV
     if (previewTitle) {
       previewTitle = previewTitle.replace(new RegExp('{filename}', 'ig'), file.name)
       previewTitle = previewTitle.replace(new RegExp('{filesize}', 'ig'), this.bytesToSize(file.size).toUpperCase())
+
+      let previewTitleImageDimensions = this.schema.widget.previewTitleImageDimensions || ''
+      if (previewTitleImageDimensions) {
+        if (file['______vRes']) {
+          const a: any = file['______vRes']
+          if (a) {
+            previewTitleImageDimensions = previewTitleImageDimensions.replace(new RegExp('{imageDimensionPixelW}', 'ig'), `${a.imageInfo.dimensions.px.w}`)
+            previewTitleImageDimensions = previewTitleImageDimensions.replace(new RegExp('{imageDimensionPixelH}', 'ig'), `${a.imageInfo.dimensions.px.h}`)
+            previewTitleImageDimensions = previewTitleImageDimensions.replace(new RegExp('{imageDimensionInchesW}', 'ig'), `${a.imageInfo.dimensions.in.w}`)
+            previewTitleImageDimensions = previewTitleImageDimensions.replace(new RegExp('{imageDimensionInchesH}', 'ig'), `${a.imageInfo.dimensions.in.h}`)
+            previewTitleImageDimensions = previewTitleImageDimensions.replace(new RegExp('{imageDimensionCentimetersW}', 'ig'), `${a.imageInfo.dimensions.cm.w}`)
+            previewTitleImageDimensions = previewTitleImageDimensions.replace(new RegExp('{imageDimensionCentimetersH}', 'ig'), `${a.imageInfo.dimensions.cm.h}`)
+
+            // set into preview title
+            previewTitle = previewTitle.replace(new RegExp('{previewTitleImageDimensions}', 'ig'), previewTitleImageDimensions)
+          }
+        }
+      }
+      // clean preview title if it wasn't an image
+      previewTitle = previewTitle.replace(new RegExp('{previewTitleImageDimensions}', 'ig'), '')
+
       file['_previewTitle'] = previewTitle
       return file['_previewTitle']
     }

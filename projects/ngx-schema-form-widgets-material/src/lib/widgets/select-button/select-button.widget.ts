@@ -7,7 +7,8 @@ import { ExpressionCompiler } from '../_service/expression-complier.service';
 
 @Component({
   selector: 'ngx-ui-select-button-widget',
-  templateUrl: './select-button.widget.html'
+  templateUrl: './select-button.widget.html',
+  styleUrls: ['./select-button.widget.scss',  '../checkbox/space.fix.scss', '../_component-helper/no-helpertext-spacer.widget.scss']
 })
 export class SelectButtonWidgetComponent extends AsyncSelectionWidgetComponent {
 

@@ -1,16 +1,17 @@
 /**
  * Created by daniele on 27.09.17
  */
-import { AfterViewInit, Component, OnInit, ViewChild, ElementRef, Injectable } from '@angular/core'
+import { AfterViewInit, Component, OnInit, ViewChild, ElementRef, Injectable, Renderer2 } from '@angular/core'
 import {ControlWidget} from 'ngx-schema-form';
 import { DateAdapter, MAT_DATE_FORMATS, NativeDateAdapter } from '@angular/material/core';
 import { MatDatepicker } from '@angular/material/datepicker';
 import {DateFormatHelper} from './date-format-helper'
 import {DateValueToStringConverter} from './date-value.converter'
 import {DateValueConverter} from './date-value.converter'
-import { inputDateAutoComplete } from './date.autocomplete'
+import { inputDateAutoComplete, setDateInputEditListener } from './date.autocomplete'
 
 import * as moment_ from 'moment'
+import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.widget';
 const moment = moment_
 
 @Injectable()
@@ -129,7 +130,7 @@ export class DateWidgetComponentDateAdapter extends NativeDateAdapter {
 @Component({
   selector: 'ngx-ui-date-widget',
   templateUrl: './date.widget.html',
-  styleUrls: ['./date.widget.scss'],
+  styleUrls: ['./date.widget.scss', '../_component-helper/no-helpertext-spacer.widget.scss'],
 
   providers: [{provide: DateAdapter, useClass: DateWidgetComponentDateAdapter}, {
     provide: MAT_DATE_FORMATS,
@@ -138,7 +139,7 @@ export class DateWidgetComponentDateAdapter extends NativeDateAdapter {
 
 })
 // TODO when typing the date we must check the format to make the input match
-export class DateWidgetComponent extends ControlWidget implements OnInit, AfterViewInit {
+export class DateWidgetComponent extends NoHelperTextSpacer implements OnInit, AfterViewInit {
 
   // TODO extend locales
   locales = {
@@ -186,10 +187,14 @@ export class DateWidgetComponent extends ControlWidget implements OnInit, AfterV
   dateValueConverter: DateValueToStringConverter = null;
 
   @ViewChild('dateInputField') dateInputField: ElementRef
+  @ViewChild('pickerToggle') pickerToggle: ElementRef
   /** testing only , see ngAfterInitView method ... **/
   disableTestDateValidation = true;
 
-  constructor(private dateAdapter: DateAdapter<Date>) {
+  constructor(
+      private dateAdapter: DateAdapter<Date>
+    , private renderer: Renderer2
+    , private elRef: ElementRef) {
     super();
     this.disableTestDateValidation = false
   }
@@ -319,8 +324,26 @@ export class DateWidgetComponent extends ControlWidget implements OnInit, AfterV
     }
 
     this.setupPresetValue()
-  }
 
+    this.__aria_setMissingAriaAttributes()
+
+    if (false !== this.formProperty.schema.widget.formatFilter) {
+      setDateInputEditListener(this.elRef.nativeElement.querySelector(`.mat-form-field-infix input`))
+    }
+  }
+  __aria_setMissingAriaAttributes() {
+    const button = this.pickerToggle && this.pickerToggle['_button'] && this.pickerToggle['_button']['_elementRef'] ? this.pickerToggle['_button']['_elementRef'].nativeElement : null
+    if (button) {
+        if (!this.schema.widget.iconDescription) {
+          this.renderer.setAttribute(button, 'aria-hidden', 'true')
+          this.renderer.setAttribute(button, 'tabindex', '-1')
+        }
+        const val = this.schema.widget.iconDescription || 'Open calendar'
+        this.renderer.setAttribute(button, 'aria-label', val)
+        this.renderer.setAttribute(button, 'title', val)
+        this.renderer.setAttribute(button, 'aria-haspopup', 'dialog')
+    }
+  }
   setupPresetValue() {
     if (this.schema.widget['preset']) {
       const newDate = this.getDateFromAge(this.schema.widget['preset']);

@@ -26,7 +26,7 @@ export default function mergeDeep(target, source) {
           } else {
             output[key][i] = target[key][i]
           }
-          console.log(`source[${key}][${i}]`)
+          //console.log(`source[${key}][${i}]`)
         }
         output[key] = source[key]
       } else {

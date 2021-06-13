@@ -133,6 +133,13 @@ Element 'widget':
             set to a positive number value to set a value like on input element
 -->
 <!--
+Element 'widget':
+  - noSpacer = Allows to hide the preserved free space where the helper-text and validation message are displayed.
+              `false` (default) = shows the preserved space
+              `true` = hides the preserved space when no helper-text and validation message is present.
+              'always' , will hide the space completely and will never display a helper-text or validation message
+-->
+<!--
 Multiselect:
         Multiselect represented by chips will be automatically enabled when 
         the type of the json schema property is `array` 

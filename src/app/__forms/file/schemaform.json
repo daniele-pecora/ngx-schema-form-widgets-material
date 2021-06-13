@@ -28,6 +28,7 @@
           }
         },
         "file-upload-2": {
+          "description": "Upload any JPEG, GIF, TIFF, PNG, BMP or PDF with max file size of 10MB and is a portrait, 100x200px, 640x404px or 300-310x168-200px",
           "widget": {
             "id": "file",
             "mode": "basic",
@@ -45,9 +46,40 @@
             "customUpload": true,
             "inlineLabel": false,
             "showUploadInfo": true,
-            "previewTitle": "Preview of the uploaded image {filename} size {filesize}",
+            "previewTitle": "Preview of the uploaded image {filename} size {filesize}{previewTitleImageDimensions}",
             "noPreviewText": "No preview",
-            "noPreviewIcon": "image"
+            "noPreviewIcon": "image",
+            "imageRules": {
+              "oneOf": [
+                {
+                  "unit": "px",
+                  "minWidth": 100,
+                  "maxWidth": 100,
+                  "minHeight": 200,
+                  "maxHeight": 200
+                },
+                {
+                  "orientation": "portrait"
+                },
+                {
+                  "unit": "px",
+                  "minWidth": 300,
+                  "maxWidth": 310,
+                  "minHeight": 168,
+                  "maxHeight": 200
+                },
+                {
+                  "unit": "px",
+                  "minWidth": 640,
+                  "maxWidth": 640,
+                  "minHeight": 404,
+                  "maxHeight": 404
+                }
+              ]
+            },
+            "invalidImageDimensionsMessageSummary": "Invalid image dimensions: Is to big, small or bad oriented. ",
+            "invalidImageDimensionsMessageDetail": "Must be either a portrait, 100x200px, 640x404px or 300-310x168-200px.",
+            "previewTitleImageDimensions": " ({imageDimensionPixelW}x{imageDimensionPixelH} PX)"
           }
         }
       }

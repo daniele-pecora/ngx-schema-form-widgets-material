@@ -59,6 +59,7 @@
     (click)="onOptionClick($event, item)"
     [ngStyle]="button.inline===false?{display:'block'}:null"
     [disabled]="schema?.widget?.card?.readOnly||item.readOnly"
+    [attr.role]="'button'"
     ></button> -->
     <ngx-ui-button-component [formProperty]="formProperty" [button]="button" (onClick)="onOptionClick($event, item)"
         [disabled]="schema?.widget?.card?.readOnly||item.readOnly"
@@ -78,6 +79,7 @@
     [ngStyle]="button.inline===false?{display:'block'}:null"
     [disabled]="schema?.widget?.card?.readOnly||item.readOnly"
     [class.resetButtonInline]="schema?.widget?.resetButton?.inCard"
+    [attr.role]="'button'"
     ></button> -->
     <ngx-ui-button-component [formProperty]="formProperty" [button]="button" (onClick)="onOptionClick($event, item)"
         [disabled]="schema?.widget?.card?.readOnly||item.readOnly"
@@ -99,6 +101,7 @@
         [ngStyle]="button.inline===false?{display:'block'}:null"
         [disabled]="schema?.widget?.card?.readOnly||item.readOnly"
         [class.selectedButtonInline]="schema?.widget?.selectedButton?.inCard"
+        [attr.role]="'button'"
         ></button> -->
     <ngx-ui-button-component [formProperty]="formProperty" [button]="button" (onClick)="onOptionClick($event, item)"
         [disabled]="schema?.widget?.card?.readOnly||item.readOnly"
@@ -141,11 +144,14 @@
             <div class="ui-g-nopad ui-g-12">
                 <img *ngIf="item.image||schema?.widget?.card?.image" class="ui-g-2 card_container-image"
                     [src]="item.image||schema?.widget?.card?.image"
-                    [ngStyle]="item.imageStyle||schema?.widget?.card?.imageStyle">
+                    [ngStyle]="item.imageStyle||schema?.widget?.card?.imageStyle"
+                    [attr.aria-hidden]="true"
+                    [attr.alt]="''"
+                    >
                 <div class="ui-g-nopad ui-g-10 card_container-title">
-                    <h3 [innerHTML]="getSaveContent(item.description||schema?.widget?.card?.description)">
+                    <span [innerHTML]="getSaveContent(item.description||schema?.widget?.card?.description)">
                         - {{item.description||schema?.widget?.card?.description}} -
-                    </h3>
+                    </span>
                 </div>
             </div>
             <div *ngIf="showSummary; else noSummary" class="ui-g-12 card_container-summary"

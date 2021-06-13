@@ -731,6 +731,30 @@
                 },
                 "prop3": {
                   "type": "string"
+                },
+                "prop4": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "enum": [
+                        "item1"
+                      ],
+                      "description": "Item 1"
+                    },
+                    {
+                      "enum": [
+                        "item2"
+                      ],
+                      "description": "Item 2",
+                      "disabled": true
+                    },
+                    {
+                      "enum": [
+                        "item3"
+                      ],
+                      "description": "Item 3"
+                    }
+                  ]
                 }
               }
             },

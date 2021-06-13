@@ -125,7 +125,17 @@
       "widget": {
         "id": "form",
         "nopad": true
-      }
+      },
+      "buttons": [
+        {
+          "id": "action_toggle_title",
+          "icon": "ui-icon-title",
+          "iconPos": "right",
+          "description": "Toggle title size",
+          "label": "Toggle title size",
+          "severity": "secondary"
+        }
+      ]
     },
     "property-2-spacer": {
       "widget": {
