@@ -11,7 +11,9 @@ Element 'widget'
               `true` = hides the preserved space when no helper-text and validation message is present.
               'always' , will hide the space completely and will never display a helper-text or validation message
 -->
-<mat-form-field [appearance]="schema?.widget?.filled?'fill':'standard'" class="fieldSpacerFix">
+<mat-form-field [appearance]="schema?.widget?.filled?'fill':'standard'" class="fieldSpacerFix"
+[class.ngx-ui-widget-full-width]="!schema.widget?.size"
+>
 <!-- hidden field so mat-form-field can be used-->
 <input matInput [formControl]="control" [hidden]="true" aria-hidden="true" [attr.size]="schema.widget?.size||null">
 <mat-slide-toggle
