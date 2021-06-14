@@ -3,7 +3,7 @@
  * when no helpertext or error message is present
  */
 
-::ng-deep {
+ ::ng-deep {
 
     .noSpacer {/* material */
         .mat-form-field-underline {
@@ -29,7 +29,8 @@
     }
 
     .noSpacer {/* ui widgets */
-        ngx-ui-field-validation-messages:empty {
+        ngx-ui-field-validation-messages:empty
+        , ngx-ui-field-validation-messages.ngx-ui-htSpacer:empty {
             padding: unset;
             display: block;
         }
