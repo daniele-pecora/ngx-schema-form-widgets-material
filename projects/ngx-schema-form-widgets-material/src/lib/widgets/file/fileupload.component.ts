@@ -134,6 +134,10 @@ export class FileuploadComponent implements AfterViewInit {
 
   @Input() // aria-labelledby
   ariaLabelledby
+  @Input() // aria-label
+  ariaLabel
+  @Input() // titel
+  title
 
   constructor(private sanitizer: DomSanitizer, private fileTypeHelper: FileTypeHelper
     , private imageValidator: ImageValidator
