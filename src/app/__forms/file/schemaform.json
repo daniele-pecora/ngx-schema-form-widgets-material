@@ -25,7 +25,8 @@
             "customUpload": true,
             "previewTitle": "Preview of the uploaded image {filename} size {filesize}",
             "noPreviewText": "No preview",
-            "deleteButtonTitle": "Delete image {filename} of size {filesize} and dimensions {previewTitleImageDimensions}"
+            "deleteButtonTitle": "Delete image {filename} of size {filesize} and dimensions {previewTitleImageDimensions}",
+            "uploadButtonTitle": "Upload an image file"
           }
         },
         "file-upload-2": {
@@ -41,7 +42,8 @@
             "accept": "image/*",
             "auto": true,
             "url": "https://www.no-real-url-necessary-here/datauri/index.php",
-            "previewWidth": 200,
+            "_previewWidth": 200,
+            "previewWidth": 0,
             "dataUriPrefix": true,
             "__no_label_icon_only__deleteButtonLabel": "Delete",
             "customUpload": true,

@@ -7,6 +7,7 @@
                            will be used as attribute `title` and `alt` and may contain the placeholder for the file name 
                              `{filename}`
                              `{filesize}`
+    - uploadButtonTitle  : the title and aria-label attribute of the upload button
     - showUploadInfo     : if <code>true</code> it shows the filename and size
     - previewTitle       : will be used as attribute `title` and `alt` and may contain the placeholder for the file name 
                              `{filename}`
@@ -177,8 +178,9 @@ Element 'widget'
     [invalidImageDimensionsMessageSummary]="schema.widget.invalidImageDimensionsMessageSummary||'Image doesn\'t match requirements, '"
     [invalidImageDimensionsMessageDetail]="schema.widget.invalidImageDimensionsMessageDetail||'it\'s either too big, too small or has the wrong orientation.'"
 
-    [ariaLabelledby]="labelEl.id"
-
+    [ariaLabelledby]="schema?.widget?.uploadButtonTitle?labelEl.id:null"
+    [ariaLabel]="schema?.widget?.uploadButtonTitle||null"
+    [title]="schema?.widget?.uploadButtonTitle||null"
     #fileUploadEl
     >
     </ngx-ui-mat-fileUpload>
