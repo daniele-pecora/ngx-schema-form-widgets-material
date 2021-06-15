@@ -230,7 +230,7 @@ Element 'widget'
     <ng-template #previewFileTemplate let-file="file" let-isImage="isImage">
       <img
         class="input-upload-file--preview"
-        *ngIf="!file.previewFailed && schema.widget?.previewWidth!==0 && isImage"
+        *ngIf="!file.previewFailed && schema.widget?.previewWidth!=='x0' && isImage"
         [attr.width]="schema.widget.previewWidth||null"
         [src]="file?.sanitizedURL"
         (load)="imageLoaded($event,file)"
@@ -238,6 +238,7 @@ Element 'widget'
         [attr.title]="file?._previewTitle||createPreviewAltText(file)||file?.name"
         [attr.alt]="file?._previewTitle||createPreviewAltText(file)||file?.name"
         [attr.aria-hidden]="true"
+        [class.input-upload-file--preview-hidden]="schema.widget?.previewWidth===0"
       >
       <object 
       *ngIf="!file.previewFailed && schema.widget?.previewWidth!==0 && !isImage"

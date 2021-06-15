@@ -44,3 +44,11 @@
 .file-upload-label {
   margin-right: 1em;
 }
+
+/**
+ * to get the data from img tag the tag must be present in html structure
+ * but must not be neccessary visible
+ */
+ .input-upload-file--preview-hidden {
+  display: none;
+}
