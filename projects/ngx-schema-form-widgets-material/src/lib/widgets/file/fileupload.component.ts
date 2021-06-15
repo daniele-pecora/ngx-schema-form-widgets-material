@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef, Output, EventEmitter } from "@angular/core";
+import { Component, Input, ViewChild, ElementRef, Output, EventEmitter, AfterViewInit, Renderer2 } from "@angular/core";
 import { DomSanitizer } from '@angular/platform-browser';
 import { LogService } from "ngx-schema-form";
 import { ImageInfo, ImageRules, ImageValidationResult, ImageValidator } from "./file-image-validator";
@@ -19,7 +19,7 @@ export const bytesToSizeString = (bytes: any) => {
   styleUrls: ['./fileupload.component.scss'],
   providers: [FileTypeHelper, ImageValidator]
 })
-export class FileuploadComponent {
+export class FileuploadComponent implements AfterViewInit {
   @Input()
   mode
   @Input()
@@ -132,10 +132,28 @@ export class FileuploadComponent {
   invalidImageDimensionsMessageDetail = 'it\'s either too big, too small or has the wrong orientation.' //schema.widget.invalidImageDimensionsMessageDetail
 
 
+  @Input() // aria-labelledby
+  ariaLabelledby
+
   constructor(private sanitizer: DomSanitizer, private fileTypeHelper: FileTypeHelper
     , private imageValidator: ImageValidator
-    , private logService: LogService) {
+    , private logService: LogService
+    , private elementRef: ElementRef
+    , private renderer: Renderer2) {
 
+  }
+
+  ngAfterViewInit(): void {
+    /**
+     * make the fileinput WAI-ARIA compatibel:
+     * this put the focus immediately to the underlying input[type=file] 
+     * and not the link that has the function of a button
+     */
+    const button = this.elementRef.nativeElement.querySelector('a[mat-raised-button]')
+    if (button) {
+      this.renderer.setAttribute(button, 'tabindex', '-1')
+      this.renderer.setAttribute(button, 'aria-disabled', 'true')
+    }
   }
 
   onClick(event) {

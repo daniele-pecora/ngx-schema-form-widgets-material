@@ -1,14 +1,19 @@
 <!--
   Element 'p-fileUpload' in 'widget'
     - dataUriPrefix      : remove data uri prefix, keep only raw data. (removes things like "data:image/png;base64," from model data)
-    - deleteButtonLabel  : the title attribute of the delete button
+    - deleteButtonLabel  : the text of the delete button
     - deleteButtonIcon   : the icon of the delete button
+    - deleteButtonTitle  : the title attribute of the delete button
+                           will be used as attribute `title` and `alt` and may contain the placeholder for the file name 
+                             `{filename}`
+                             `{filesize}`
     - showUploadInfo     : if <code>true</code> it shows the filename and size
     - previewTitle       : will be used as attribute `title` and `alt` and may contain the placeholder for the file name 
                              `{filename}`
                              `{filesize}`
                            if not set then the file name is used for both attributes.
                              e.g `"previewTitle": "Preview of the uploaded image {filename} size {filesize}"`
+
     - noPreviewText: any text to show a short message when the uploaded file doesn't support beeing previewed (e.g. TIFF)
                       when not set no text will be shown.
                       keep this text short as possible.
@@ -118,7 +123,7 @@ Element 'widget'
   <div class="mat-inputfield_upload">
 
 
-    <label [attr.for]="id" class="file-upload-label">{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark></label>
+    <label #labelEl [attr.for]="id" class="file-upload-label" id="label--{{id}}">{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark></label>
 
 
     <!-- TODO not all properties are yet supported... see also p-fileUpload block below-->
@@ -171,6 +176,8 @@ Element 'widget'
     [imageRules]="schema.widget.imageRules"
     [invalidImageDimensionsMessageSummary]="schema.widget.invalidImageDimensionsMessageSummary||'Image doesn\'t match requirements, '"
     [invalidImageDimensionsMessageDetail]="schema.widget.invalidImageDimensionsMessageDetail||'it\'s either too big, too small or has the wrong orientation.'"
+
+    [ariaLabelledby]="labelEl.id"
 
     #fileUploadEl
     >
@@ -228,8 +235,8 @@ Element 'widget'
         [src]="file?.sanitizedURL"
         (load)="imageLoaded($event,file)"
         (error)="imageLoadingFailed($event,file)"
-        [attr.title]="file?._previewTitle||createAltText(file)||file?.name"
-        [attr.alt]="file?._previewTitle||createAltText(file)||file?.name"
+        [attr.title]="file?._previewTitle||createPreviewAltText(file)||file?.name"
+        [attr.alt]="file?._previewTitle||createPreviewAltText(file)||file?.name"
         [attr.aria-hidden]="true"
       >
       <object 
@@ -239,8 +246,8 @@ Element 'widget'
       [attr.width]="schema.widget.previewWidth||null"
       (load)="objectLoaded($event,file)"
       (error)="objectLoadingFailed($event,file)"
-      [attr.title]="file?._previewTitle||createAltText(file)||file?.name"
-      [attr.alt]="file?._previewTitle||createAltText(file)||file?.name"
+      [attr.title]="file?._previewTitle||createPreviewAltText(file)||file?.name"
+      [attr.alt]="file?._previewTitle||createPreviewAltText(file)||file?.name"
       [attr.aria-hidden]="true"
       >
       <embed 
@@ -249,16 +256,16 @@ Element 'widget'
       (load)="objectLoaded($event,file)"
       (error)="objectLoadingFailed($event,file)"
       [attr.width]="schema.widget.previewWidth||null"
-      [attr.title]="file?._previewTitle||createAltText(file)||file?.name"
-      [attr.alt]="file?._previewTitle||createAltText(file)||file?.name"
+      [attr.title]="file?._previewTitle||createPreviewAltText(file)||file?.name"
+      [attr.alt]="file?._previewTitle||createPreviewAltText(file)||file?.name"
       [attr.aria-hidden]="true"
       >
       </object>
 
       <span *ngIf="file.previewFailed" 
         [attr.aria-hidden]="true"
-        [attr.title]="file?._previewTitle||createAltText(file)||file?.name"
-        [attr.alt]="file?._previewTitle||createAltText(file)||file?.name"
+        [attr.title]="file?._previewTitle||createPreviewAltText(file)||file?.name"
+        [attr.alt]="file?._previewTitle||createPreviewAltText(file)||file?.name"
         class="file-upload-image-no-preview"
       >
         <span *ngIf="!schema?.widget?.noPreviewIcon" class="material-icons file-upload-image-no-preview-icon">attach_file</span>
@@ -269,7 +276,7 @@ Element 'widget'
       <span *ngIf="schema.widget?.showUploadInfo" class="input-upload-file--infotext">{{file.name}} - {{bytesToSize(file.size)}}</span>
         <button
           i18n-title
-          [attr.title]="schema.widget?.deleteButtonLabel || null"
+          [attr.title]="file?._deleteButtonAlt||createButtonAltDelete(file)||schema.widget?.deleteButtonLabel || null"
           *ngIf="!schema.widget?.deleteButtonLabel;else showButtonWithLabel"
           mat-icon-button
           color="secondary"
@@ -281,7 +288,7 @@ Element 'widget'
         </button>
         <ng-template #showButtonWithLabel><button
           i18n-title
-          [attr.title]="schema.widget?.deleteButtonLabel || null"
+          [attr.title]="file?._deleteButtonAlt||createButtonAltDelete(file)||schema.widget?.deleteButtonLabel || null"
           *ngIf="schema.widget?.deleteButtonLabel"
           mat-raised-button
           color="secondary"

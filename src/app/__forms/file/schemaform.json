@@ -24,7 +24,8 @@
             "deleteButtonLabel": "Delete",
             "customUpload": true,
             "previewTitle": "Preview of the uploaded image {filename} size {filesize}",
-            "noPreviewText": "No preview"
+            "noPreviewText": "No preview",
+            "deleteButtonTitle": "Delete image {filename} of size {filesize} and dimensions {previewTitleImageDimensions}"
           }
         },
         "file-upload-2": {
@@ -49,6 +50,7 @@
             "previewTitle": "Preview of the uploaded image {filename} size {filesize}{previewTitleImageDimensions}",
             "noPreviewText": "No preview",
             "noPreviewIcon": "image",
+            "deleteButtonTitle": "Delete image {filename} of size {filesize} and dimensions {previewTitleImageDimensions}",
             "imageRules": {
               "oneOf": [
                 {

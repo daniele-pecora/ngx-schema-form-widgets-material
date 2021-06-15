@@ -1,6 +1,6 @@
 import { Component, OnInit, Pipe, PipeTransform, Renderer2, AfterViewInit, ViewChild } from '@angular/core'
 import { ControlWidget } from 'ngx-schema-form'
-import {Message} from '../_domain/message'
+import { Message } from '../_domain/message'
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
 import { bytesToSizeString, FileuploadComponent } from './fileupload.component'
 import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.widget'
@@ -15,7 +15,7 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
 
   uploadedFiles: any[] = []
   files: File[]
-  
+
   @ViewChild('fileUploadEl')
   fileUploadEl: FileuploadComponent
 
@@ -113,7 +113,7 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
   imageLoaded(event, file) {
     this.setImageDataValue(event.target, file)
   }
-  imageLoadingFailed(event, file){
+  imageLoadingFailed(event, file) {
     file.previewFailed = true
     /** if it can't be red as image it must be red as object */
     this.setObjectDataValue(file)
@@ -121,7 +121,7 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
   objectLoaded(event, file) {
     this.setObjectDataValue(file)
   }
-  objectLoadingFailed(event, file){
+  objectLoadingFailed(event, file) {
     file.previewFailed = true
     this.setObjectDataValue(file)
   }
@@ -222,13 +222,13 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
   }
 
   checkForMessages() {
-    const msgs = [].concat(this.fileUploadEl.msgs||[]).concat(this.msgs||[])
+    const msgs = [].concat(this.fileUploadEl.msgs || []).concat(this.msgs || [])
     if ((msgs || []).length) {
       const _msg = msgs[0]
       const errMsg = {
         code: 'OBJECT_MISSING_REQUIRED_PROPERTY',
         path: `#${this.formProperty.path}`,
-        message: `${_msg.summary||''}${_msg.detail||''}`,
+        message: `${_msg.summary || ''}${_msg.detail || ''}`,
         params: [],
         severity: _msg.severity,
         title: _msg.summary
@@ -262,11 +262,15 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
   }
 
   onSelect(event) {
+    /**
+     * required to show messages when uploading a file 
+     * that doesn't match content-type with the 'accept' attribute
+     */
     this.checkForMessages()
   }
 
   onError(event) {
-    console.error('onError', event)
+    //console.error('onError', event)
   }
 
   onRemove(event) {
@@ -300,40 +304,73 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
     return file['___isImage'] = /^image\//.test(file.type)
   }
 
-  createAltText(file: File) {
-    if (file['_previewTitle']) {
-      return file['_previewTitle']
+  createPreviewAltText(file: File) {
+    return this.fillPlaceholder(file, '_previewTitle', this.schema.widget.previewTitle || '')
+  }
+
+  createButtonAltDelete(file: File) {
+    return this.fillPlaceholder(file, '_deleteButtonTitle', this.schema.widget.deleteButtonTitle || '')
+  }
+
+  createButtonAltUpload(file: File) {
+    return this.fillPlaceholder(file, '_uploadButtonTitle', this.schema.widget.uploadButtonTitle || '')
+  }
+
+  fillPlaceholder(file: File, varName: string, labelText: string) {
+    if (file[varName]) {
+      return file[varName]
     }
-    let previewTitle = this.schema.widget.previewTitle
-    if (previewTitle) {
-      previewTitle = previewTitle.replace(new RegExp('{filename}', 'ig'), file.name)
-      previewTitle = previewTitle.replace(new RegExp('{filesize}', 'ig'), this.bytesToSize(file.size).toUpperCase())
-
-      let previewTitleImageDimensions = this.schema.widget.previewTitleImageDimensions || ''
-      if (previewTitleImageDimensions) {
-        if (file['______vRes']) {
-          const a: any = file['______vRes']
-          if (a) {
-            previewTitleImageDimensions = previewTitleImageDimensions.replace(new RegExp('{imageDimensionPixelW}', 'ig'), `${a.imageInfo.dimensions.px.w}`)
-            previewTitleImageDimensions = previewTitleImageDimensions.replace(new RegExp('{imageDimensionPixelH}', 'ig'), `${a.imageInfo.dimensions.px.h}`)
-            previewTitleImageDimensions = previewTitleImageDimensions.replace(new RegExp('{imageDimensionInchesW}', 'ig'), `${a.imageInfo.dimensions.in.w}`)
-            previewTitleImageDimensions = previewTitleImageDimensions.replace(new RegExp('{imageDimensionInchesH}', 'ig'), `${a.imageInfo.dimensions.in.h}`)
-            previewTitleImageDimensions = previewTitleImageDimensions.replace(new RegExp('{imageDimensionCentimetersW}', 'ig'), `${a.imageInfo.dimensions.cm.w}`)
-            previewTitleImageDimensions = previewTitleImageDimensions.replace(new RegExp('{imageDimensionCentimetersH}', 'ig'), `${a.imageInfo.dimensions.cm.h}`)
-
-            // set into preview title
-            previewTitle = previewTitle.replace(new RegExp('{previewTitleImageDimensions}', 'ig'), previewTitleImageDimensions)
-          }
-        }
-      }
-      // clean preview title if it wasn't an image
-      previewTitle = previewTitle.replace(new RegExp('{previewTitleImageDimensions}', 'ig'), '')
-
-      file['_previewTitle'] = previewTitle
-      return file['_previewTitle']
+    if (labelText) {
+      labelText = labelText.replace(new RegExp('{filename}', 'ig'), file.name)
+      labelText = labelText.replace(new RegExp('{filesize}', 'ig'), this.bytesToSize(file.size).toUpperCase())
+      labelText = this.makeReplacement_ImageDimensionText(file, labelText)
+      file[varName] = labelText
+      return file[varName]
     }
     return null
   }
+
+  makeReplacement_ImageDimensionText(file: File, labelText: string) {
+    let imageDimensions = this.schema.widget.previewTitleImageDimensions || ''
+    if (imageDimensions) {
+      if (file['______vRes']) {
+        const a: any = file['______vRes']
+        if (a) {
+          if (file['_imageDimensionsText']) {
+            imageDimensions = file['_imageDimensionsText']
+          } else {
+            imageDimensions = imageDimensions.replace(new RegExp('{imageDimensionPixelW}', 'ig'), `${a.imageInfo.dimensions.px.w}`)
+            imageDimensions = imageDimensions.replace(new RegExp('{imageDimensionPixelH}', 'ig'), `${a.imageInfo.dimensions.px.h}`)
+            imageDimensions = imageDimensions.replace(new RegExp('{imageDimensionInchesW}', 'ig'), `${a.imageInfo.dimensions.in.w}`)
+            imageDimensions = imageDimensions.replace(new RegExp('{imageDimensionInchesH}', 'ig'), `${a.imageInfo.dimensions.in.h}`)
+            imageDimensions = imageDimensions.replace(new RegExp('{imageDimensionCentimetersW}', 'ig'), `${a.imageInfo.dimensions.cm.w}`)
+            imageDimensions = imageDimensions.replace(new RegExp('{imageDimensionCentimetersH}', 'ig'), `${a.imageInfo.dimensions.cm.h}`)
+
+            file['_imageDimensionsText'] = imageDimensions
+          }
+          // set into preview title
+          labelText = labelText.replace(new RegExp('{previewTitleImageDimensions}', 'ig'), imageDimensions)
+        }
+      }
+    }
+    // clean preview title if it wasn't an image
+    labelText = labelText.replace(new RegExp('{previewTitleImageDimensions}', 'ig'), '')
+    return labelText
+  }
+
+  updateUploadButtonTitle() {
+    console.log('this.fileUploadEl', this.fileUploadEl)
+    const input = this.fileUploadEl['el'].nativeElement.querySelector('input')
+    if (input) {
+      const label = this.fileUploadEl['el'].nativeElement.parentElement.querySelector('label')
+      if (label) {
+        const labelId = 'label--' + this.id
+        this.renderer2.setAttribute(label, 'id', labelId)
+        this.renderer2.setAttribute(input, 'aria-labelledby', labelId)
+      }
+    }
+  }
+
 }
 
 

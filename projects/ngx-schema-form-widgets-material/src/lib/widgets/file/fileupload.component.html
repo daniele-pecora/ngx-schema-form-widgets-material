@@ -1,8 +1,8 @@
-<button mat-raised-button color="primary"
-        (click)="onClick($event)"
+<a mat-raised-button 
+  [attr.tabindex]="'-1'"
 >
   <mat-icon>add</mat-icon>
-  {{chooseLabel}}</button>
+  {{chooseLabel}}
 <input #fileUpload
        type="file"
        class="input_fileupload--hidden"
@@ -13,7 +13,9 @@
 
        [attr.required]="required?'required':null"
        [attr.aria-required]="required"
+       [attr.aria-labelledby]="ariaLabelledby"
 >
+</a>
 
 <div *ngFor="let f of files">
   <span>{{f.name}}</span>
