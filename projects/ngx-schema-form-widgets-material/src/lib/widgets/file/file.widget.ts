@@ -359,7 +359,6 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
   }
 
   updateUploadButtonTitle() {
-    console.log('this.fileUploadEl', this.fileUploadEl)
     const input = this.fileUploadEl['el'].nativeElement.querySelector('input')
     if (input) {
       const label = this.fileUploadEl['el'].nativeElement.parentElement.querySelector('label')
