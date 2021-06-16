@@ -120,6 +120,125 @@ Element 'widget'
               `true` = hides the preserved space when no helper-text and validation message is present.
               'always' , will hide the space completely and will never display a helper-text or validation message
 -->
+<!--
+Element 'widget'
+  Use this property to gather file information like file name or file size.
+  Single file upload:
+      When using single file upload then the target will contain the file info of the current uploaded file.
+      All targets will be cleared when the file gets removed via 'Cancel' button.
+  Multiple file upload:
+      When using multiple file upload then the target will contain the file info of the last uploaded file.
+      All targets will be cleared when the last file gets removed via 'Cancel' button.
+
+   - targets      an arrays of assignments of address parts to fields
+                  this allows to assign a part of the address to a specific field
+                  - key          : an array or a single value of keys of the result object in priority order.
+                                   the first existing value wins.
+
+                                   This may also be an expression.
+                                   Accessing any value of the result object is allowed.
+                                   e.g.:
+                                   <code>{ "key": "address.street + ' ' + address.house_number" }</code>
+                  - destination   : an array of paths pointing to formProperties fields to set the value
+
+                  e.g.
+                      <code>[{ 'key' : ['file.name','file.size'], 'destination' : ['form1/upload-file-name', 'form3/upload-file-size']}]</code>
+                  another example:
+                  <code>
+                        "targets": [
+                          {
+                            "key": "file.name",
+                            "destination": "form1/upload-file-name"
+                          },
+                          {
+                            "key": [
+                              "file.name",
+                              "file.size"
+                            ],
+                            "destination": ["form1/upload-file-name", "form1/another_upload-file-name"]
+                          },
+                          {
+                            "key": "file.size",
+                            "destination": "form1/upload-file-size"
+                          },
+                          {
+                            "key": "file",
+                            "destination": "form1/upload-file-info"
+                          }
+                        ]
+                  </code>
+
+
+            Description of the file object that will be passed to the targets:
+            <code>
+              {
+                file : {
+                  name: string // name of the file (without path)
+                  size: number // the size of the file in bytes
+                  type: string // mime-type
+                  lastModified: // the timestamp of the last modification
+                  image: // only present if file is of type image
+                        - imageInfo 
+                          - screen
+                            - dpi
+                              - x:number // screen dpi x
+                              - y:number // screen dpi y
+                          - dimensions
+                            - px // dimensions in pixels
+                              - x
+                              - y
+                            - in // dimensions in inch
+                              - x
+                              - y
+                            - cm // dimensions in centimeters
+                              - x
+                              - y
+                        - imageSrc // data-url
+                        - validationResult // status if the image meets the requiremets defined in property `imageRules`
+                          - valid:boolean
+                }
+              }
+            </code>
+            Example
+            <code>
+              {
+                "file:" {
+                  "name": "test.pdf",
+                  "size": 21845,
+                  "type": "application/pdf",
+                  "lastModified": 1623826127961,
+                  "image": {
+                      "imageInfo": {
+                          "screen": {
+                              "dpi": {
+                                  "x": 192,
+                                  "y": 192
+                              }
+                          },
+                          "dimensions": {
+                              "px": {
+                                  "w": 500,
+                                  "h": 184
+                              },
+                              "in": {
+                                  "w": 2.6041666666666665,
+                                  "h": 0.9583333333333334
+                              },
+                              "cm": {
+                                  "w": 6.614583333333333,
+                                  "h": 2.4341666666666666
+                              }
+                          }
+                      },
+                      "imageSrc": "data:image/png;base64,iVBORw0KGgoA....",
+                      "validationResult": {
+                          "valid": true
+                      }
+                  }
+                }
+              }
+            </code>
+-->
 <div class="ui-g-12">
   <div class="mat-inputfield_upload">
 

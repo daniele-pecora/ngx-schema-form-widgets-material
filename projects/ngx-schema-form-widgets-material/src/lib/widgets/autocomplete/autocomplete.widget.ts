@@ -13,6 +13,7 @@ import { MatChipInputEvent, MatChipList } from '@angular/material/chips'
 import { FormControl } from '@angular/forms'
 import { ValidationFieldMessagesComponent } from '../_validation-field-messages/_validation-field-messages.component'
 import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.widget'
+import { TargetsHelper } from '../_component-helper/_targets.helper'
 
 @Component({
   selector: 'ngx-ui-autocomplete-widget',
@@ -46,6 +47,7 @@ export class AutoCompleteWidgetComponent extends NoHelperTextSpacer implements O
   get asMultiselect(): boolean { return ((this.schema.items && this.schema.items.anyOf) || (`${this.schema.type}` === 'array' && (-1 !== ['string', 'number', 'boolean'].indexOf(`${this.schema.items.type}` || 'noitemtypeset')))) }
   @ViewChild('validationMessages') validationMessages: ValidationFieldMessagesComponent
 
+  targetsHelper: TargetsHelper
   constructor(private lookupService: WidgetComponentHttpApiService, private expressionCompiler: ExpressionCompiler
     , private ngZone: NgZone) {
     super()
@@ -73,12 +75,12 @@ export class AutoCompleteWidgetComponent extends NoHelperTextSpacer implements O
   }
 
   ngOnInit(): void {
-
+    this.targetsHelper = new TargetsHelper(this.formProperty, this.expressionCompiler)
   }
 
   ngAfterViewInit(): void {
     super.ngAfterViewInit();
-    
+
     this.reAttachAutocomplete_AfterViewInit()
 
     if (this.valueChangeSub) {
@@ -211,7 +213,8 @@ export class AutoCompleteWidgetComponent extends NoHelperTextSpacer implements O
     this.updateTargets(event)
   }
 
-  onSelect(event) {this.selected(event)
+  onSelect(event) {
+    this.selected(event)
     this.updateTargets(event)
   }
 
@@ -233,49 +236,10 @@ export class AutoCompleteWidgetComponent extends NoHelperTextSpacer implements O
             break
           }
         }
-        this.setTargetValues(resValue)
+        this.targetsHelper.setTargetValues(resValue)
         return
       }
-      this.setTargetValues(this.resultMap[value] || {})
-    }
-  }
-
-  private setTargetValues(resultItem: any) {
-    const targets = (this.schema.widget || {})['targets'];
-    if ((targets || []).length) {
-      for (const target of targets) {
-        const targetKeys = Array.isArray(target.key) ? target.key : [target.key];
-        for (const targetKey of targetKeys) {
-          const destinationTarget = target.destination;
-          const valueSet = this.setTargetVal(resultItem, destinationTarget, targetKey);
-          if (valueSet !== undefined && valueSet !== null) {
-            break
-          }
-        }
-      }
-    }
-  }
-
-  private setTargetVal(resultItem: any, targetPath: string, destProperty: string): any | void {
-    const targetPaths = Array.isArray(targetPath) ? targetPath : [targetPath]
-    for (const _targetPath of targetPaths) {
-      const target = this.formProperty.findRoot().getProperty(_targetPath) as FormProperty
-      if (target) {
-        let value
-        try {
-          value = this.expressionCompiler.evaluate(destProperty, resultItem)
-        } catch (error) {
-          console.error(
-            'Failed to process expression from targetPath:', _targetPath,
-            ' for destProperty:', destProperty,
-            ' from resultItem:', resultItem,
-            ' ERROR:', error)
-        }
-        target.setValue(value, false)
-        if (value !== undefined && value !== null) {
-          return value
-        }
-      }
+      this.targetsHelper.setTargetValues(this.resultMap[value] || {})
     }
   }
 
@@ -350,7 +314,7 @@ export class AutoCompleteWidgetComponent extends NoHelperTextSpacer implements O
   }
 
   // multiselect
-  unique(){// default `true`
+  unique() {// default `true`
     return false !== (this.schema.widget || {}).unique
   }
 

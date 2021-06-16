@@ -26,7 +26,21 @@
             "previewTitle": "Preview of the uploaded image {filename} size {filesize}",
             "noPreviewText": "No preview",
             "deleteButtonTitle": "Delete image {filename} of size {filesize} and dimensions {previewTitleImageDimensions}",
-            "uploadButtonTitle": "Upload an image file"
+            "uploadButtonTitle": "Upload an image file",
+            "targets": [
+              {
+                "key": "file.name",
+                "destination": "files/file-upload-1-name"
+              },
+              {
+                "key": "file.size",
+                "destination": "files/file-upload-1-size"
+              },
+              {
+                "key": "file",
+                "destination": "files/file-upload-1-info"
+              }
+            ]
           }
         },
         "file-upload-2": {

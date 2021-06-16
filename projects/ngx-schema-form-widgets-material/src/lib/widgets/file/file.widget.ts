@@ -4,6 +4,8 @@ import { Message } from '../_domain/message'
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
 import { bytesToSizeString, FileuploadComponent } from './fileupload.component'
 import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.widget'
+import { TargetsHelper } from '../_component-helper/_targets.helper'
+import { ExpressionCompiler } from '../_service/expression-complier.service'
 
 @Component({
   selector: 'ngx-ui-file-widget',
@@ -29,11 +31,14 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
     return this.sanitizer.bypassSecurityTrustUrl(url)
   }
 
-  constructor(private sanitizer: DomSanitizer, private renderer2: Renderer2) {
+  targetsHelper: TargetsHelper
+  constructor(private sanitizer: DomSanitizer, private renderer2: Renderer2,
+    private expressionCompiler: ExpressionCompiler) {
     super()
   }
 
   ngOnInit() {
+    this.targetsHelper = new TargetsHelper(this.formProperty, this.expressionCompiler)
     this.uploadedFiles = this.formProperty['_____uploadedFiles'] || []
     if (!this.formProperty['_____uploadedFiles']) {
       this.restoreFromValue()
@@ -154,8 +159,15 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
         file.base64String = base64String
 
         this.updateControlValue(base64String)
+        
+        this.updateTargetValues(file)
+      }
+      img.onerror = () => {
+        this.updateTargetValues(null)
       }
       img.src = file.sanitizedURL.changingThisBreaksApplicationSecurity
+
+      // TODO: this.resizeImage(file, 200, 200)
     }
   }
 
@@ -173,6 +185,11 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
         base64String = fileLoadedEvent.target['result']
 
         this.updateControlValue(base64String)
+
+        this.updateTargetValues(file)
+      }
+      fileReader.onerror = () => {
+        this.updateTargetValues(null)
       }
       // Convert data to base64
       fileReader.readAsDataURL(file)
@@ -259,6 +276,7 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
     this.files = []
 
     this.updateFromPropertyUploadedFiles()
+    this.updateTargetValues(null)
   }
 
   onSelect(event) {
@@ -368,6 +386,23 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
         this.renderer2.setAttribute(input, 'aria-labelledby', labelId)
       }
     }
+  }
+
+  // === FILE INFO ====
+
+  private updateTargetValues(file: File): any | void {
+    let resultItem = { file: null }
+    if (file)
+      resultItem = {
+        file: {
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          lastModified: file.lastModified,
+          image: file['______vRes']
+        }
+      }
+    this.targetsHelper.setTargetValues(resultItem)
   }
 
 }
