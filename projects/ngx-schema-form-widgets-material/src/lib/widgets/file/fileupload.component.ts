@@ -231,7 +231,11 @@ export class FileuploadComponent implements AfterViewInit {
         removeFile(file, this.files)
       } else {
         let addFile = true
-        if (this.isImage(file)) {
+        if (this.imageRules && this.isNonReadableImage(file)) {
+          this.logService.error(`Rejecting image because it's a non-readable image format '${file.type}' and has image rules that can\'t be verified. Don't use this type of image together with 'imageRules'`, this.imageRules)
+          addFile = false
+        }
+        if (this.isImage(file) && !this.isNonReadableImage(file)) {
           const vRes = await this.checkImageDimensions(file)
           file['______vRes'] = vRes
           if (!vRes.validationResult.valid) {
@@ -284,6 +288,13 @@ export class FileuploadComponent implements AfterViewInit {
 
   isImage(file: File): boolean {
     return /^image\//.test(file.type)
+  }
+  
+  isNonReadableImage(file: File): boolean {
+    if (file.hasOwnProperty('___isImage_tiff')) {
+      return file['___isImage_tiff']
+    }
+    return file['___isImage_tiff'] = /^image\/tiff?$/.test(file.type)
   }
 
   removeFile(event, file) {
