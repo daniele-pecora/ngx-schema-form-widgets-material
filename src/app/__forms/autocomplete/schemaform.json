@@ -12,6 +12,7 @@
                 "resultExpression": "data",
                 "minLength": 1,
                 "_filled": true,
+                "forceSelection": true,
                 "serviceOptions": {
                     "method": "POST",
                     "headers": {
