@@ -46,6 +46,16 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
   }
 
   ngAfterViewInit() {
+    // enable formProperty.reset(...)
+    const control = this.control
+    this.formProperty.valueChanges.subscribe((newValue) => {
+      if (control.value !== newValue) {
+        if (!newValue) {
+          this.onClear(null)
+        }
+      }
+    })
+    // end - enable formProperty.reset(...)
     super.ngAfterViewInit()
   }
 
@@ -194,6 +204,71 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
       // Convert data to base64
       fileReader.readAsDataURL(file)
     }
+  }
+
+  // === RESIZE ====
+  async resizeImage(file: File, max_width, max_height) {
+
+    const imageSrc = await new Promise<any>((resolve1, reject1) => {
+      const reader = new FileReader()
+      reader.onload = async (event: any) => {
+        resolve1(event.target.result)
+      }
+      reader.onerror = (event) => {
+        reject1(event)
+      }
+      reader.onabort = (event) => {
+        reject1(event)
+      }
+      reader.readAsArrayBuffer(file)
+    })
+
+    // blob stuffs
+    const blob = new Blob([imageSrc], { type: file.type })
+    window.URL = window.URL || window.webkitURL
+    const blobURL = window.URL.createObjectURL(blob)
+
+    const img = await new Promise<any>((resolve2, reject2) => {
+      const img = new Image()
+      img.onload = (event) => {
+        resolve2(event.target)
+      }
+      img.onerror = (event) => {
+        reject2(null)
+      }
+      img.onabort = (event) => {
+        reject2(null)
+      }
+      img.src = blobURL
+    })
+
+    const canvas = document.createElement('canvas')
+    let width = img.width
+    let height = img.height
+
+    if (width > height) {
+      if (width > max_width) {
+        height = Math.round(height *= max_width / width)
+        width = max_width
+      }
+    } else {
+      if (height > max_height) {
+        width = Math.round(width *= max_height / height)
+        height = max_height
+      }
+    }
+
+    canvas.width = width
+    canvas.height = height
+    const ctx = canvas.getContext("2d")
+    ctx.drawImage(img, 0, 0, width, height)
+
+    const dataURL = canvas.toDataURL(
+      file.type
+      //'image/jpeg'
+      , 0.7) // get the data from canvas as 70% JPG (can be also PNG, etc.)
+    // console.log('resizedB64DataURL', dataURL)
+    document.body.prepend(canvas)
   }
 
   updateControlValue(base64String: string) {
