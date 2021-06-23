@@ -46,6 +46,16 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
   }
 
   ngAfterViewInit() {
+    // enable formProperty.reset(...)
+    const control = this.control
+    this.formProperty.valueChanges.subscribe((newValue) => {
+      if (control.value !== newValue) {
+        if (!newValue) {
+          this.onClear(null)
+        }
+      }
+    })
+    // end - enable formProperty.reset(...)
     super.ngAfterViewInit()
   }
 

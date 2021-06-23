@@ -41,7 +41,13 @@
                 "destination": "files/file-upload-1-info"
               }
             ]
-          }
+          },
+          "buttons": [
+            {
+              "id": "action_1",
+              "label": "Delete Image"
+            }
+          ]
         },
         "file-upload-2": {
           "description": "Upload any JPEG, GIF, TIFF, PNG, BMP or PDF with max file size of 10MB and is a portrait, 100x200px, 640x404px or 300-310x168-200px",
