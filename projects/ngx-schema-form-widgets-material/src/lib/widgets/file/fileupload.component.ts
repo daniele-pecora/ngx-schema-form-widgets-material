@@ -248,8 +248,8 @@ export class FileuploadComponent implements AfterViewInit {
             })
 
             removeFile(file, this.files)
+            this.logService.error('Rejecting image because of validation result:', vRes, 'and rules:', this.imageRules)
           }
-          this.logService.error('Rejecting image because of validation result:', vRes, 'and rules:', this.imageRules)
         }
         if (addFile)
           filteredFiles.push(file)
