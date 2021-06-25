@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, Renderer2, ViewChild, Inject} from '@angular/core';
+import {Component, ElementRef, OnInit, Renderer2, ViewChild, Inject, AfterViewInit} from '@angular/core';
 import {ActionObjectLayoutWidgetComponent} from '../_base/action-object-layout.widget.component'
 import {MenuItem} from '../_domain/menuitem'
 import {SeverityNameConverterPipe} from '../_converters/_severity/SeverityNames'
@@ -16,7 +16,7 @@ import { DOCUMENT } from '@angular/common'
   styleUrls: ['./wizard.widget.scss'],
   providers: [IconNameConverterPipe, SeverityNameConverterPipe]
 })
-export class WizardWidgetComponent extends ActionObjectLayoutWidgetComponent implements OnInit {
+export class WizardWidgetComponent extends ActionObjectLayoutWidgetComponent implements OnInit, AfterViewInit {
 
   currentPage = 0
   private startPage = 0
@@ -33,6 +33,7 @@ export class WizardWidgetComponent extends ActionObjectLayoutWidgetComponent imp
     , severityNameConverter: SeverityNameConverterPipe
     , buttonTypesConverter: ButtonTypeTransformerService
     , private renderer: Renderer2
+    , private elementRef:ElementRef
     , @Inject(DOCUMENT) private document) {
     super(this_actionRegistry, iconNameConverter, severityNameConverter, buttonTypesConverter)
   }
@@ -68,6 +69,21 @@ export class WizardWidgetComponent extends ActionObjectLayoutWidgetComponent imp
 
     this.currentPage = this.startPage || 0
   }
+
+  ngAfterViewInit(){
+    super.ngAfterViewInit()
+    this.udpateStepperTitles()
+  }
+
+  private udpateStepperTitles() {
+    let items = this.elementRef.nativeElement.querySelectorAll('.mat-step-label')
+    if (items)
+      for (let i = 0; i < items.length; i++) {
+        // update title attribute
+        this.renderer.setAttribute(items[i].parentNode, 'title', items[i].innerText || items[i].innerHTML)
+      }
+  }
+
 
   previousPage() {
     this.processAction('prev', this.addNavigationInfoPageIds({ fromPage: this.currentPage, toPage: this.currentPage - 1 }))
