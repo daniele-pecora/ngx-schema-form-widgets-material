@@ -6,6 +6,7 @@ import { bytesToSizeString, FileuploadComponent } from './fileupload.component'
 import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.widget'
 import { TargetsHelper } from '../_component-helper/_targets.helper'
 import { ExpressionCompiler } from '../_service/expression-complier.service'
+import Compressor from 'compressorjs'
 
 @Component({
   selector: 'ngx-ui-file-widget',
@@ -169,7 +170,7 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
         file.base64String = base64String
 
         this.updateControlValue(base64String)
-        
+
         this.updateTargetValues(file)
       }
       img.onerror = () => {
@@ -177,7 +178,8 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
       }
       img.src = file.sanitizedURL.changingThisBreaksApplicationSecurity
 
-      // TODO: this.resizeImage(file, 200, 200)
+      // TODO: autoresize image
+      this.resizeImage_ifNecessary(file)
     }
   }
 
@@ -207,7 +209,59 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
   }
 
   // === RESIZE ====
-  async resizeImage(file: File, max_width, max_height) {
+  async resizeImage_ifNecessary(file: File) {
+    if (!this.schema.widget.resize && !this.schema.widget.resize.auto) { return }
+
+    const imageDataURL = await new Promise<any>((resolve, reject) => {
+      let compressionLevel
+      let convertSize
+      if (this.schema.widget.resize.size) {
+        const max_size = this.schema.widget.resize.size
+        compressionLevel = ((((file.size > max_size ? (100 / (file.size / max_size)) : 100) / 100) - 1.0) * -1).toFixed(2)
+        convertSize = file.size > max_size ? max_size : Infinity
+      }
+      const options: Compressor.Options = {
+        strict: true
+        , maxWidth: this.schema.widget.resize.width
+        , maxHeight: this.schema.widget.resize.height
+        , quality: compressionLevel
+        , convertSize: convertSize
+        , success: async (file: Blob) => {
+          //resolve(file) 
+          const dataURL = await new Promise<any>((resolve2, reject2) => {
+            const reader = new FileReader()
+            reader.onload = (event) => {
+              resolve2(event.target.result)
+            }
+            reader.onerror = reader.onabort = (error) => { reject2(error) }
+            reader.readAsDataURL(file)
+          })
+          resolve(dataURL)
+        }
+        , error: (error: Error) => { reject(error) }
+        , drew: (context, canvas) => {
+          context.fillStyle = '#fff'
+          context.font = '2rem serif'
+          context.fillText('ui-schema-form-material', 20, canvas.height - 20)
+        }
+      }
+
+      new Compressor(file, options)
+    })
+
+    //
+    const img = document.createElement('img')
+    img.src = imageDataURL
+    document.body.prepend(img)
+    return imageDataURL
+  }
+  async _resizeImage_ifNecessary(file: File) {
+    if (!this.schema.widget.resize && !this.schema.widget.resize.auto) { return }
+    let resize = Object.assign({ size: 0, width: 0, height: 0, auto: false }, this.schema.widget.resize)
+    const result = await this.resizeImage(file, resize.width, resize.height, resize.size)
+    //console.log(result)
+  }
+  async resizeImage(file: File, max_width, max_height, max_size) {
 
     const imageSrc = await new Promise<any>((resolve1, reject1) => {
       const reader = new FileReader()
@@ -247,15 +301,17 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
     let height = img.height
 
     if (width > height) {
-      if (width > max_width) {
-        height = Math.round(height *= max_width / width)
-        width = max_width
-      }
+      if (max_width)
+        if (width > max_width) {
+          height = Math.round(height *= max_width / width)
+          width = max_width
+        }
     } else {
-      if (height > max_height) {
-        width = Math.round(width *= max_height / height)
-        height = max_height
-      }
+      if (max_height)
+        if (height > max_height) {
+          width = Math.round(width *= max_height / height)
+          height = max_height
+        }
     }
 
     canvas.width = width
@@ -263,12 +319,30 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
     const ctx = canvas.getContext("2d")
     ctx.drawImage(img, 0, 0, width, height)
 
+    const compressionLevel = ((((file.size > max_size ? (100 / (file.size / max_size)) : 100) / 100) - 1.0) * -1).toFixed(2)
+
     const dataURL = canvas.toDataURL(
-      file.type
-      //'image/jpeg'
-      , 0.7) // get the data from canvas as 70% JPG (can be also PNG, etc.)
+      file.type //'image/jpeg'
+      , compressionLevel // , 0.7
+    ) // get the data from canvas as 70% JPG (can be also PNG, etc.)
     // console.log('resizedB64DataURL', dataURL)
     document.body.prepend(canvas)
+
+    // 
+    const loggingBlobResult = await new Promise<{ size: number, arrayBuffer: ArrayBuffer, blob: Blob }>((resolve2, reject2) => {
+      canvas.toBlob((blob) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+          const arrayBuffer = reader.result as ArrayBuffer
+          resolve2({ size: arrayBuffer.byteLength, arrayBuffer: arrayBuffer, blob: blob })
+        }
+        reader.onerror = reader.onabort = (error) => { reject2(error) }
+        reader.readAsArrayBuffer(blob)
+      }, file.type, compressionLevel)
+    })
+    console.log(`resize from ${img.width}x${img.height} to ${width}x${height} and compressed by ${compressionLevel} from ${file.size} to ${loggingBlobResult.size} target:${max_size}`, loggingBlobResult)
+
+    return dataURL
   }
 
   updateControlValue(base64String: string) {
@@ -319,8 +393,8 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
       const _msg = msgs[0]
       const errMsg = {
         code: 'OBJECT_MISSING_REQUIRED_PROPERTY',
-        path: `#${this.formProperty.path}`,
-        message: `${_msg.summary || ''}${_msg.detail || ''}`,
+        path: `#${this.formProperty.path} `,
+        message: `${_msg.summary || ''} ${_msg.detail || ''} `,
         params: [],
         severity: _msg.severity,
         title: _msg.summary
@@ -432,12 +506,12 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
           if (file['_imageDimensionsText']) {
             imageDimensions = file['_imageDimensionsText']
           } else {
-            imageDimensions = imageDimensions.replace(new RegExp('{imageDimensionPixelW}', 'ig'), `${a.imageInfo.dimensions.px.w}`)
-            imageDimensions = imageDimensions.replace(new RegExp('{imageDimensionPixelH}', 'ig'), `${a.imageInfo.dimensions.px.h}`)
-            imageDimensions = imageDimensions.replace(new RegExp('{imageDimensionInchesW}', 'ig'), `${a.imageInfo.dimensions.in.w}`)
-            imageDimensions = imageDimensions.replace(new RegExp('{imageDimensionInchesH}', 'ig'), `${a.imageInfo.dimensions.in.h}`)
-            imageDimensions = imageDimensions.replace(new RegExp('{imageDimensionCentimetersW}', 'ig'), `${a.imageInfo.dimensions.cm.w}`)
-            imageDimensions = imageDimensions.replace(new RegExp('{imageDimensionCentimetersH}', 'ig'), `${a.imageInfo.dimensions.cm.h}`)
+            imageDimensions = imageDimensions.replace(new RegExp('{imageDimensionPixelW}', 'ig'), `${a.imageInfo.dimensions.px.w} `)
+            imageDimensions = imageDimensions.replace(new RegExp('{imageDimensionPixelH}', 'ig'), `${a.imageInfo.dimensions.px.h} `)
+            imageDimensions = imageDimensions.replace(new RegExp('{imageDimensionInchesW}', 'ig'), `${a.imageInfo.dimensions.in.w} `)
+            imageDimensions = imageDimensions.replace(new RegExp('{imageDimensionInchesH}', 'ig'), `${a.imageInfo.dimensions.in.h} `)
+            imageDimensions = imageDimensions.replace(new RegExp('{imageDimensionCentimetersW}', 'ig'), `${a.imageInfo.dimensions.cm.w} `)
+            imageDimensions = imageDimensions.replace(new RegExp('{imageDimensionCentimetersH}', 'ig'), `${a.imageInfo.dimensions.cm.h} `)
 
             file['_imageDimensionsText'] = imageDimensions
           }
