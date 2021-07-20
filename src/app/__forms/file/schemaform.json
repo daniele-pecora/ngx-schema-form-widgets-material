@@ -6,6 +6,44 @@
   "properties": {
     "files": {
       "properties": {
+        "editDialogShow": {
+          "type": "string",
+          "widget": "hidden"
+        },
+        "editDialog": {
+          "type": "object",
+          "no-title": "Edit Image",
+          "no-description": "This dialog allows to edit an image",
+          "widget": {
+            "id": "dialog",
+            "closable": true,
+            "header": "Image editor",
+            "show": false,
+            "contentType": "object"
+          },
+          "properties": {
+            "editor": {
+              "type": "string",
+              "title": "",
+              "no-description": "<i>description is wrapped to a paragraph by default</i>",
+              "widget": {
+                "id": "html",
+                "html": [
+                  "<div id=\"vanilla-demo\"></div>"
+                ]
+              }
+            }
+          },
+          "_visibleIf": {
+            "oneOf": [
+              {
+                "/files/editDialogShow": [
+                  "$EXP$ 'show' in target.value"
+                ]
+              }
+            ]
+          }
+        },
         "file-upload-1": {
           "widget": {
             "id": "file",
@@ -46,6 +84,10 @@
             {
               "id": "action_1",
               "label": "Delete Image"
+            },
+            {
+              "id": "action_edit_image",
+              "label": "Edit Image"
             }
           ]
         },
@@ -103,6 +145,37 @@
             },
             "invalidImageDimensionsMessageSummary": "Invalid image dimensions: Is to big, small or bad oriented. ",
             "invalidImageDimensionsMessageDetail": "Must be either a portrait, 100x200px, 640x404px or 300-310x168-200px.",
+            "previewTitleImageDimensions": " ({imageDimensionPixelW}x{imageDimensionPixelH} PX)"
+          }
+        },
+        "file-upload-3": {
+          "description": "Upload any JPEG, GIF, TIFF, PNG, BMP with autoresize to file size of 10MB and max 640x404px",
+          "widget": {
+            "id": "file",
+            "mode": "basic",
+            "_maxFileSize": 10485760,
+            "invalidFileSizeMessageDetail": "File too big. Max 10MB",
+            "invalidFileTypeMessageSummary": "Incompatible file type,  ",
+            "chooseLabel": "Upload",
+            "accept": "image/gif,image/jpeg,image/jpg,image/png,image/bmp",
+            "auto": true,
+            "url": "https://www.no-real-url-necessary-here/datauri/index.php",
+            "resize": {
+              "auto": true,
+              "size": 1024,
+              "_size": 1310720,
+              "width": 400,
+              "height": 300
+            },
+            "previewWidth": 200,
+            "dataUriPrefix": true,
+            "customUpload": true,
+            "inlineLabel": false,
+            "showUploadInfo": true,
+            "previewTitle": "Preview of the uploaded image {filename} size {filesize}{previewTitleImageDimensions}",
+            "noPreviewText": "No preview",
+            "noPreviewIcon": "image",
+            "deleteButtonTitle": "Delete image {filename} of size {filesize} and dimensions {previewTitleImageDimensions}",
             "previewTitleImageDimensions": " ({imageDimensionPixelW}x{imageDimensionPixelH} PX)"
           }
         }
