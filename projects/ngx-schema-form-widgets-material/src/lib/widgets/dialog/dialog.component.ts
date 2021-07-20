@@ -39,7 +39,8 @@ export class DialogComponent implements OnChanges, AfterViewInit {
         height: '',
         minWidth: '',
         minHeight: '',
-        maxWidth: defaultDialogConfig.maxWidth,
+        // make sure dialog doesn't get bigger than the viewport
+        maxWidth: '100vw', //defaultDialogConfig.maxWidth (default is 80vw, what is not that good on a mobile device),
         maxHeight: '',
         position: {
             top: '',
