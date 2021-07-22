@@ -52,6 +52,8 @@
     },
     "select2": {
       "type": "string",
+      "title": "Select 2",
+      "description": "Description Select 2",
       "widget": "select",
       "oneOf": [
         {
@@ -79,11 +81,53 @@
           "description": "Option 2-2"
         }
       ],
-      "visibleIf": {
+      "_visibleIf": {
         "select1": [
           "o1"
         ]
       }
+    },
+    "input1": {
+      "type": "string",
+      "title": "Input 1",
+      "description": "Description Input 1",
+      "widget": {
+        "id": "string"
+      },
+      "buttons": [
+        {
+          "id": "infoT",
+          "label": " Info ",
+          "severity": "primary",
+          "icon": "ui-icon-info-outline",
+          "position": {
+            "h": "right",
+            "v": "middle"
+          },
+          "type": "mini-fab"
+        }
+      ]
+    },
+    "input2": {
+      "type": "string",
+      "title": "Input 2",
+      "description": "Description Input 2",
+      "widget": {
+        "id": "string"
+      },
+      "buttons": [
+        {
+          "id": "infoT",
+          "label": " Info ",
+          "severity": "primary",
+          "icon": "ui-icon-info-outline",
+          "position": {
+            "h": "right",
+            "v": "middle"
+          },
+          "type": "mini-fab"
+        }
+      ]
     }
   }
 }
