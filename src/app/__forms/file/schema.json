@@ -16,6 +16,11 @@
           "title": "Upload 2",
           "description": "Upload any JPEG, GIF, TIFF, PNG, BMP or PDF with max file size of 10MB"
         },
+        "file-upload-3": {
+          "type": "string",
+          "title": "Upload 3",
+          "description": "Upload any JPEG, GIF, TIFF, PNG, BMP or PDF with max file size of 10MB"
+        },
         "file-upload-1-name": {
           "type": "string",
           "title": "File name of Upload 1",

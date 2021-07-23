@@ -7,8 +7,22 @@ import {IconNameConverterPipe} from '../_converters/_icon/IconNames'
   selector: 'ngx-ui-button-widget',
   templateUrl: './button.widget.html',
   styleUrls: ['./button.widget.scss'],
-  providers: [IconNameConverterPipe, SeverityNameConverterPipe]
+  providers: [IconNameConverterPipe, SeverityNameConverterPipe],
+  host: {
+    '[class.buttonMargin]': 'isNotInline()',
+    '[class.reduceSpace]': 'isReduceSpace()',
+  }
 })
 export class ButtonWidgetComponent extends ButtonWidget {
-
+  isNotInline() {
+    const button = this.button || {}
+    if (button.position && button.position.h === 'right') {
+      return false
+    }
+    return true
+  }
+  isReduceSpace() {
+    const button = this.button || {}
+    return (button.position && (button.position.v === 'middle' ||  button.position.v === 'top'))
+  }
 }
