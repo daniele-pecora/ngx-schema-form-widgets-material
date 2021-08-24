@@ -14,6 +14,7 @@ import { FormControl } from '@angular/forms'
 import { ValidationFieldMessagesComponent } from '../_validation-field-messages/_validation-field-messages.component'
 import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.widget'
 import { TargetsHelper } from '../_component-helper/_targets.helper'
+import { IsFormPropertyRequiredAttributeStringPipe } from '../_pipe/IsRequiredField'
 
 @Component({
   selector: 'ngx-ui-autocomplete-widget',
@@ -46,6 +47,10 @@ export class AutoCompleteWidgetComponent extends NoHelperTextSpacer implements O
   removable = true
   get asMultiselect(): boolean { return ((this.schema.items && this.schema.items.anyOf) || (`${this.schema.type}` === 'array' && (-1 !== ['string', 'number', 'boolean'].indexOf(`${this.schema.items.type}` || 'noitemtypeset')))) }
   @ViewChild('validationMessages') validationMessages: ValidationFieldMessagesComponent
+
+  get forceSelection() {
+    return this.schema && this.schema.widget && this.schema.widget.forceSelection
+  }
 
   targetsHelper: TargetsHelper
   constructor(private lookupService: WidgetComponentHttpApiService, private expressionCompiler: ExpressionCompiler
@@ -139,6 +144,34 @@ export class AutoCompleteWidgetComponent extends NoHelperTextSpacer implements O
       this.chipList.errorState = this.multiselectControl.touched && this.multiselectControl.invalid
     }
   }
+
+  showForceSelectionErrorIfNecessary() {
+    const input_required = new IsFormPropertyRequiredAttributeStringPipe().transform(this.formProperty)
+    // create error message
+    const errorSchema = this.schema.widget.forceSelectionError || {}
+    const errorWhenNotRequired = errorSchema.errorWhenNotRequired || false
+    const showErrorWhenNotSelected = (input_required || errorWhenNotRequired)
+    if (showErrorWhenNotSelected) {
+      // Tell the validation that field is not valid due to not selecting item from list
+      const errorCode = errorSchema.errorCode || 'OBJECT_MISSING_REQUIRED_PROPERTY'
+      const errorMessage = errorSchema.errorMessage || 'Please select item from list'
+      const errMsg = {
+        code: errorCode,
+        path: `#${this.formProperty.path}`,
+        message: `${errorMessage}`,
+        params: [],
+        severity: 'error',
+        title: errorMessage
+      }
+      this.formProperty.extendErrors([errMsg])
+      const _errorList = this.formProperty['_errors']
+      if (_errorList && _errorList.length) {
+        // make sure error is at first position
+        _errorList.reverse()
+      }
+    }
+  }
+
 
   getAutocompleteAsyncHelper(): AutocompleteAsyncHelper {
     if (this.helper) {

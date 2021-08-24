@@ -14,7 +14,24 @@ Element 'p-dropdown' in 'widget' field do represent the same as in the primeng d
   - field
   - dataKey
   - scrollHeight
-  - forceSelection
+
+  
+  - forceSelection   = If activated the input field gets clear if the user doesn't select an item from the list of suggestions.
+  - forceSelectionError      Define an error for the case that the user doesn't select an item from the list of suggestions
+    - errorWhenNotRequired   :Decide to show this error also when the field is optional
+                              Default value = `false`
+    - errorCode              :Set the error code the set for the error
+                              Default value = 'OBJECT_MISSING_REQUIRED_PROPERTY' 
+    - errorMessage           :Set the error message to show
+                              Default value = 'Please select item from list'
+  Example:
+  ```
+        "forceSelectionError": {
+            "errorWhenNotRequired": true,
+            "errorCode": "OBJECT_MISSING_REQUIRED_PROPERTY",
+            "errorMessage": "Please select item from list"
+        }
+  ```
 
 Element 'p-dropdown' in 'widget'
   - width            = Set style width (any css value), will be set on 'md-autocomplete', 'ui-autocomplete' and 'input'
