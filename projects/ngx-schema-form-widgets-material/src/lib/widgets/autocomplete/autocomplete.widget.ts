@@ -15,6 +15,7 @@ import { ValidationFieldMessagesComponent } from '../_validation-field-messages/
 import { NoHelperTextSpacer } from '../_component-helper/no-helpertext-spacer.widget'
 import { TargetsHelper } from '../_component-helper/_targets.helper'
 import { IsFormPropertyRequiredAttributeStringPipe } from '../_pipe/IsRequiredField'
+import { MatOption } from '@angular/material/core'
 
 @Component({
   selector: 'ngx-ui-autocomplete-widget',
@@ -172,6 +173,39 @@ export class AutoCompleteWidgetComponent extends NoHelperTextSpacer implements O
     }
   }
 
+  onInputChange(event) {
+    if (this.forceSelection) {
+      let valid = false
+      let inputValue = event.target.value.trim()
+      if (inputValue) {
+        if (this.autocomplete.options && this.autocomplete.options.length) {
+          for (const option of this.autocomplete.options) {
+            if (option.value === inputValue) {
+              valid = true
+              break
+            }
+          }
+        }
+        if (!valid) {
+          if (this.asMultiselect) {
+            this.autocompleteInputMultiselect.value = ''
+          }
+          else {
+            this.autocompleteInput.value = ''
+          }
+          this.formProperty.setValue('', true)
+
+          // TODO if it may be necessary to have an `onClear` and an `onModelChange` events then this would be a right spot to call them
+          // e.g:
+          // this.onClear.emit(event)
+          // this.onModelChange(this.value)
+        }
+        if (!valid) {
+          this.showForceSelectionErrorIfNecessary()
+        }
+      }
+    }
+  }
 
   getAutocompleteAsyncHelper(): AutocompleteAsyncHelper {
     if (this.helper) {

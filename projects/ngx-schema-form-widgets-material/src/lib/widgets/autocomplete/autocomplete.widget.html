@@ -253,6 +253,8 @@ Element 'widget':
 
  [attr.required]="(formProperty|IsRequiredAttrString)"
  [attr.aria-required]="(formProperty|IsRequiredAttr)"
+
+ (change)="onInputChange($event)"
 >
 <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" *ngIf="!schema.readOnly">
  <mat-option *ngIf="isLoading" class="is-loading"><mat-spinner diameter="30"></mat-spinner></mat-option>
