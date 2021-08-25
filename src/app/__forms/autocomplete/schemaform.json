@@ -3,6 +3,9 @@
         "id": "form",
         "split": false
     },
+    "required": [
+        "autocomplete-simple"
+    ],
     "properties": {
         "autocomplete-simple": {
             "widget": {
@@ -13,6 +16,11 @@
                 "minLength": 1,
                 "_filled": true,
                 "forceSelection": true,
+                "forceSelectionError": {
+                    "errorWhenNotRequired": true,
+                    "errorCode": "OBJECT_MISSING_REQUIRED_PROPERTY",
+                    "errorMessage": "X Please select item from list"
+                },
                 "serviceOptions": {
                     "method": "POST",
                     "headers": {

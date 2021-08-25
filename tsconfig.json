@@ -10,7 +10,8 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es5",
+    "skipLibCheck": true,
+    "target": "es2015",
     "typeRoots": [
       "node_modules/@types"
     ],
