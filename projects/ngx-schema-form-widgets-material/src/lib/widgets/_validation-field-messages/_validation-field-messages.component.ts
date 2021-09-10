@@ -78,7 +78,7 @@ export class ValidationFieldMessagesComponent implements OnInit, OnChanges {
     firstOnly = true
 
     validationMessages: Array<string> = []
-    
+    severities: any = {}
     /* this has moved to `no-helpertext-spacer.widget.ts`
     get classNoSpacer() {
         const _formComponent = this
@@ -112,6 +112,7 @@ export class ValidationFieldMessagesComponent implements OnInit, OnChanges {
     private collectMessages() {
         this.validationMessages = []
         const validationMessages = []
+        const severities = {}
         if (this.formComponent.control.dirty && !this.formComponent.control.valid) {
             if (this.formComponent.formProperty.schema.hasOwnProperty('widget')
                 && this.formComponent.formProperty.schema.widget.hasOwnProperty('validationMessage')) {
@@ -127,6 +128,7 @@ export class ValidationFieldMessagesComponent implements OnInit, OnChanges {
                          */
                         if (validationError && -1 === this.validationMessages.indexOf(validationError.message)) {
                             validationMessages.push(validationError.message)
+                            severities[validationError.message] = validationError.severity
                         }
                     }
                 } else if (this.formComponent.formProperty._errors) {
@@ -138,6 +140,7 @@ export class ValidationFieldMessagesComponent implements OnInit, OnChanges {
                          */
                         if (_error && -1 === this.validationMessages.indexOf(validationErrorMessage)) {
                             validationMessages.push(_error.message)
+                            severities[_error.message] = _error.severity
                         }
                     }
                 } else if (this.formComponent.errorMessages) {
@@ -157,6 +160,7 @@ export class ValidationFieldMessagesComponent implements OnInit, OnChanges {
 
             if (this.firstOnly) {
                 this.validationMessages.push(validationMessages[0])
+                this.severities[validationMessages[0]] = severities[validationMessages[0]]
             } else {
                 this.validationMessages = this.validationMessages.concat(validationMessages)
             }
