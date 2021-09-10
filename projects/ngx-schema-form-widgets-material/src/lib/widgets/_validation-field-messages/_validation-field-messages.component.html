@@ -23,7 +23,11 @@
     -->
 
 <ng-content *ngIf="!validationMessages.length"></ng-content>
-  <div role="alert" class="ui-message ui-messages-error ui-corner-all"
-    *ngFor="let validationMessage of validationMessages">
+<ng-container *ngFor="let validationMessage of validationMessages">
+  <div class="ui-message ui-corner-all"
+    [class.ui-messages-error]="severities[validationMessage]!=='info'"
+    [attr.role]="severities[validationMessage]=='info'?'status':'alert'"
+  >
     {{validationMessage}}
   </div>
+</ng-container>
