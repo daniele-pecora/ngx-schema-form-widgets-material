@@ -283,7 +283,7 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
     this.control.setValue(base64String)
   }
 
-  onUploadWithCustomHandler(event) {
+  __deprecated_onUploadWithCustomHandler(event) {
     if (!this.isMultiple()) {
       this.uploadedFiles = []
     }
@@ -297,7 +297,7 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
     this.checkForMessages()
   }
 
-  onUpload(event) {
+  __deprecated_onUpload(event) {
     if (!this.isMultiple()) {
       this.uploadedFiles = []
     }
@@ -310,6 +310,47 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
 
     this.updateFromPropertyUploadedFiles()
 
+    this.checkForMessages()
+  }
+
+  onUploadWithCustomHandler(event) {
+    /* await */this.doUpload(event, false)
+  }
+
+  onUpload(event) {
+    /* await */this.doUpload(event, false)
+  }
+
+  /* async */doUpload(event, propagateSuccesMsg: boolean) {
+    // - POC - use image urls returned by upload service
+    const useImageURLProvidedByUploadService = (file) => {
+      /**
+       * If the upload service provides a json array containing the url where the uploaded file 
+       * can be accessed then that url will be used for the preview
+       */
+      if (event.originalEvent && event.originalEvent.body && Array.isArray(event.originalEvent.body) && event.originalEvent.body[0]) {
+        file['sanitizedURL'] = this.sanitize(event.originalEvent.body[0])
+      }
+      return file
+    }
+    // - POC - use image urls returned by upload service
+
+    if (!this.isMultiple()) {
+      this.uploadedFiles = []
+    }
+    const filterInvalidFiles = event.files /*await this.checkFileValidity(event.files) - the files are already checked in fileupload.component.ts */
+    if ((filterInvalidFiles || []).length) {
+      for (const file of filterInvalidFiles) {
+        if (-1 !== this.uploadedFiles.indexOf(file))// no duplicates
+            continue
+          this.uploadedFiles.push(this.sanitizeURL(useImageURLProvidedByUploadService(file)))
+      }
+      if (propagateSuccesMsg) {
+        this.msgs = []
+        this.msgs.push({ severity: 'info', summary: 'Success', detail: ' File Uploaded' })
+      }
+      this.updateFromPropertyUploadedFiles()
+    }
     this.checkForMessages()
   }
 
