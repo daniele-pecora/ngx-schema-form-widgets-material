@@ -345,6 +345,11 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
        */
       if (event.originalEvent && event.originalEvent.body && Array.isArray(event.originalEvent.body) && event.originalEvent.body[0]) {
         file['sanitizedURL'] = this.sanitize(event.originalEvent.body[0])
+        if (!file['objectURL']) {
+          /** create a safe resource url for non image files */
+          file['objectURL'] = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(file))
+          file['sanitizedURL'] = file['objectURL']
+        }
         file['_uploadURL'] = event.originalEvent.body[0]
       }
       return file
