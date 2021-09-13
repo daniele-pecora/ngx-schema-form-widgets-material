@@ -151,6 +151,10 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
   }
 
   setImageDataValue(imgTag, file) {
+    if (file && this.schema.widget.useURL) {
+      this.updateControlValue(URL.createObjectURL(file))
+      return
+    }
     if (file && !file.hasOwnProperty('base64String')) {
       let img = this.renderer2.createElement('img')
       let file = this.uploadedFiles[0]
@@ -182,6 +186,10 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
   }
 
   setObjectDataValue(file) {
+    if (file && this.schema.widget.useURL) {
+      this.updateControlValue(URL.createObjectURL(file))
+      return
+    }
     const this_control = this.control
     //Read File
 
