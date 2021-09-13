@@ -1,5 +1,5 @@
 import { Component, OnInit, Pipe, PipeTransform, Renderer2, AfterViewInit, ViewChild } from '@angular/core'
-import { ControlWidget } from 'ngx-schema-form'
+import { ControlWidget, LogService } from 'ngx-schema-form'
 import { Message } from '../_domain/message'
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
 import { bytesToSizeString, FileuploadComponent } from './fileupload.component'
@@ -33,11 +33,12 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
 
   targetsHelper: TargetsHelper
   constructor(private sanitizer: DomSanitizer, private renderer2: Renderer2,
-    private expressionCompiler: ExpressionCompiler) {
+    private expressionCompiler: ExpressionCompiler
+    , private logService: LogService) {
     super()
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.targetsHelper = new TargetsHelper(this.formProperty, this.expressionCompiler)
     this.uploadedFiles = this.formProperty['_____uploadedFiles'] || []
     if (!this.formProperty['_____uploadedFiles']) {
@@ -63,7 +64,7 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
     this.formProperty['_____uploadedFiles'] = this.uploadedFiles
   }
 
-  restoreFromValue() {
+  async restoreFromValue() {
     const createBlobFromDataURI = (dataURI): Blob => {
       let byteString
       let mimeString
@@ -88,11 +89,17 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
       const values = Array.isArray(this.formProperty.value) ? this.formProperty.value : [this.formProperty.value]
       this.uploadedFiles = []
       for (const value of values) {
-        const file: Blob = createBlobFromDataURI(
-          value.startsWith('data:')
-            ? value
-            : 'data:,' + value
-        )
+        let file: Blob
+        if (this.schema.widget.useURL) {
+          file = await fetch(value).then(r => r.blob())
+          file['_uploadURL'] = value
+        } else {
+          file = createBlobFromDataURI(
+            value.startsWith('data:')
+              ? value
+              : 'data:,' + value
+          )
+        }
         if (file) {
           file['objectURL'] = {
             'changingThisBreaksApplicationSecurity': value
@@ -152,7 +159,7 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
 
   setImageDataValue(imgTag, file) {
     if (file && this.schema.widget.useURL) {
-      this.updateControlValue(URL.createObjectURL(file))
+      this.updateControlValue(file['_uploadURL'])
       return
     }
     if (file && !file.hasOwnProperty('base64String')) {
@@ -173,7 +180,7 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
         file.base64String = base64String
 
         this.updateControlValue(base64String)
-        
+
         this.updateTargetValues(file)
       }
       img.onerror = () => {
@@ -187,7 +194,7 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
 
   setObjectDataValue(file) {
     if (file && this.schema.widget.useURL) {
-      this.updateControlValue(URL.createObjectURL(file))
+      this.updateControlValue(file['_uploadURL'])
       return
     }
     const this_control = this.control
@@ -338,6 +345,7 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
        */
       if (event.originalEvent && event.originalEvent.body && Array.isArray(event.originalEvent.body) && event.originalEvent.body[0]) {
         file['sanitizedURL'] = this.sanitize(event.originalEvent.body[0])
+        file['_uploadURL'] = event.originalEvent.body[0]
       }
       return file
     }
@@ -350,8 +358,8 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
     if ((filterInvalidFiles || []).length) {
       for (const file of filterInvalidFiles) {
         if (-1 !== this.uploadedFiles.indexOf(file))// no duplicates
-            continue
-          this.uploadedFiles.push(this.sanitizeURL(useImageURLProvidedByUploadService(file)))
+          continue
+        this.uploadedFiles.push(this.sanitizeURL(useImageURLProvidedByUploadService(file)))
       }
       if (propagateSuccesMsg) {
         this.msgs = []
@@ -412,7 +420,13 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
   }
 
   onError(event) {
-    //console.error('onError', event)
+    this.logService.error('onError', event)
+    if (true) {
+      this.msgs = []
+      this.msgs.push({ severity: 'error', summary: 'Failed', detail: ' Upload failed' })
+    }
+    this.onClear(event)
+    this.checkForMessages()
   }
 
   onRemove(event) {
