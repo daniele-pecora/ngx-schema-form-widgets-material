@@ -205,6 +205,72 @@ export class FileuploadComponent implements AfterViewInit {
       this.logService.warn('WARNING: HTTP upload not yet implemented!')
     }
   }
+  /*
+  upload() {
+    if (this.customUpload) {
+      if (this.fileLimit) {
+        this.uploadedFileCount += this.files.length;
+      }
+
+      this.uploadHandler.emit({
+        files: this.files
+      });
+    }
+    else {
+      this.uploading = true;
+      this.msgs = [];
+      let formData = new FormData();
+
+      this.onBeforeUpload.emit({
+        'formData': formData
+      });
+
+      for (let i = 0; i < this.files.length; i++) {
+        formData.append(this.name, this.files[i], this.files[i].name);
+      }
+
+      this.http.post(this.url, formData, {
+        headers: this.headers, reportProgress: true, observe: 'events', withCredentials: this.withCredentials
+      }).subscribe((event: HttpEvent<any>) => {
+        switch (event.type) {
+          case HttpEventType.Sent:
+            this.onSend.emit({
+              originalEvent: event,
+              'formData': formData
+            });
+            break;
+          case HttpEventType.Response:
+            this.uploading = false;
+            this.progress = 0;
+
+            if (event['status'] >= 200 && event['status'] < 300) {
+              if (this.fileLimit) {
+                this.uploadedFileCount += this.files.length;
+              }
+
+              this.onUpload.emit({ originalEvent: event, files: this.files });
+            } else {
+              this.onError.emit({ files: this.files });
+            }
+
+            this.clear();
+            break;
+          case HttpEventType.UploadProgress: {
+            if (event['loaded']) {
+              this.progress = Math.round((event['loaded'] * 100) / event['total']);
+            }
+
+            this.onProgress.emit({ originalEvent: event, progress: this.progress });
+            break;
+          }
+        }
+      },
+        error => {
+          this.uploading = false;
+          this.onError.emit({ files: this.files, error: error });
+        });
+    }
+  }*/
 
   async checkFileValidity(files) {
     const accept = this.accept//this.schema.widget.accept
@@ -289,7 +355,7 @@ export class FileuploadComponent implements AfterViewInit {
   isImage(file: File): boolean {
     return /^image\//.test(file.type)
   }
-  
+
   isNonReadableImage(file: File): boolean {
     if (file.hasOwnProperty('___isImage_tiff')) {
       return file['___isImage_tiff']

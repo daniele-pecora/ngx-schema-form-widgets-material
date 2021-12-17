@@ -24,6 +24,8 @@
     - mode
     - names
     - url
+      - useURL = When using url and the upload service returns an array of url where the image can be accessed
+                 then you can set this to `true` to have the url instead of the byte content as a value.
     - method
     - multiple
     - disabled
@@ -354,7 +356,7 @@ Element 'widget'
         class="input-upload-file--preview"
         *ngIf="!file.previewFailed && schema.widget?.previewWidth!=='x0' && isImage"
         [attr.width]="schema.widget.previewWidth||null"
-        [src]="file?.sanitizedURL"
+        [src]="file?.base64String||file?.sanitizedURL"
         (load)="imageLoaded($event,file)"
         (error)="imageLoadingFailed($event,file)"
         [attr.title]="file?._previewTitle||createPreviewAltText(file)||file?.name"
@@ -364,7 +366,7 @@ Element 'widget'
       >
       <object 
       *ngIf="!file.previewFailed && schema.widget?.previewWidth!==0 && !isImage"
-      [data]="file?.sanitizedURL" 
+      [data]="file?.base64String||file?.sanitizedURL" 
       [type]="file.type" 
       [attr.width]="schema.widget.previewWidth||null"
       (load)="objectLoaded($event,file)"
@@ -374,7 +376,7 @@ Element 'widget'
       [attr.aria-hidden]="true"
       >
       <embed 
-      [src]="file?.sanitizedURL" 
+      [src]="file?.base64String||file?.sanitizedURL" 
       [type]="file.type" 
       (load)="objectLoaded($event,file)"
       (error)="objectLoadingFailed($event,file)"
