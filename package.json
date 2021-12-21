@@ -17,7 +17,7 @@
     "start:lib": "npm run build:lib && npm start",
     "-- NUCLI --": "-- ------ --",
     "styles:watch": "sass --watch --no-source-map src/assets",
-    "styles:build": "sass --no-source-map src/assets:./src/assets",
+    "styles:build": "sass --no-source-map src/assets",
     "build:prod": "ng build -c=production --prod --aot --sourceMap=false --build-optimizer",
     "-- Electron --": "-- ------ --",
     "electron:package.json": "node -e \"var fs = require('fs');fs.writeFileSync('dist/ngx-schema-form-widgets-material-app/package.json', fs.readFileSync('electron-package.json'));\"",
