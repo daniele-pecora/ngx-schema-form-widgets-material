@@ -58,6 +58,7 @@
             "auto": true,
             "url": "https://www.no-real-url-necessary-here/datauri/index.php",
             "previewWidth": 200,
+            "previewPreferDataURLs": true,
             "dataUriPrefix": true,
             "deleteButtonLabel": "Delete",
             "customUpload": true,
@@ -104,8 +105,9 @@
             "accept": "image/*",
             "auto": true,
             "url": "https://www.no-real-url-necessary-here/datauri/index.php",
-            "_previewWidth": 200,
-            "previewWidth": 0,
+            "previewWidth": 200,
+            "_previewWidth": 0,
+            "previewPreferDataURLs": true,
             "dataUriPrefix": true,
             "__no_label_icon_only__deleteButtonLabel": "Delete",
             "customUpload": true,
@@ -115,7 +117,7 @@
             "noPreviewText": "No preview",
             "noPreviewIcon": "image",
             "deleteButtonTitle": "Delete image {filename} of size {filesize} and dimensions {previewTitleImageDimensions}",
-            "imageRules": {
+            "_imageRules": {
               "oneOf": [
                 {
                   "unit": "px",
@@ -168,6 +170,7 @@
               "height": 300
             },
             "previewWidth": 200,
+            "previewPreferDataURLs": true,
             "dataUriPrefix": true,
             "customUpload": true,
             "inlineLabel": false,

@@ -286,6 +286,75 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
     document.body.prepend(canvas)
   }
 
+  async __convertFromBlobToDataString(file) {
+    const convertToDataURL = true
+    return new Promise((resolve, reject) => {
+      const resolveFile = (file) => {
+        file['objectURL'] = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(file))
+        file['objectURL'] = this.sanitizer.bypassSecurityTrustResourceUrl(file.previewBase64String)
+        file['sanitizedURL'] = file['objectURL']
+        file.previewBase64String = file.previewBase64String
+        resolve(file)
+      }
+      if (!convertToDataURL) {
+        resolve(file)
+      } else {
+        if (file.previewBase64String) {
+          resolve(file)
+        } else {
+          // 2. read as preview - image
+          const fromImage = (file) => {
+            let img = this.renderer2.createElement('img')
+            img.onload = () => {
+              const c = document.createElement('canvas')
+              const ctx = c.getContext('2d')
+              /**
+               * Since the width and height of the image tag are only available 
+               * after the image is loaded, they must be requested here
+               * after the onload event.
+               */
+              c.width = img.width
+              c.height = img.height
+              ctx.drawImage(img, 0, 0)
+              let base64String = c.toDataURL(file.type)
+              // file.base64String = base64String
+              file.previewBase64String = base64String
+
+              resolveFile(file)
+            }
+            img.onerror = () => {
+              reject(file)
+            }
+            img.src = file.previewBase64String//file.sanitizedURL.changingThisBreaksApplicationSecurity
+          }
+          // 1. read as object
+          const fromObject = (file, callback) => {
+            //Check File is not Empty
+            if (file.size > 0) {
+              // FileReader function for read the file.
+              const fileReader = new FileReader()
+              let base64String
+              // Onload of file read the file content
+              fileReader.onload = (fileLoadedEvent) => {
+                base64String = fileLoadedEvent.target['result']
+                // file.base64String = base64String
+                file.previewBase64String = base64String
+                callback(file)
+              }
+              fileReader.onerror = () => {
+                reject(file)
+              }
+              // Convert data to base64
+              fileReader.readAsDataURL(file)
+            }
+          }
+
+          fromObject(file, fromImage)
+        }
+      }
+    })
+  }
+
   updateControlValue(base64String: string) {
     /**
      * remove data uri prefix like
@@ -328,15 +397,20 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
     this.checkForMessages()
   }
 
-  onUploadWithCustomHandler(event) {
-    /* await */this.doUpload(event, false)
+  async onUploadWithCustomHandler(event) {
+    await this.doUpload(event, false)
   }
 
-  onUpload(event) {
-    /* await */this.doUpload(event, false)
+  async onUpload(event) {
+    await this.doUpload(event, false)
   }
 
-  /* async */doUpload(event, propagateSuccesMsg: boolean) {
+  isConvertBlobUrlToDataEnabled(file) {
+    return (true === this.schema.widget.previewPreferDataURLs) &&
+      (!file['_uploadURL'] && ((file['objectURL'] || {}).changingThisBreaksApplicationSecurity || '').startsWith('blob:')) // only if it's a blob url
+  }
+
+  async doUpload(event, propagateSuccesMsg: boolean) {
     // - POC - use image urls returned by upload service
     const useImageURLProvidedByUploadService = (file) => {
       /**
@@ -364,7 +438,11 @@ export class FileWidgetComponent extends NoHelperTextSpacer implements OnInit, A
       for (const file of filterInvalidFiles) {
         if (-1 !== this.uploadedFiles.indexOf(file))// no duplicates
           continue
-        this.uploadedFiles.push(this.sanitizeURL(useImageURLProvidedByUploadService(file)))
+        let _file = this.sanitizeURL(useImageURLProvidedByUploadService(file))
+        if (this.isConvertBlobUrlToDataEnabled(_file)) {
+          try { _file = await this.__convertFromBlobToDataString(_file) } catch (e) {/*ignore if file image preview can't be pre-loaded*/ }
+        }
+        this.uploadedFiles.push(_file)
       }
       if (propagateSuccesMsg) {
         this.msgs = []
