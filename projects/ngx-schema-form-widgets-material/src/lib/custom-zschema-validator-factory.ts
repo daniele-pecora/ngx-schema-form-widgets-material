@@ -36,6 +36,12 @@ export class CustomZSchemaValidatorFactory extends SchemaValidatorFactory {
       throw this.zschema.getLastError();
     }
   }
+  
+  compile(schema: any) {
+    const zSchema = new ZSchema({}) as any
+    zSchema.compileSchema(schema)
+    return zSchema.getResolvedSchema(schema)
+  }
 
   protected denormalizeRequiredPropertyPaths(err: any[]) {
     if (err && err.length) {
