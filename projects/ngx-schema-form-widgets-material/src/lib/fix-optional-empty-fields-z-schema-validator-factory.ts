@@ -49,7 +49,7 @@ export class FixOptionalEmptyFieldsZSchemaValidatorFactory extends CustomZSchema
        * Set temporary multi-type including <code>"null"</code>
        * so optional fields with no value don't get validated
        */
-      if (value === '' && schema.widget.__optional) {
+      if (value === '' && schema.widget && schema.widget.__optional) {
         // create clone
         const newSchema = JSON.parse(JSON.stringify(schema));
         newSchema.type = Array.isArray(newSchema.type) ? newSchema.type : [newSchema.type, 'null'];
