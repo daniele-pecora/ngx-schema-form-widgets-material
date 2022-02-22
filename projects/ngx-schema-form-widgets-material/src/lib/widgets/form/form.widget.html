@@ -42,11 +42,12 @@ Element 'link'
 <ng-template #form_element
   let-formprop="formprop"
   let-parentprop="parentprop"
+  let-index="index"
   >
   <sf-form-element
     *ngIf="formprop"
     [class.ui-sm-12]="!(formprop?.schema?.widget?.id==='hidden')"
-    class="ui-g-{{i%2===0 ? parentprop?.schema?.widget?.splitLeft : parentprop?.schema?.widget?.splitRight}}"
+    class="ui-g-{{index%2===0 ? parentprop?.schema?.widget?.splitLeft : parentprop?.schema?.widget?.splitRight}}"
     [class.ui-g-6]="(!parentprop?.schema?.widget?.splitLeft && !parentprop?.schema?.widget?.splitRight) && !(formprop.schema.widget.id==='hidden'||formprop.schema.widget.ignoreParentSplit)"
     [class.ui-g-nopad]="schema?.widget?.nopad"
     [formProperty]="formprop">
@@ -63,7 +64,7 @@ Element 'link'
     
     <div *ngIf="schema.widget.split===true;else formElementNoSplit">
       <div *ngFor="let fieldId of fieldset.fields;let i = index">
-        <ng-container *ngTemplateOutlet="form_element;context:{ formprop: formProperty.getProperty(fieldId),  parentprop: formProperty}">
+        <ng-container *ngTemplateOutlet="form_element;context:{ formprop: formProperty.getProperty(fieldId),  parentprop: formProperty, index: i}">
         </ng-container>
       </div>
     </div>
