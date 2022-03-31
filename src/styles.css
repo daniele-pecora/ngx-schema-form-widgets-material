@@ -1,0 +1,40 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+/**
+Hint label after select, switch, checkbox element
+taken from '.mat-form-field-subscript-wrapper'
+
+- THIS is now set in widges it self
+
+mat-select ~ mat-hint, mat-checkbox ~ mat-hint, mat-slide-toggle ~ mat-hint {
+  display: block;
+  font-size: 75%;
+  margin-top: .54167em;
+  top: calc(100% - 1.66667em);
+}
+*/
+/*
+- THIS is now set in widges it self
+mat-form-field {
+  width: 100% !important;
+}
+*/
+/*
+.form-card--width {
+  margin: auto;
+  max-width: 600px;
+}
+*/
+
+body {
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+  font-size: 16px;
+  line-height: 1.5em;
+  color: #212121;
+  -webkit-font-smoothing: antialiased;
+  padding: 0;
+  margin: 0;
+  background-color: #f7f7f7;
+  min-height: 100%;
+}

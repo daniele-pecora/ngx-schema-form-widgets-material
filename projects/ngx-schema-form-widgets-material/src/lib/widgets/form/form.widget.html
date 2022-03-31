@@ -1,0 +1,103 @@
+<!--
+Element 'form'
+ - heading             : `1-6` = Set the number of the html heading type (H1-H6) to use for the title
+ - asCard              : true|false (default:false) = show or don't show card layout
+ - split               : true|false = set if fields should be split up in two colums
+ - ignoreParentSplit   : true|false = ignores the split property of the parent .
+                                      Keeps positioning the fields in columns style and
+                                      avoids creating nested blocks with columns
+  - showErrors         : true|false
+                         or object of type:
+                                  {
+                                      position  : top|bottom, (default:top)   // shows the messages at top or at the bottom
+                                      all       : true|false, (default:false) // show also children's error messages
+                                      firstOnly : true|false, (default:false) // show only the first error message
+                                      codes     : string[],   ([])            // show only error messages that match any of this error codes, leave empty to show all errors
+                                   }
+
+- nopad            : When <code>true</code> the padding for the first level children will be removed
+- splitLeft        : Defines the width of the left column when <code>"split": true</code>
+                     The left and right column share a value of <code>12</code> so that is what
+                     the total of both should max be.
+- splitRight       : Defines the width of the right column when <code>"split": true</code>
+                     The left and right column share a value of <code>12</code> so that is what
+                     the total of both should max be.
+
+Element 'button'
+ - label       : label
+ - description : tooltip
+ - id          : style id
+ - disabled    : true|false|'valid'|'invalid' = disabled state, or form is in/valid
+ - severity    : primary|secondary|success|info|warning|danger = primeng ui-button severity suffix
+ - icon        : icon from primeng ultima
+ - iconPos     : left|right = primeng button icon position
+ - inline      : true|false = show horizontally inlined
+
+Element 'link'
+    see documentation of _widget-link/widget-link.component.ts
+-->
+
+<ngx-ui-validation-messages *ngIf="formProperty.schema.widget?.showErrors && formProperty.schema.widget?.showErrors?.position!=='bottom'" [formComponent]="this"></ngx-ui-validation-messages>
+
+<ng-template #form_element
+  let-formprop="formprop"
+  let-parentprop="parentprop"
+  let-index="index"
+  >
+  <sf-form-element
+    *ngIf="formprop"
+    [class.ui-sm-12]="!(formprop?.schema?.widget?.id==='hidden')"
+    class="ui-g-{{index%2===0 ? parentprop?.schema?.widget?.splitLeft : parentprop?.schema?.widget?.splitRight}}"
+    [class.ui-g-6]="(!parentprop?.schema?.widget?.splitLeft && !parentprop?.schema?.widget?.splitRight) && !(formprop.schema.widget.id==='hidden'||formprop.schema.widget.ignoreParentSplit)"
+    [class.ui-g-nopad]="schema?.widget?.nopad"
+    [formProperty]="formprop">
+  </sf-form-element>
+</ng-template>
+
+<div class="{{formProperty.schema?.widget?.asCard?'ui-g card card-w-title':''}}">
+  <div *ngFor="let fieldset of formProperty.schema.fieldsets">
+    <ngx-ui-widget-title *ngIf="fieldset.title || fieldset.name" cssClass="ui-g-12" [formProperty]="formProperty"
+      [title]="fieldset.title || fieldset.name">
+      <ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+    </ngx-ui-widget-title>
+    <h5 class="ui-g-12" *ngIf="fieldset.description">{{fieldset.description}}</h5>
+    
+    <div *ngIf="schema.widget.split===true;else formElementNoSplit">
+      <div *ngFor="let fieldId of fieldset.fields;let i = index">
+        <ng-container *ngTemplateOutlet="form_element;context:{ formprop: formProperty.getProperty(fieldId),  parentprop: formProperty, index: i}">
+        </ng-container>
+      </div>
+    </div>
+
+    <ng-template #formElementNoSplit>
+    <div>
+      <sf-form-element *ngFor="let fieldId of fieldset.fields" [formProperty]="formProperty.getProperty(fieldId)">
+      </sf-form-element>
+    </div>
+    </ng-template>
+
+
+  </div>
+</div>
+
+<ngx-ui-validation-messages *ngIf="formProperty.schema.widget?.showErrors && formProperty.schema.widget?.showErrors?.position==='bottom'" [formComponent]="this"></ngx-ui-validation-messages>
+
+<!--
+  Action buttons
+-->
+
+<div *ngIf="widgetButtons?.length" class="ui-g-12">
+  <div *ngFor="let button of widgetButtons" [class]="button.inline===false?'ui-g-12':''">
+
+      <ngx-ui-button-component
+      *ngIf="isButtonVisibile(button, formProperty.valid, formProperty.value)"
+      [formProperty]="formProperty" [button]="button"></ngx-ui-button-component>
+  </div>
+</div>
+
+<div *ngIf="formProperty.schema.links?.length" class="ui-g-12">
+  <div *ngFor="let link of formProperty.schema.links" [class]="link.inline===false?'ui-g-12':''">
+    <ngx-ui-widget-link [link]="link"
+                       [disabled]="isClickableDisabled(link, formProperty.valid)"></ngx-ui-widget-link>
+  </div>
+</div>

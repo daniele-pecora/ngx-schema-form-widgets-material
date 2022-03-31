@@ -1,0 +1,133 @@
+{
+  "type": "object",
+  "description": "This form shows how re-activate visibility on a dropdown doesn't restore the value and triggers validation resulting in false. It also shows how text-overflow:ellipsis works on large option items.",
+  "properties": {
+    "info": {
+      "type": "string",
+      "widget": {
+        "id": "html",
+        "html": [
+          "<h3>Test title</h3>",
+          "<ol>",
+          "<li>first entry</li>",
+          "<li>second entry</li>",
+          "<li>third entry</li>",
+          "<li>fourth entry</li>",
+          "<li>fifth entry</li>",
+          "</ol>"
+        ]
+      }
+    },
+    "select1": {
+      "type": "string",
+      "widget": "select",
+      "title": "Select some options",
+      "description": "Some of this options may be selector from you in person",
+      "oneOf": [
+        {
+          "enum": [
+            ""
+          ],
+          "description": "Option 0 - empty"
+        },
+        {
+          "description": "One very very very very laaaaaaaarge optioooooooon",
+          "enum": [
+            "verylargeoption"
+          ]
+        },
+        {
+          "enum": [
+            "o1"
+          ],
+          "description": "Option 1"
+        },
+        {
+          "enum": [
+            "o2"
+          ],
+          "description": "Option 2"
+        }
+      ]
+    },
+    "select2": {
+      "type": "string",
+      "title": "Select 2",
+      "description": "Description Select 2",
+      "widget": "select",
+      "oneOf": [
+        {
+          "enum": [
+            ""
+          ],
+          "description": "Option 0 - empty"
+        },
+        {
+          "enum": [
+            null
+          ],
+          "description": "Option 0.1 - null"
+        },
+        {
+          "enum": [
+            "oo1"
+          ],
+          "description": "Option 2-1"
+        },
+        {
+          "enum": [
+            "oo2"
+          ],
+          "description": "Option 2-2"
+        }
+      ],
+      "_visibleIf": {
+        "select1": [
+          "o1"
+        ]
+      }
+    },
+    "input1": {
+      "type": "string",
+      "title": "Input 1",
+      "description": "Description Input 1",
+      "widget": {
+        "id": "string"
+      },
+      "buttons": [
+        {
+          "id": "infoT",
+          "label": " Info ",
+          "severity": "primary",
+          "icon": "ui-icon-info-outline",
+          "position": {
+            "h": "right",
+            "v": "middle"
+          },
+          "type": "mini-fab"
+        }
+      ]
+    },
+    "input2": {
+      "type": "string",
+      "title": "Input 2",
+      "description": "Description Input 2",
+      "widget": {
+        "id": "string"
+      },
+      "buttons": [
+        {
+          "id": "infoT",
+          "label": " Info ",
+          "severity": "primary",
+          "icon": "ui-icon-info-outline",
+          "position": {
+            "h": "right",
+            "v": "middle"
+          },
+          "type": "mini-fab"
+        }
+      ]
+    }
+  }
+}

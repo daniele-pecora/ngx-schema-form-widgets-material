@@ -1,0 +1,61 @@
+{
+    "simpleTypes": {
+        "date": "12.12.1980"
+    },
+    "complexTypes": {
+        "wizard": {
+            "property-1": "erqwra1",
+            "property-2": "asdfasd2",
+            "property-3": "asdfasd3",
+            "property-4": "asdf4",
+            "property-5": "asdf5",
+            "property-6": "asdf6"
+        }
+    },
+    "array": {
+        "simple": [
+            "string 1",
+            "string 2",
+            "string 3",
+            "string 4"
+        ],
+        "complex": [
+            {
+                "property-1": "1",
+                "property-2": {
+                    "sub1": "2 sub 1",
+                    "sub2": "2 sub 2",
+                    "sub3": "2 sub 3"
+                },
+                "property-3": "3"
+            },
+            {
+                "property-1": "1a",
+                "property-2": {
+                    "sub1": "2a sub 1",
+                    "sub2": "2a sub 2",
+                    "sub3": "2a sub 3"
+                },
+                "property-3": "3a"
+            },
+            {
+                "property-1": "1b",
+                "property-2": {
+                    "sub1": "2b sub 1",
+                    "sub2": "2b sub 2",
+                    "sub3": "2b sub 3"
+                },
+                "property-3": "3b"
+            },
+            {
+                "property-1": "1c",
+                "property-2": {
+                    "sub1": "2c sub 1",
+                    "sub2": "2c sub 2",
+                    "sub3": "2c sub 3"
+                },
+                "property-3": "3c"
+            }
+        ]
+    }
+}

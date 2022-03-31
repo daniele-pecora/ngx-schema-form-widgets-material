@@ -1,0 +1,12 @@
+/**
+ * ngx-ui-wizard-widget
+ */
+.ui-steps .ui-steps-item {
+  display: inline-block;
+  white-space: nowrap;
+  width: 25%;
+}
+
+.mat-expansion-panel-body ngx-ui-form-object > div.ui-g-12 {
+  float: none;
+}

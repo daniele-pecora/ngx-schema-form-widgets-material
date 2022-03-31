@@ -1,0 +1,650 @@
+<!--
+Element 'schema':
+        - title       = label for the page
+        - name        = label for the page in case 'title' is not present
+        - description = description for the ui widget
+        - fieldsets   = define a set of fieldsets contaning the fields to show per page
+
+Element 'fieldset':
+        - name        = label for the stepper
+        - title       = label for the stepper in case 'name' is not present
+        - description = description for the page
+        - fields      = the ids of the fields to show in this page
+        - hidden      = defines if this page should be hidden or shown.
+                        must be activated by setting the property <code>widget.live:true</code>
+                        for the <code>wizard<code> widget
+
+Element 'widget:wizard':
+        - heading     : `1-6` = Set the number of the html heading type (H1-H6) to use for the title
+        - startPage    = index of the page to start with (default 0)
+        - live         = true|false. allows hiding/showing pages by settings the property <code>hidden</code> at the corresponding fieldset
+        - buttons.prev, buttons.next ,buttons.finish
+           - label    : label
+           - id       : style id
+           - severity : primary|secondary|success|info|warning|danger = primeng ui-button severity suffix
+           - icon     : icon from primeng ultima
+           - iconPos  : left|right = primeng button icon position
+           - actionId : the id of an action defined in the action-registry (action.ts)
+                        this action will be executed before changing page (except of finish action)
+                        A set of params indicating the navigation direction are provided to the action function
+                          - fromPage   = Source page/section.
+                                         The page on wich tha page change has been triggered.
+                          - toPage     = Destination page/section.
+                                         The page wich will be the next visible.
+                          - fromPageId = Id of the source page/section.
+                                         The page on wich tha page change has been triggered.
+                          - toPageId   = Id of the destination page/section.
+                                         The page wich will be the next visible.
+                        Example:
+                        <code>
+                          {
+                            "fromPage": 0,
+                            "toPage": 1,
+                            "fromPageId": "page1",
+                            "toPageId": "page2"
+                          }
+                        </code>
+
+        - labelPrev    = label for the button 'previous' (overrides button.prev.label)
+        - labelNext    = label for the button 'next' (overrides button.next.label)
+        - labelFinish  = label for the button 'finish' (overrides button.finish.label)
+
+        - stepper       = object containing the title for every page that may be set.
+            - (key)     = the key of every property must match with the id of a 'fieldset'
+            - (value)   = the title to show in the step
+            |
+            |             this is mainly used when you don't want to
+            |             set the title from 'fieldsets' onto the page
+            |             but want to have a title in the stepper
+
+        - disableScrollToTop  = decide to deactivate scrolling every page to change when changed in stepper
+        - scrollToTop         = object containing the title for every page that may be set.
+            - (key)           = the key of every property must match with the id of a 'fieldset'
+            - (value)         = the boolean value to make tha page scroll to top or not
+            |
+            |             this is mainly used when you want or don't want to
+            |             scroll to window top when changing the current page
+        - separateView        = when true then the stepper, form and button will be showed in each an own card (default :false), this will ignore setting 'asCard'
+        - asCard         : true|false (default:false) = show or don't show card layout
+
+        - style           : 'default' or 'accordion'
+                             <code>default</code> will show the steps as pages.
+                             <code>accordion</code> will show the steps as an accordion.
+
+        - stepperVertical : Any positive number between 1-12 will enable the vertical mode of the wizard stepper.
+                            The value 1-12 references to the responsive design grid which uses 12 columns.
+                            So the value set here decides how much space (counted in columns) should be taken for the vertical stepper.
+                            e.g:
+                              <code>{ ..., "stepperVertical": 3}</code>
+                              To set the width of the vertical stepper to 3 columns and the content will get 9 columns.
+
+
+- showErrors : true|false
+               or object of type:
+                                {
+                                    position  : top|bottom, (default:top)   // shows the messages at top or at the bottom
+                                    all       : true|false, (default:false) // show also children's error messages
+                                    firstOnly : true|false, (default:false) // show only the first error message
+                                    codes     : string[],   ([])            // show only error messages that match any of this error codes, leave empty to show all errors
+                                 }
+
+todo: when stepper in mobile version mode show title in wizard page instead
+todo: when stepper in desktop mode show name and description in wizard page
+-->
+<!--
+
+Element 'button'
+ - label       : label
+ - description : tooltip
+ - id          : style id
+ - disabled    : true|false|'valid'|'invalid' = disabled state, or form is in/valid
+ - severity    : primary|secondary|success|info|warning|danger = primeng ui-button severity suffix
+ - icon        : icon from primeng ultima
+ - iconPos     : left|right = primeng button icon position
+ - inline      : true|false = show horizontally inlined
+
+Element 'link'
+    see documentation of _widget-link/widget-link.component.ts
+
+
+
+
+Modes of horizontal stepper:
+  
+1) wizard stepper mode: regular
+      In this mode all steps will show a number and a label.
+      (1) step --- (2) step --- (3) step --- (4) step
+
+  2) wizard stepper mode: only current step
+      This mode will be automatically activated when more than 5 steps are present.
+      In this mode only the current step will show a label,
+      all other steps will only show the number.
+      (1)-(2)-(3)- (5)step -(6)-(7)-(8)
+
+  3) wizard stepper mode: one-two-three
+      This mode will be automatically activated on small viewport.
+      In this mode the stepper will show the
+      first an last step with a number only
+      and the current with number and label.
+      All other steps are not shown.
+      (1) --- (5) step --- (8) step
+
+-->
+
+<div class="ui-g-12" *ngIf="schema.title || schema.name || schema.description">
+  <ngx-ui-widget-title [formProperty]="formProperty" [title]="schema.title || schema.name || schema.description">
+    <ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+  </ngx-ui-widget-title>
+  <h5 *ngIf="schema.description">{{schema.description}}</h5>
+</div>
+
+<ngx-ui-validation-messages
+  *ngIf="formProperty.schema.widget?.showErrors && formProperty.schema.widget?.showErrors?.position!=='bottom'"
+  [formComponent]="this"></ngx-ui-validation-messages>
+
+<ng-template #form_element
+  let-formprop="formprop">
+  <sf-form-element
+    *ngIf="formprop"
+    [class.ui-sm-12]="!(formprop?.schema?.widget?.id==='hidden')"
+    [ngClass]="(formprop?.schema?.widget?.id==='hidden'||formprop?.schema?.widget?.ignoreParentSplit)?'':'ui-g-6'"
+    [formProperty]="formprop">
+  </sf-form-element>
+</ng-template>
+
+<ng-template #wizardTemplateContentSteps>
+    <mat-step *ngFor="let fieldset of filterHiddenItems(schema.fieldsets); let stepIndex=index"
+              [completed]="isPageValid(stepIndex)"
+    >
+      <ng-template matStepLabel>{{(schema.widget?.stepper||{})[fieldset.id] || fieldset.name || fieldset.title}}
+      </ng-template>
+
+      <div class="ui-g-12" *ngIf="fieldset.title || fieldset.name || fieldset.description">
+        <h3 *ngIf="fieldset.title || fieldset.name">{{fieldset.title || fieldset.name}}</h3>
+        <h5 *ngIf="fieldset.description">{{fieldset.description}}</h5>
+      </div>
+
+      <div *ngIf="schema.widget.split===true;else formElementNoSplit">
+        <div *ngFor="let fieldId of fieldset.fields;let i = index">
+          <ng-container *ngTemplateOutlet="form_element;context:{ formprop: formProperty.getProperty(fieldId) }">
+          </ng-container>
+        </div>
+      </div>
+      <ng-template #formElementNoSplit>
+      <div>
+        <sf-form-element *ngFor="let fieldId of fieldset.fields" [formProperty]="formProperty.getProperty(fieldId)">
+        </sf-form-element>
+      </div>
+      </ng-template>
+
+      <div>
+        <button
+          mat-raised-button
+          matStepperPrevious
+          *ngIf="stepIndex>0 && isButtonVisibile(schema.widget.buttons?.prev, isCurrentPageValid(), formProperty.value)"
+          [disabled]="!hasPagePrevious(stepIndex)?true:null"
+          [color]="schema.widget.buttons?.prev?.severity?getSeverity(schema.widget.buttons?.prev?.severity):null"
+          type="button"
+          (click)="logPage(stepIndex)"
+          [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.prev?.styleClass||'')]"
+          [class.mat-icon-button]="!getLabel(schema.widget.labelPrev, schema.widget.buttons?.prev, 'Previous')"
+          [attr.role]="'button'"
+        >
+          <mat-icon *ngIf="schema.widget.buttons?.prev?.icon && schema.widget.buttons?.prev?.iconPos==='left'"
+                    class="mat-24"
+                    aria-label="">{{schema.widget.buttons?.prev?.icon|IconName}}
+          </mat-icon>
+          <ng-container>{{getLabel(schema.widget.labelPrev, schema.widget.buttons?.prev, 'Previous')}}</ng-container>
+          <mat-icon *ngIf="schema.widget.buttons?.prev?.icon && schema.widget.buttons?.prev?.iconPos!=='left'"
+                    class="mat-24"
+                    aria-label="">{{schema.widget.buttons?.prev?.icon|IconName}}
+          </mat-icon>
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          matStepperNext
+          *ngIf="stepIndex<filterHiddenItems(schema.fieldsets).length-1 && isButtonVisibile(schema.widget.buttons?.next, isCurrentPageValid(), formProperty.value)"
+          [disabled]="(readOnly && !isPageValid(stepIndex)) || !hasPageNext(stepIndex)?true:null"
+          [color]="schema.widget.buttons?.next?.severity?getSeverity(schema.widget.buttons?.next?.severity):null"
+          type="button"
+          (click)="logPage(stepIndex)"
+          [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.next?.styleClass||'')]"
+          [class.mat-icon-button]="!getLabel(schema.widget.labelNext, schema.widget.buttons?.next, 'Next')"
+          [attr.role]="'button'"
+        >
+          <mat-icon *ngIf="schema.widget.buttons?.next?.icon && schema.widget.buttons?.next?.iconPos==='left'"
+                    class="mat-24"
+                    aria-label="">{{schema.widget.buttons?.next?.icon|IconName}}
+          </mat-icon>
+          <ng-container>{{getLabel(schema.widget.labelNext, schema.widget.buttons?.next, 'Next')}}</ng-container>
+          <mat-icon *ngIf="schema.widget.buttons?.next?.icon && schema.widget.buttons?.next?.iconPos!=='left'"
+                    class="mat-24"
+                    aria-label="">{{schema.widget.buttons?.next?.icon|IconName}}
+          </mat-icon>
+        </button>
+        <button
+          mat-raised-button
+          color="accent"
+          matStepperNext
+          *ngIf="stepIndex==filterHiddenItems(schema.fieldsets).length-1 && isButtonVisibile(schema.widget.buttons?.finish, isCurrentPageValid(), formProperty.value)"
+          [disabled]="(!isPageValid(stepIndex) || !formProperty.valid)?true:null"
+          [color]="schema.widget.buttons?.finish?.severity?getSeverity(schema.widget.buttons?.finish?.severity):null"
+          type="button"
+          (click)="logPage(stepIndex)"
+          [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.finish?.styleClass||'')]"
+          [class.mat-icon-button]="!getLabel(schema.widget.labelFinish, schema.widget.buttons?.finish, 'Finish')"
+          [attr.role]="'button'"
+        >
+          <mat-icon *ngIf="schema.widget.buttons?.finish?.icon && schema.widget.buttons?.finish?.iconPos==='left'"
+                    class="mat-24" aria-label="">{{schema.widget.buttons?.finish?.icon|IconName}}
+          </mat-icon>
+          <ng-container>{{getLabel(schema.widget.labelFinish, schema.widget.buttons?.finish, 'Finish')}}</ng-container>
+          <mat-icon *ngIf="schema.widget.buttons?.finish?.icon && schema.widget.buttons?.finish?.iconPos!=='left'"
+                    class="mat-24" aria-label="">{{schema.widget.buttons?.finish?.icon|IconName}}
+          </mat-icon>
+        </button>
+      </div>
+    </mat-step>
+</ng-template>
+
+<ng-template #wizardTemplateContentStepsContent let-stepIndex="stepIndex" let-fieldset="fieldset">
+      <ng-template matStepLabel>{{(schema.widget?.stepper||{})[fieldset.id] || fieldset.name || fieldset.title}}
+      </ng-template>
+
+      <div class="ui-g-12" *ngIf="fieldset.title || fieldset.name || fieldset.description">
+        <h3 *ngIf="fieldset.title || fieldset.name">{{fieldset.title || fieldset.name}}</h3>
+        <h5 *ngIf="fieldset.description">{{fieldset.description}}</h5>
+      </div>
+
+      <div *ngIf="schema.widget.split===true;else formElementNoSplit">
+        <ng-container *ngFor="let fieldId of fieldset.fields;let i = index">
+          <ng-container *ngTemplateOutlet="form_element;context:{ formprop: formProperty.getProperty(fieldId) }">
+          </ng-container>
+        </ng-container>
+      </div>
+      <ng-template #formElementNoSplit>
+      <div>
+        <sf-form-element *ngFor="let fieldId of fieldset.fields" [formProperty]="formProperty.getProperty(fieldId)">
+        </sf-form-element>
+      </div>
+      </ng-template>
+      <!-- //TODO put buttons into mat-(horizontal/vertical)stepper tag -->
+</ng-template>
+
+
+<ng-template #wizardTemplateContentHorizontal>
+    <mat-horizontal-stepper #wizardStepper [linear]="readOnly"
+                            (selectionChange)="selectionChange($event)"
+                            [ngClass]="'ui-g-12'"
+    >
+    <mat-step *ngFor="let fieldset of filterHiddenItems(schema.fieldsets); let stepIndex=index"
+              [completed]="isPageValid(stepIndex)"
+    >
+      <ng-template matStepLabel>{{(schema.widget?.stepper||{})[fieldset.id] || fieldset.name || fieldset.title}}
+      </ng-template>
+      <ng-container
+      [ngTemplateOutlet]="wizardTemplateContentStepsContent"
+      [ngTemplateOutletContext]="{fieldset:fieldset, stepIndex:stepIndex}"></ng-container>
+
+      <!-- //TODO put buttons into mat-(horizontal/vertical)stepper tag-->
+      <!-- <mat-action-row> -->
+        <div class="ui-g-12">
+          <button
+            mat-raised-button
+            [attr.x-matStepperPrevious]=""
+            *ngIf="stepIndex>0 && isButtonVisibile(schema.widget.buttons?.prev, isCurrentPageValid(), formProperty.value)"
+            [disabled]="!hasPagePrevious(stepIndex)?true:null"
+            [color]="schema.widget.buttons?.prev?.severity?getSeverity(schema.widget.buttons?.prev?.severity):null"
+            type="button"
+            (click)="logPage(stepIndex);previousPage()"
+            [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.prev?.styleClass||'')]"
+            [class.mat-icon-button]="!getLabel(schema.widget.labelPrev, schema.widget.buttons?.prev, 'Previous')"
+            [attr.role]="'button'"
+          >
+            <mat-icon *ngIf="schema.widget.buttons?.prev?.icon && schema.widget.buttons?.prev?.iconPos==='left'"
+                      class="mat-24"
+                      aria-label="">{{schema.widget.buttons?.prev?.icon|IconName}}
+            </mat-icon>
+            <ng-container>{{getLabel(schema.widget.labelPrev, schema.widget.buttons?.prev, 'Previous')}}</ng-container>
+            <mat-icon *ngIf="schema.widget.buttons?.prev?.icon && schema.widget.buttons?.prev?.iconPos!=='left'"
+                      class="mat-24"
+                      aria-label="">{{schema.widget.buttons?.prev?.icon|IconName}}
+            </mat-icon>
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            [attr.x-matStepperNext]=""
+            *ngIf="stepIndex<filterHiddenItems(schema.fieldsets).length-1 && isButtonVisibile(schema.widget.buttons?.next, isCurrentPageValid(), formProperty.value)"
+            [disabled]="(readOnly && !isPageValid(stepIndex)) || !hasPageNext(stepIndex)?true:null"
+            [color]="schema.widget.buttons?.next?.severity?getSeverity(schema.widget.buttons?.next?.severity):null"
+            type="button"
+            (click)="logPage(stepIndex);nextPage()"
+            [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.next?.styleClass||'')]"
+            [class.mat-icon-button]="!getLabel(schema.widget.labelNext, schema.widget.buttons?.next, 'Next')"
+            [attr.role]="'button'"
+          >
+            <mat-icon *ngIf="schema.widget.buttons?.next?.icon && schema.widget.buttons?.next?.iconPos==='left'"
+                      class="mat-24"
+                      aria-label="">{{schema.widget.buttons?.next?.icon|IconName}}
+            </mat-icon>
+            <ng-container>{{getLabel(schema.widget.labelNext, schema.widget.buttons?.next, 'Next')}}</ng-container>
+            <mat-icon *ngIf="schema.widget.buttons?.next?.icon && schema.widget.buttons?.next?.iconPos!=='left'"
+                      class="mat-24"
+                      aria-label="">{{schema.widget.buttons?.next?.icon|IconName}}
+            </mat-icon>
+          </button>
+          <button
+            mat-raised-button
+            color="accent"
+            [attr.x-matStepperNext]=""
+            *ngIf="stepIndex==filterHiddenItems(schema.fieldsets).length-1 && isButtonVisibile(schema.widget.buttons?.finish, isCurrentPageValid(), formProperty.value)"
+            [disabled]="(!isPageValid(stepIndex) || !formProperty.valid)?true:null"
+            [color]="schema.widget.buttons?.finish?.severity?getSeverity(schema.widget.buttons?.finish?.severity):null"
+            type="button"
+            (click)="logPage(stepIndex);finishPage()"
+            [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.finish?.styleClass||'')]"
+            [class.mat-icon-button]="!getLabel(schema.widget.labelFinish, schema.widget.buttons?.finish, 'Finish')"
+            [attr.role]="'button'"
+          >
+            <mat-icon *ngIf="schema.widget.buttons?.finish?.icon && schema.widget.buttons?.finish?.iconPos==='left'"
+                      class="mat-24" aria-label="">{{schema.widget.buttons?.finish?.icon|IconName}}
+            </mat-icon>
+            <ng-container>{{getLabel(schema.widget.labelFinish, schema.widget.buttons?.finish, 'Finish')}}</ng-container>
+            <mat-icon *ngIf="schema.widget.buttons?.finish?.icon && schema.widget.buttons?.finish?.iconPos!=='left'"
+                      class="mat-24" aria-label="">{{schema.widget.buttons?.finish?.icon|IconName}}
+            </mat-icon>
+          </button>
+        </div>
+        <!-- </mat-action-row> -->
+    </mat-step>
+    </mat-horizontal-stepper>
+</ng-template>
+
+<ng-template #wizardTemplateContentVertical>
+  <mat-vertical-stepper #wizardStepper [linear]="readOnly"
+                          (selectionChange)="selectionChange($event)"
+                          [ngClass]="'ui-g-12'"
+  >
+  <mat-step *ngFor="let fieldset of filterHiddenItems(schema.fieldsets); let stepIndex=index"
+  [completed]="isPageValid(stepIndex)"
+>
+    <ng-template matStepLabel>{{(schema.widget?.stepper||{})[fieldset.id] || fieldset.name || fieldset.title}}
+    </ng-template>
+    <ng-container
+    [ngTemplateOutlet]="wizardTemplateContentStepsContent"
+    [ngTemplateOutletContext]="{fieldset:fieldset, stepIndex:stepIndex}"></ng-container>
+
+      <!-- //TODO put buttons into mat-(horizontal/vertical)stepper tag-->
+      <!-- <mat-action-row> -->
+        <div class="ui-g-12">
+          <button
+            mat-raised-button
+            [attr.x-matStepperPrevious]=""
+            *ngIf="stepIndex>0 && isButtonVisibile(schema.widget.buttons?.prev, isCurrentPageValid(), formProperty.value)"
+            [disabled]="!hasPagePrevious(stepIndex)?true:null"
+            [color]="schema.widget.buttons?.prev?.severity?getSeverity(schema.widget.buttons?.prev?.severity):null"
+            type="button"
+            (click)="logPage(stepIndex);previousPage()"
+            [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.prev?.styleClass||'')]"
+            [class.mat-icon-button]="!getLabel(schema.widget.labelPrev, schema.widget.buttons?.prev, 'Previous')"
+            [attr.role]="'button'"
+          >
+            <mat-icon *ngIf="schema.widget.buttons?.prev?.icon && schema.widget.buttons?.prev?.iconPos==='left'"
+                      class="mat-24"
+                      aria-label="">{{schema.widget.buttons?.prev?.icon|IconName}}
+            </mat-icon>
+            <ng-container>{{getLabel(schema.widget.labelPrev, schema.widget.buttons?.prev, 'Previous')}}</ng-container>
+            <mat-icon *ngIf="schema.widget.buttons?.prev?.icon && schema.widget.buttons?.prev?.iconPos!=='left'"
+                      class="mat-24"
+                      aria-label="">{{schema.widget.buttons?.prev?.icon|IconName}}
+            </mat-icon>
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            [attr.x-matStepperNext]=""
+            *ngIf="stepIndex<filterHiddenItems(schema.fieldsets).length-1 && isButtonVisibile(schema.widget.buttons?.next, isCurrentPageValid(), formProperty.value)"
+            [disabled]="(readOnly && !isPageValid(stepIndex)) || !hasPageNext(stepIndex)?true:null"
+            [color]="schema.widget.buttons?.next?.severity?getSeverity(schema.widget.buttons?.next?.severity):null"
+            type="button"
+            (click)="logPage(stepIndex);nextPage()"
+            [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.next?.styleClass||'')]"
+            [class.mat-icon-button]="!getLabel(schema.widget.labelNext, schema.widget.buttons?.next, 'Next')"
+            [attr.role]="'button'"
+          >
+            <mat-icon *ngIf="schema.widget.buttons?.next?.icon && schema.widget.buttons?.next?.iconPos==='left'"
+                      class="mat-24"
+                      aria-label="">{{schema.widget.buttons?.next?.icon|IconName}}
+            </mat-icon>
+            <ng-container>{{getLabel(schema.widget.labelNext, schema.widget.buttons?.next, 'Next')}}</ng-container>
+            <mat-icon *ngIf="schema.widget.buttons?.next?.icon && schema.widget.buttons?.next?.iconPos!=='left'"
+                      class="mat-24"
+                      aria-label="">{{schema.widget.buttons?.next?.icon|IconName}}
+            </mat-icon>
+          </button>
+          <button
+            mat-raised-button
+            color="accent"
+            [attr.x-matStepperNext]=""
+            *ngIf="stepIndex==filterHiddenItems(schema.fieldsets).length-1 && isButtonVisibile(schema.widget.buttons?.finish, isCurrentPageValid(), formProperty.value)"
+            [disabled]="(!isPageValid(stepIndex) || !formProperty.valid)?true:null"
+            [color]="schema.widget.buttons?.finish?.severity?getSeverity(schema.widget.buttons?.finish?.severity):null"
+            type="button"
+            (click)="logPage(stepIndex);finishPage()"
+            [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.finish?.styleClass||'')]"
+            [class.mat-icon-button]="!getLabel(schema.widget.labelFinish, schema.widget.buttons?.finish, 'Finish')"
+            [attr.role]="'button'"
+          >
+            <mat-icon *ngIf="schema.widget.buttons?.finish?.icon && schema.widget.buttons?.finish?.iconPos==='left'"
+                      class="mat-24" aria-label="">{{schema.widget.buttons?.finish?.icon|IconName}}
+            </mat-icon>
+            <ng-container>{{getLabel(schema.widget.labelFinish, schema.widget.buttons?.finish, 'Finish')}}</ng-container>
+            <mat-icon *ngIf="schema.widget.buttons?.finish?.icon && schema.widget.buttons?.finish?.iconPos!=='left'"
+                      class="mat-24" aria-label="">{{schema.widget.buttons?.finish?.icon|IconName}}
+            </mat-icon>
+          </button>
+        </div>
+        <!-- </mat-action-row> -->
+</mat-step>
+  </mat-vertical-stepper>
+</ng-template>
+
+<ng-template #wizardTemplateContentAccorion>
+    <mat-accordion
+    [ngClass]="'ui-g-12'"
+    >
+  <mat-expansion-panel
+  *ngFor="let fieldset of filterHiddenItems(schema.fieldsets); let stepIndex=index"
+  [expanded]="currentPage===stepIndex"
+   (opened)="selectionChange({originaEvent:null, selectedIndex:stepIndex})"
+  hideToggle
+  [disabled]="readOnly && currentPage<stepIndex"
+  >
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            <span i18n>
+                {{(schema.widget?.stepper||{})[fieldset.id] || fieldset.name || fieldset.title}}
+            </span>
+        </mat-panel-title>
+      <!--
+      <mat-panel-description>
+          No support for description now
+      </mat-panel-description>
+      -->
+    </mat-expansion-panel-header>
+
+    <ng-container
+    [ngTemplateOutlet]="wizardTemplateContentStepsContent"
+    [ngTemplateOutletContext]="{fieldset:fieldset, stepIndex:stepIndex}"></ng-container>
+
+      <!-- //TODO put buttons into mat-(horizontal/vertical)stepper tag-->
+      <mat-action-row>
+        <div class="x-ui-g-12">
+          <button
+            mat-raised-button
+            [attr.x-matStepperPrevious]=""
+            *ngIf="stepIndex>0 && isButtonVisibile(schema.widget.buttons?.prev, isCurrentPageValid(), formProperty.value)"
+            [disabled]="!hasPagePrevious(stepIndex)?true:null"
+            [color]="schema.widget.buttons?.prev?.severity?getSeverity(schema.widget.buttons?.prev?.severity):null"
+            type="button"
+            (click)="logPage(stepIndex);previousPage()"
+            [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.prev?.styleClass||'')]"
+            [class.mat-icon-button]="!getLabel(schema.widget.labelPrev, schema.widget.buttons?.prev, 'Previous')"
+            [attr.role]="'button'"
+          >
+            <mat-icon *ngIf="schema.widget.buttons?.prev?.icon && schema.widget.buttons?.prev?.iconPos==='left'"
+                      class="mat-24"
+                      aria-label="">{{schema.widget.buttons?.prev?.icon|IconName}}
+            </mat-icon>
+            <ng-container>{{getLabel(schema.widget.labelPrev, schema.widget.buttons?.prev, 'Previous')}}</ng-container>
+            <mat-icon *ngIf="schema.widget.buttons?.prev?.icon && schema.widget.buttons?.prev?.iconPos!=='left'"
+                      class="mat-24"
+                      aria-label="">{{schema.widget.buttons?.prev?.icon|IconName}}
+            </mat-icon>
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            [attr.x-matStepperNext]=""
+            *ngIf="stepIndex<filterHiddenItems(schema.fieldsets).length-1 && isButtonVisibile(schema.widget.buttons?.next, isCurrentPageValid(), formProperty.value)"
+            [disabled]="(readOnly && !isPageValid(stepIndex)) || !hasPageNext(stepIndex)?true:null"
+            [color]="schema.widget.buttons?.next?.severity?getSeverity(schema.widget.buttons?.next?.severity):null"
+            type="button"
+            (click)="logPage(stepIndex);nextPage()"
+            [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.next?.styleClass||'')]"
+            [class.mat-icon-button]="!getLabel(schema.widget.labelNext, schema.widget.buttons?.next, 'Next')"
+            [attr.role]="'button'"
+          >
+            <mat-icon *ngIf="schema.widget.buttons?.next?.icon && schema.widget.buttons?.next?.iconPos==='left'"
+                      class="mat-24"
+                      aria-label="">{{schema.widget.buttons?.next?.icon|IconName}}
+            </mat-icon>
+            <ng-container>{{getLabel(schema.widget.labelNext, schema.widget.buttons?.next, 'Next')}}</ng-container>
+            <mat-icon *ngIf="schema.widget.buttons?.next?.icon && schema.widget.buttons?.next?.iconPos!=='left'"
+                      class="mat-24"
+                      aria-label="">{{schema.widget.buttons?.next?.icon|IconName}}
+            </mat-icon>
+          </button>
+          <button
+            mat-raised-button
+            color="accent"
+            [attr.x-matStepperNext]=""
+            *ngIf="stepIndex==filterHiddenItems(schema.fieldsets).length-1 && isButtonVisibile(schema.widget.buttons?.finish, isCurrentPageValid(), formProperty.value)"
+            [disabled]="(!isPageValid(stepIndex) || !formProperty.valid)?true:null"
+            [color]="schema.widget.buttons?.finish?.severity?getSeverity(schema.widget.buttons?.finish?.severity):null"
+            type="button"
+            (click)="logPage(stepIndex);finishPage()"
+            [ngClass]="['ngx-ui-widget-button', (schema.widget.buttons?.finish?.styleClass||'')]"
+            [class.mat-icon-button]="!getLabel(schema.widget.labelFinish, schema.widget.buttons?.finish, 'Finish')"
+            [attr.role]="'button'"
+          >
+            <mat-icon *ngIf="schema.widget.buttons?.finish?.icon && schema.widget.buttons?.finish?.iconPos==='left'"
+                      class="mat-24" aria-label="">{{schema.widget.buttons?.finish?.icon|IconName}}
+            </mat-icon>
+            <ng-container>{{getLabel(schema.widget.labelFinish, schema.widget.buttons?.finish, 'Finish')}}</ng-container>
+            <mat-icon *ngIf="schema.widget.buttons?.finish?.icon && schema.widget.buttons?.finish?.iconPos!=='left'"
+                      class="mat-24" aria-label="">{{schema.widget.buttons?.finish?.icon|IconName}}
+            </mat-icon>
+          </button>
+        </div>
+
+      </mat-action-row>
+  </mat-expansion-panel>
+  </mat-accordion>
+</ng-template>
+
+
+<ng-template #wizardTemplateContentWizard>
+  <ng-container *ngIf="!formProperty.schema?.widget?.stepperVertical;else wizardTemplateContentVertical"
+    [ngTemplateOutlet]="wizardTemplateContentHorizontal"
+  >
+  </ng-container>
+</ng-template>
+
+<ng-template #wizardTemplateContent>
+  <div #scrollHook>
+  <ng-container [ngSwitch]="formProperty.schema.widget?.style">
+    <ng-container *ngSwitchDefault [ngTemplateOutlet]="wizardTemplateContentWizard"></ng-container>
+    <ng-container *ngSwitchCase="'default'" [ngTemplateOutlet]="wizardTemplateContentWizard"></ng-container>
+    <ng-container *ngSwitchCase="'accordion'" [ngTemplateOutlet]="wizardTemplateContentAccorion"></ng-container>
+  </ng-container>
+  </div>
+</ng-template>
+
+<mat-card
+  *ngIf="formProperty.schema && formProperty.schema.widget && formProperty.schema.widget['asCard'];else wizardTemplateContentNoCard">
+  <ng-container [ngTemplateOutlet]="wizardTemplateContent"></ng-container>
+</mat-card>
+<ng-template #wizardTemplateContentNoCard>
+  <ng-container [ngTemplateOutlet]="wizardTemplateContent"></ng-container>
+</ng-template>
+
+<ngx-ui-validation-messages
+  *ngIf="formProperty.schema.widget?.showErrors && formProperty.schema.widget?.showErrors?.position==='bottom'"
+  [formComponent]="this"></ngx-ui-validation-messages>
+
+
+<!--
+  Action buttons
+-->
+<ng-template #wizardTemplateActionButtons>
+    <div *ngIf="widgetButtons?.length"
+    [class]="formProperty.schema?.widget?.separateView ? 'card ui-g ui-g-12' : 'ui-g ui-g-12'">
+      <ng-container *ngFor="let button of widgetButtons">
+        <button
+          *ngIf="isButtonVisibile(button, formProperty.valid, formProperty.value)"
+          [ngStyle]="button.inline===false?{display:'block'}:null"
+          [attr.id]="button.styleId"
+          i18n
+
+          [attr.rem-label]="button.label||null"
+          [attr.rem-icon]="getIcon(button.icon)||null"
+          [attr.rem-iconPos]="button.iconPos||null"
+
+          [attr.title]="button.description||button.label||null"
+          [disabled]="isClickableDisabled(button, isCurrentPageValid())"
+          [color]="button.severity?getSeverity(button.severity):null"
+          [ngClass]="['ngx-ui-widget-button', (formProperty.schema.widget.buttons?.finish?.styleClass||'')]"
+          (click)="button.action($event)"
+          type="button"
+          [matTooltip]="button.description||null"
+
+          mat-raised-button
+          [attr.role]="'button'"
+        >
+        <mat-icon *ngIf="button.icon && button.iconPos==='left'" class="mat-24">{{button.icon|IconName}}</mat-icon>
+        <ng-container *ngIf="button.label">{{button.label}}</ng-container>
+        <mat-icon *ngIf="button.icon && button.iconPos!=='left'" class="mat-24">{{button.icon|IconName}}</mat-icon>
+      </button>
+    </ng-container>
+  </div>
+</ng-template>
+
+<ng-container
+  *ngIf="formProperty.schema && formProperty.schema.widget && formProperty.schema.widget['asCard'];else wizardTemplateActionButtonsNoCard">
+  <mat-card *ngIf="widgetButtons?.length" class="card ui-g ui-g-12">
+    <ng-container [ngTemplateOutlet]="wizardTemplateContent"></ng-container>
+  </mat-card>
+</ng-container>
+<ng-template #wizardTemplateActionButtonsNoCard>
+  <ng-container [ngTemplateOutlet]="wizardTemplateActionButtons"></ng-container>
+</ng-template>
+
+<ng-template #wizardTemplateLinks>
+  <div *ngFor="let link of formProperty.schema.links" [class]="link.inline===false?'ui-g-12':''">
+    <ngx-ui-widget-link [link]="link"
+                       [disabled]="isClickableDisabled(link, isCurrentPageValid())"></ngx-ui-widget-link>
+  </div>
+</ng-template>
+
+<ng-container
+  *ngIf="formProperty.schema && formProperty.schema.widget && formProperty.schema.widget['asCard'];else wizardTemplateLinksNoCard">
+  <mat-card *ngIf="formProperty.schema.links?.length" class="ui-g ui-g-12">
+    <ng-container [ngTemplateOutlet]="wizardTemplateLinks"></ng-container>
+  </mat-card>
+</ng-container>
+<ng-template #wizardTemplateLinksNoCard>
+  <ng-container [ngTemplateOutlet]="wizardTemplateLinks"></ng-container>
+</ng-template>

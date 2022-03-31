@@ -1,0 +1,71 @@
+<!--
+Element 'ngx-captcha'
+  - title = label
+  - description = some descriptive text below the RE-CAPTCHA
+
+Element 'ngx-recaptcha' in 'widget'
+  - siteKey
+  - type
+  - theme
+  - size
+  - language
+
+  - script_url   : The Google reCaptcha javascript or any other javascript that renders a CAPTCHA.   
+                   Default is `https://(www.recaptcha.net|www.google.com)/recaptcha/api.js?hl=(language)&render=explicit&onload=(callback)`.  
+                   If another javascript is provided that Google's ReCAPTCHA then make sure it is fully compliant.  
+                   For an example custom javascript see official page : https://www.npmjs.com/package/ngx-recaptcha-easy   
+  - loadingMsg    : A message that will be showed when the captcha script is loading. Default: 'Loading CAPTCHA ...'  
+  - loadingError  : A message that will be showed when the captcha script couldn't be loaded Default: 'Error loading CAPTCHA'  
+
+  - consentContent  : Some BBCode: (Default: 'This form uses ReCaptcha. Before sending the form, [u][url=https://policies.google.com/privacy?]please accept cookies before sending the form[/url][/u]')
+  - consentPrompt   : Some text for the 'Accept' checkbox label. (Default: '')
+  - consentRequired : true|false (Default: false)
+  - consentCookie   : string (Default: ReCAPTCHA_consent)
+  - consentStatic   : boolean . Will keep the checkbox visible even if consent is given (Default: false)
+  - consentTitle    : string: (Default: 'Required privacy policy agreement')
+
+  - noSpacer = Allows to hide the preserved free space where the helper-text and validation message are displayed.
+              `false` (default) = shows the preserved space
+              `true` = hides the preserved space when no helper-text and validation message is present.
+              'always' , will hide the space completely and will never display a helper-text or validation message
+-->
+
+<div class="ui-g-12">
+  <div class="mat-checkbox">
+
+    <label *ngIf="schema.widget.size!=='invisible'" [attr.for]="id">
+      {{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}
+      <ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+    </label>
+    <ng-container *ngIf="requiresConsent || (this.schema?.widget?.consentRequired && this.schema?.widget?.consentStatic)">
+      <div>
+      <div class="ui-widget-captcha-consentText" [innerHTML]="this.htmlContent"></div>
+      <label [matTooltip]="this.schema?.widget?.consentTitle||consentTitleDefault" [title]="this.schema?.widget?.consentTitle||consentTitleDefault">
+        <input
+          [title]="this.schema?.widget?.consentTitle||consentTitleDefault" type="checkbox" value="allow" [checked]="!requiresConsent" (change)="storeConsent($event)">{{schema?.widget?.consentPrompt||consentPromptDefault}}</label>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="showCAPTCHA">
+    <ngx-recaptcha
+      id="{{captchaNameId}}"
+      (captchaResponse)="showResponse($event)"
+      [language]="schema.widget.language||null"
+      [size]="schema.widget.size||null"
+      [theme]="schema.widget.theme||null"
+      [type]="schema.widget.type||null"
+      [site_key]="schema.widget.siteKey"
+      (loaded)="onLoaded($event)"
+      (captchaExpired)="onExpire($event)"
+      (error)="onError($event)"
+      global="false"
+      [script_url]="schema.widget.script_url||null"
+    ></ngx-recaptcha>
+    <h4 *ngIf="!captchaloaded" i18n>{{schema.widget.loadingMsg||'Loading CAPTCHA ...'}}</h4>
+    <mat-hint *ngIf="schema.description && schema.widget.size!=='invisible'">{{schema.description}}</mat-hint>
+    <mat-error *ngIf="control?.errors">
+      <div class="ui-message ui-messages-error" *ngIf="captchaloadingerror" i18n>{{schema.widget.loadingError||'Error loading CAPTCHA!'}}</div>
+      <ngx-ui-field-validation-messages [formComponent]="this" [validationErrors]="control.errors"></ngx-ui-field-validation-messages>
+    </mat-error>
+    </ng-container>
+  </div>
+</div>

@@ -1,0 +1,435 @@
+<!--
+  Element 'p-fileUpload' in 'widget'
+    - dataUriPrefix      : remove data uri prefix, keep only raw data. (removes things like "data:image/png;base64," from model data)
+    - deleteButtonLabel  : the text of the delete button
+    - deleteButtonIcon   : the icon of the delete button
+    - deleteButtonTitle  : the title attribute of the delete button
+                           will be used as attribute `title` and `alt` and may contain the placeholder for the file name 
+                             `{filename}`
+                             `{filesize}`
+    - uploadButtonTitle  : the title and aria-label attribute of the upload button
+    - showUploadInfo     : if <code>true</code> it shows the filename and size
+    - previewTitle       : will be used as attribute `title` and `alt` and may contain the placeholder for the file name 
+                             `{filename}`
+                             `{filesize}`
+                           if not set then the file name is used for both attributes.
+                             e.g `"previewTitle": "Preview of the uploaded image {filename} size {filesize}"`
+
+    - noPreviewText: any text to show a short message when the uploaded file doesn't support beeing previewed (e.g. TIFF)
+                      when not set no text will be shown.
+                      keep this text short as possible.
+    - noPreviewIcon: an icon to show instead of the default icon 'attach_file' when the uploaded file doesn't support beeing previewed (e.g. TIFF)
+
+  Element 'p-fileUpload' in 'widget' field do represent the same as in the primeng documentation
+    - mode
+    - names
+    - url
+      - useURL = When using url and the upload service returns an array of url where the image can be accessed
+                 then you can set this to `true` to have the url instead of the byte content as a value.
+    - method
+    - multiple
+    - disabled
+    - accept
+    - maxFileSize
+    - auto
+    - withCredentials
+    - invalidFileSizeMessageSummary
+    - invalidFileSizeMessageDetail
+    - invalidFileTypeMessageSummary
+    - invalidFileTypeMessageDetail
+    - previewWidth
+    - chooseLabel
+    - uploadLabel
+    - cancelLabel
+    - customUpload
+    - showUploadButton
+    - showCancelButton
+
+
+  Known BUGS:
+    1) you may not select mode:basic and multiple:multiple together,
+       you want be able to select a file until you remove the existing first
+
+    2) when setting mode:advanced the 'choose' button will not be clickable
+       some extra CSS is required fix this issue:
+
+       /**
+        * fix primeng - file upload choose button
+        * see https://github.com/primefaces/primeng/issues/3455
+        */
+       .ui-fileupload-choose.ui-fileupload-choose-selected input[type=file],
+       .ui-fileupload-buttonbar .ui-fileupload-choose input {
+         display: block;
+       }
+
+
+
+
+
+   Hints:
+
+    - Only image files can be upload at client side as base64 data url
+
+    - customUpload, setting this to true (default) will use the upload implementation of the file.widget
+      which does not upload anything but creates a base64 string reprensentation and adds it
+      into the model
+
+      if set it enables this prperties per default:
+        - auto = true
+        - showUploadButton = false
+
+
+  Element 'widget'
+       - inlineLabel  : <code>false</code> will display the upload button below the label
+
+
+  Element 'widget'
+      !!NOTE: imageRules can not be used with allowing to upload TIFF files!!
+       - imageRules : Image validation rules:
+           - oneOf
+                      - orientation : 'landscape', 'portrait' or 'square'
+                      - unit        : 'px' for pixel, 'in' for inch or 'cm' for centimeter
+                      - minWidth    : Minimal width
+                      - maxWidth    : Maximum widht
+                      - minHeight   : Minimal height 
+                      - maxHeight   : Maximum height
+
+                      Any of this property may stand alone.
+           - allOf
+                      - orientation : 'landscape', 'portrait' or 'square'
+                      - unit        : 'px' for pixel, 'in' for inch or 'cm' for centimeter
+                      - minWidth    : Minimal width
+                      - maxWidth    : Maximum widht
+                      - minHeight   : Minimal height 
+                      - maxHeight   : Maximum height
+
+                      Any of this property may stand alone.
+      - invalidImageDimensionsMessageSummary : Summary for the errormessage if dimension doesn't match requirements
+      - invalidImageDimensionsMessageDetail  : Detail for the errormessage if dimension doesn't match requirements
+
+      - previewTitleImageDimensions         : Text template for the `title` and `alt` attribute if file is an image.
+                                              Can be used inside `previewTitle` as placeholder like `{previewTitleImageDimensions}`
+                                              Can contain placeholders:
+                                                  - {imageDimensionPixelW}, {imageDimensionPixelH}
+                                                  - {imageDimensionInchesW}, {imageDimensionInchesH}
+                                                  - {imageDimensionCentimetersW}, {imageDimensionCentimetersH}
+                                              e.g: 
+                                                  { "previewTitleImageDimensions" : " ({imageDimensionPixelW}x{imageDimensionPixelH})" }
+-->
+<!--
+Element 'widget'
+  - noSpacer = Allows to hide the preserved free space where the helper-text and validation message are displayed.
+              `false` (default) = shows the preserved space
+              `true` = hides the preserved space when no helper-text and validation message is present.
+              'always' , will hide the space completely and will never display a helper-text or validation message
+-->
+<!--
+Element 'widget'
+  Use this property to gather file information like file name or file size.
+  Single file upload:
+      When using single file upload then the target will contain the file info of the current uploaded file.
+      All targets will be cleared when the file gets removed via 'Cancel' button.
+  Multiple file upload:
+      When using multiple file upload then the target will contain the file info of the last uploaded file.
+      All targets will be cleared when the last file gets removed via 'Cancel' button.
+
+   - targets      an arrays of assignments of address parts to fields
+                  this allows to assign a part of the address to a specific field
+                  - key          : an array or a single value of keys of the result object in priority order.
+                                   the first existing value wins.
+
+                                   This may also be an expression.
+                                   Accessing any value of the result object is allowed.
+                                   e.g.:
+                                   <code>{ "key": "address.street + ' ' + address.house_number" }</code>
+                  - destination   : an array of paths pointing to formProperties fields to set the value
+
+                  e.g.
+                      <code>[{ 'key' : ['file.name','file.size'], 'destination' : ['form1/upload-file-name', 'form3/upload-file-size']}]</code>
+                  another example:
+                  <code>
+                        "targets": [
+                          {
+                            "key": "file.name",
+                            "destination": "form1/upload-file-name"
+                          },
+                          {
+                            "key": [
+                              "file.name",
+                              "file.size"
+                            ],
+                            "destination": ["form1/upload-file-name", "form1/another_upload-file-name"]
+                          },
+                          {
+                            "key": "file.size",
+                            "destination": "form1/upload-file-size"
+                          },
+                          {
+                            "key": "file",
+                            "destination": "form1/upload-file-info"
+                          }
+                        ]
+                  </code>
+
+
+            Description of the file object that will be passed to the targets:
+            <code>
+              {
+                file : {
+                  name: string // name of the file (without path)
+                  size: number // the size of the file in bytes
+                  type: string // mime-type
+                  lastModified: // the timestamp of the last modification
+                  image: // only present if file is of type image
+                        - imageInfo 
+                          - screen
+                            - dpi
+                              - x:number // screen dpi x
+                              - y:number // screen dpi y
+                          - dimensions
+                            - px // dimensions in pixels
+                              - x
+                              - y
+                            - in // dimensions in inch
+                              - x
+                              - y
+                            - cm // dimensions in centimeters
+                              - x
+                              - y
+                        - imageSrc // data-url
+                        - validationResult // status if the image meets the requiremets defined in property `imageRules`
+                          - valid:boolean
+                }
+              }
+            </code>
+            Example
+            <code>
+              {
+                "file:" {
+                  "name": "test.pdf",
+                  "size": 21845,
+                  "type": "application/pdf",
+                  "lastModified": 1623826127961,
+                  "image": {
+                      "imageInfo": {
+                          "screen": {
+                              "dpi": {
+                                  "x": 192,
+                                  "y": 192
+                              }
+                          },
+                          "dimensions": {
+                              "px": {
+                                  "w": 500,
+                                  "h": 184
+                              },
+                              "in": {
+                                  "w": 2.6041666666666665,
+                                  "h": 0.9583333333333334
+                              },
+                              "cm": {
+                                  "w": 6.614583333333333,
+                                  "h": 2.4341666666666666
+                              }
+                          }
+                      },
+                      "imageSrc": "data:image/png;base64,iVBORw0KGgoA....",
+                      "validationResult": {
+                          "valid": true
+                      }
+                  }
+                }
+              }
+            </code>
+-->
+<div class="ui-g-12">
+  <div class="mat-inputfield_upload">
+
+
+    <label #labelEl [attr.for]="id" class="file-upload-label" id="label--{{id}}">{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark></label>
+
+
+    <!-- TODO not all properties are yet supported... see also p-fileUpload block below-->
+    <ngx-ui-mat-fileUpload
+    *ngIf="schema.widget.multiple || !control.value"
+    [class.file-upload-label--display-block]="schema?.widget?.inlineLabel===false"
+
+    (onError)="onError($event)"
+    (onClear)="onClear($event)"
+    (onRemove)="onRemove($event)"
+    (onSelect)="onSelect($event)"
+    (onProgress)="onProgress($event)"
+
+    (uploadHandler)="onUploadWithCustomHandler($event)"
+    (onUpload)="onUpload($event)"
+    (onBeforeSend)="onBeforeSend($event)"
+
+
+    [mode]="schema.widget.mode||'basic'"
+    [name]="schema.widget.name||name"
+    [url]="schema.widget.url||null"
+    [method]="schema.widget.method||'POST'"
+    [multiple]="schema.widget.multiple==='multiple'||null"
+    [accept]="schema.widget.accept||null"
+    [maxFileSize]="schema.widget.maxFileSize||null"
+    [auto]="isBoolean(schema.widget.auto)?schema.widget.auto:true"
+    [withCredentials]="schema.widget.withCredentials||null"
+    [invalidFileSizeMessageSummary]="schema.widget.invalidFileSizeMessageSummary||'{0}: Invalid file size, '"
+    [invalidFileSizeMessageDetail]="schema.widget.invalidFileSizeMessageDetail||'maximum upload size is {0}.'"
+    [invalidFileTypeMessageSummary]="schema.widget.invalidFileTypeMessageSummary||'{0}: Invalid file type, '"
+    [invalidFileTypeMessageDetail]="schema.widget.invalidFileTypeMessageDetail||'allowed file types: {0}.'"
+    [invalidFileLimitMessageSummary]="schema.widget.invalidFileLimitMessageSummary||'Maximum number of files exceeded, '"
+    [invalidFileLimitMessageDetail]="schema.widget.invalidFileLimitMessageDetail||'limit is {0} at most.'"
+    [previewWidth]="schema.widget.previewWidth||50"
+    [chooseLabel]="schema.widget.chooseLabel||'Choose'"
+    [uploadLabel]="schema.widget.uploadLabel||'Upload'"
+    [cancelLabel]="schema.widget.cancelLabel||'Cancel'"
+    [customUpload]="isBoolean(schema.widget.customUpload)?schema.widget.customUpload:true"
+    [showUploadButton]="(schema.widget.showUploadButton && !schema.widget.auto && !schema.widget.customUpload)||null"
+    [showCancelButton]="schema.widget.showCancelButton||null"
+    [files]="files"
+
+
+    [attr.id]="id"
+    [attr.formControl]="control"
+    [disabled]="schema.widget.disabled||(schema.readOnly?true:null)"
+
+    [required]="(formProperty|IsRequiredAttr)"
+
+    [imageRules]="schema.widget.imageRules"
+    [invalidImageDimensionsMessageSummary]="schema.widget.invalidImageDimensionsMessageSummary||'Image doesn\'t match requirements, '"
+    [invalidImageDimensionsMessageDetail]="schema.widget.invalidImageDimensionsMessageDetail||'it\'s either too big, too small or has the wrong orientation.'"
+
+    [ariaLabelledby]="schema?.widget?.uploadButtonTitle?labelEl.id:null"
+    [ariaLabel]="schema?.widget?.uploadButtonTitle||null"
+    [title]="schema?.widget?.uploadButtonTitle||null"
+    #fileUploadEl
+    >
+    </ngx-ui-mat-fileUpload>
+
+<!--    
+    <mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>
+    <mat-error *ngIf="control?.errors">
+    <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
+
+
+
+
+
+    </mat-error>
+-->
+
+    <ng-container *ngIf="schema.widget?.mode==='advanced' || schema.widget?.multiple==='multiple'">
+      <div style="background: grey;color:white;padding:1em">
+        <h3 *ngIf="schema.widget?.mode==='advanced'">Fileupload Widget - Advanced Mode is not fully supported yet!</h3>
+        <h3 *ngIf="schema.widget?.multiple==='multiple'">Fileupload Widget - Multiple File Mode is not fully supported yet!</h3>
+      </div>
+    </ng-container>
+
+    <div *ngIf="schema.widget.mode!=='advanced'; else loadImagesInAdvancedMode">
+      <ng-container [ngTemplateOutlet]="previewImageTemplate"></ng-container>
+    </div>
+
+    <ng-template #loadImagesInAdvancedMode>
+      <!--
+        In mode 'advanced' the list of files will be rendered inside the p-fileUpload component,
+        so nothing to do here
+      -->
+    </ng-template>
+
+    <ng-template #previewImageTemplate>
+      <ng-container *ngIf="uploadedFiles.length">
+        <ng-container *ngIf="uploadedFiles.length === 1;multipleFiles" [ngTemplateOutlet]="previewFileTemplate" [ngTemplateOutletContext]="{file:uploadedFiles[0], isImage: isImage(uploadedFiles[0])}">
+        </ng-container>
+        <ng-template #multipleFiles>
+          <ul *ngIf="uploadedFiles.length > 1">
+            <li *ngFor="let file of uploadedFiles">
+              <ng-container [ngTemplateOutlet]="previewFileTemplate" [ngTemplateOutletContext]="{file:file, isImage: isImage(file)}"></ng-container>
+            </li>
+          </ul>
+        </ng-template>
+      </ng-container>
+    </ng-template>
+
+    <ng-template #previewFileTemplate let-file="file" let-isImage="isImage">
+      <img
+        class="input-upload-file--preview"
+        *ngIf="!file.previewFailed && schema.widget?.previewWidth!=='x0' && isImage"
+        [attr.width]="schema.widget.previewWidth||null"
+        [src]="file?.sanitizedURL"
+        (load)="imageLoaded($event,file)"
+        (error)="imageLoadingFailed($event,file)"
+        [attr.title]="file?._previewTitle||createPreviewAltText(file)||file?.name"
+        [attr.alt]="file?._previewTitle||createPreviewAltText(file)||file?.name"
+        [attr.aria-hidden]="true"
+        [class.input-upload-file--preview-hidden]="schema.widget?.previewWidth===0"
+      >
+      <object 
+      *ngIf="!file.previewFailed && schema.widget?.previewWidth!==0 && !isImage"
+      [data]="file?.sanitizedURL" 
+      [type]="file.type" 
+      [attr.width]="schema.widget.previewWidth||null"
+      (load)="objectLoaded($event,file)"
+      (error)="objectLoadingFailed($event,file)"
+      [attr.title]="file?._previewTitle||createPreviewAltText(file)||file?.name"
+      [attr.alt]="file?._previewTitle||createPreviewAltText(file)||file?.name"
+      [attr.aria-hidden]="true"
+      >
+      <embed 
+      [src]="file?.sanitizedURL" 
+      [type]="file.type" 
+      (load)="objectLoaded($event,file)"
+      (error)="objectLoadingFailed($event,file)"
+      [attr.width]="schema.widget.previewWidth||null"
+      [attr.title]="file?._previewTitle||createPreviewAltText(file)||file?.name"
+      [attr.alt]="file?._previewTitle||createPreviewAltText(file)||file?.name"
+      [attr.aria-hidden]="true"
+      >
+      </object>
+
+      <span *ngIf="file.previewFailed" 
+        [attr.aria-hidden]="true"
+        [attr.title]="file?._previewTitle||createPreviewAltText(file)||file?.name"
+        [attr.alt]="file?._previewTitle||createPreviewAltText(file)||file?.name"
+        class="file-upload-image-no-preview"
+      >
+        <span *ngIf="!schema?.widget?.noPreviewIcon" class="material-icons file-upload-image-no-preview-icon">attach_file</span>
+        <span *ngIf="schema?.widget?.noPreviewIcon" class="material-icons file-upload-image-no-preview-icon">{{schema?.widget?.noPreviewIcon|IconName}}</span>
+        <span *ngIf="schema?.widget?.noPreviewText" class="file-upload-image-no-preview-text">{{schema?.widget?.noPreviewText}}</span>
+      </span>
+
+      <span *ngIf="schema.widget?.showUploadInfo" class="input-upload-file--infotext">{{file.name}} - {{bytesToSize(file.size)}}</span>
+        <button
+          i18n-title
+          [attr.title]="file?._deleteButtonAlt||createButtonAltDelete(file)||schema.widget?.deleteButtonLabel || null"
+          *ngIf="!schema.widget?.deleteButtonLabel;else showButtonWithLabel"
+          mat-icon-button
+          color="secondary"
+          (click)="deleteFileInBasicUpload($event,file)"
+
+          [attr.role]="'button'"
+          >
+          <mat-icon>{{schema.widget?.deleteButtonIcon||'clear'}}</mat-icon>
+        </button>
+        <ng-template #showButtonWithLabel><button
+          i18n-title
+          [attr.title]="file?._deleteButtonAlt||createButtonAltDelete(file)||schema.widget?.deleteButtonLabel || null"
+          *ngIf="schema.widget?.deleteButtonLabel"
+          mat-raised-button
+          color="secondary"
+          (click)="deleteFileInBasicUpload($event,file)"
+
+          [attr.role]="'button'"
+          >
+          <mat-icon>{{schema.widget?.deleteButtonIcon||'clear'}}</mat-icon>
+          {{schema.widget?.deleteButtonLabel}}
+        </button></ng-template>
+    </ng-template>
+    <input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="control">
+  </div>
+</div>
+
+<mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>
+<mat-error *ngIf="control?.errors">
+  <ngx-ui-field-validation-messages [formComponent]="this" [validationErrors]="control.errors"></ngx-ui-field-validation-messages>
+</mat-error>

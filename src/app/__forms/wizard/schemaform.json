@@ -1,0 +1,245 @@
+{
+  "title": "wizard",
+  "readOnly": false,
+  "buttons": [
+    {
+      "id": "action_toggle_wizard_view",
+      "icon": "ui-icon-compare",
+      "description": "Toggle wizard mode (default -> accordion)"
+    },
+    {
+      "id": "action_toggle_wizard_stepper_view",
+      "icon": "ui-icon-border-inner",
+      "description": "Toggle wizard stepper mode (horizontal -> vertical)"
+    },
+    {
+      "id": "action_wizard_page_show_hide_2",
+      "icon": "ui-icon-visibility-off",
+      "iconPos": "right",
+      "description": "Toggle page 2",
+      "label": "Toggle page 2",
+      "severity": "secondary"
+    },
+    {
+      "id": "action_toggle_title",
+      "icon": "ui-icon-title",
+      "iconPos": "right",
+      "description": "Toggle title size",
+      "label": "Toggle title size",
+      "severity": "secondary"
+    }
+  ],
+  "widget": {
+    "id": "wizard",
+    "live": true,
+    "buttons": {
+      "prev": {
+        "label": "Zur\u00FCck",
+        "severity": "secondary",
+        "icon": "ui-icon-arrow-back",
+        "iconPos": "left",
+        "actionId": "wizard_action_prev",
+        "styleClass": "flat"
+      },
+      "next": {
+        "label": "Weiter",
+        "severity": "primary",
+        "icon": "ui-icon-arrow-forward",
+        "iconPos": "right",
+        "actionId": "wizard_action_next",
+        "styleClass": "flat"
+      },
+      "finish": {
+        "label": "Absenden",
+        "severity": "info",
+        "icon": "ui-icon-cloud-upload",
+        "iconPos": "right",
+        "actionId": "wizard_action_finish",
+        "visible": false,
+        "styleClass": "flat"
+      }
+    },
+    "_stepperVertical": 4,
+    "separateView": false,
+    "asCard": false,
+    "stepper": {
+      "page1": "Data",
+      "page2": "More data",
+      "page3": "Items",
+      "page4": "Pages",
+      "page5": "Fruits",
+      "page6": "Vegetables",
+      "page7": "Tables",
+      "page8": "Chairs",
+      "page9": "Bottles",
+      "page10": "Drinks",
+      "page11": "Cars",
+      "page12": "Maps",
+      "page13": "Money",
+      "page14": "Total"
+    }
+  },
+  "properties": {
+    "property-0": {
+      "widget": {
+        "id": "array",
+        "style": "tabview",
+        "itemNumeration": true,
+        "itemTitle": "MyItem"
+      },
+      "buttons": [
+        {
+          "id": "action_change_array_item_numeration",
+          "icon": "ui-icon-compare",
+          "iconPos": "left",
+          "label": "CONTINOUS",
+          "description": "Toggle items numeration mode (default -> continous)"
+        }
+      ]
+    },
+    "property-1": {
+      "widget": {
+        "id": "form",
+        "nopad": true
+      },
+      "buttons": [
+        {
+          "id": "action_toggle_title",
+          "icon": "ui-icon-title",
+          "iconPos": "right",
+          "description": "Toggle title size",
+          "label": "Toggle title size",
+          "severity": "secondary"
+        }
+      ]
+    },
+    "property-2": {},
+    "property-3": {},
+    "property-4": {},
+    "property-5": {},
+    "property-6": {},
+    "property-7": {},
+    "property-8": {},
+    "property-9": {},
+    "property-10": {},
+    "property-11": {},
+    "property-12": {},
+    "property-13": {},
+    "property-14": {},
+    "property-15": {},
+    "property-16": {},
+    "property-17": {},
+    "property-18": {},
+    "property-19": {},
+    "property-20": {},
+    "property-21": {},
+    "property-22": {},
+    "property-23": {},
+    "property-24": {},
+    "property-25": {},
+    "property-26": {},
+    "property-27": {}
+  },
+  "fieldsets": [
+    {
+      "id": "page2",
+      "no-title-here": "Test - don't do this",
+      "fields": [
+        "property-0",
+        "property-1",
+        "property-2",
+        "property-3"
+      ]
+    },
+    {
+      "id": "page1",
+      "hidden": true,
+      "fields": [
+        "property-4",
+        "property-5",
+        "property-6"
+      ]
+    },
+    {
+      "id": "page3",
+      "fields": [
+        "property-7",
+        "property-8",
+        "property-9"
+      ]
+    },
+    {
+      "id": "page4",
+      "fields": [
+        "property-10",
+        "property-11",
+        "property-12"
+      ]
+    },
+    {
+      "id": "page5",
+      "fields": [
+        "property-13",
+        "property-14",
+        "property-15"
+      ]
+    },
+    {
+      "id": "page6",
+      "fields": [
+        "property-16",
+        "property-17",
+        "property-18"
+      ]
+    },
+    {
+      "id": "page7",
+      "fields": [
+        "property-19",
+        "property-20"
+      ]
+    },
+    {
+      "id": "page8",
+      "fields": [
+        "property-21"
+      ]
+    },
+    {
+      "id": "page9",
+      "fields": [
+        "property-22"
+      ]
+    },
+    {
+      "id": "page10",
+      "fields": [
+        "property-23"
+      ]
+    },
+    {
+      "id": "page11",
+      "fields": [
+        "property-24"
+      ]
+    },
+    {
+      "id": "page12",
+      "fields": [
+        "property-25"
+      ]
+    },
+    {
+      "id": "page13",
+      "fields": [
+        "property-26"
+      ]
+    },
+    {
+      "id": "page14",
+      "fields": [
+        "property-27"
+      ]
+    }
+  ]
+}

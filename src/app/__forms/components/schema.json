@@ -1,0 +1,840 @@
+{
+  "type": "object",
+  "properties": {
+    "simpleTypes": {
+      "order": [
+        "checkbox",
+        "switch",
+        "color",
+        "datetime-picker",
+        "date",
+        "datetime-native",
+        "datetime-local",
+        "email",
+        "month",
+        "number",
+        "password",
+        "radio",
+        "range",
+        "search",
+        "tel",
+        "text",
+        "input-mask",
+        "time",
+        "url",
+        "week",
+        "textarea",
+        "autofill",
+        "autocomplete",
+        "select",
+        "select_async_targets",
+        "select_button",
+        "button"
+      ],
+      "title": "Simple types",
+      "description": "Description of simple types",
+      "type": "object",
+      "properties": {
+        "checkbox": {
+          "type": "boolean",
+          "title": "checkbox",
+          "description": "Presentation of the component 'checkbox'.",
+          "widget": {
+            "id": "checkbox"
+          }
+        },
+        "switch": {
+          "type": "boolean",
+          "title": "switch",
+          "description": "Presentation of the component 'checkbox'.",
+          "widget": {
+            "id": "switch"
+          }
+        },
+        "color": {
+          "type": "string",
+          "title": "color",
+          "description": "Presentation of the component 'color'.",
+          "widget": {
+            "id": "color"
+          }
+        },
+        "date-picker": {
+          "type": "string",
+          "title": "date-picker",
+          "description": "Presentation of the component 'date-picker'.",
+          "widget": {
+            "id": "date-picker"
+          }
+        },
+        "date": {
+          "type": "string",
+          "title": "date",
+          "description": "Presentation of the component 'date'. Autofill (cc-exp)",
+          "widget": {
+            "id": "date",
+            "autofill": "cc-exp"
+          }
+        },
+        "datetime-local": {
+          "type": "string",
+          "title": "datetime-local",
+          "description": "Presentation of the component 'datetime-local'.",
+          "widget": {
+            "id": "datetime-local"
+          }
+        },
+        "date-native": {
+          "type": "string",
+          "title": "date-native",
+          "description": "Presentation of the component 'date-native'. Autofill (cc-exp)",
+          "widget": {
+            "id": "date-native",
+            "autofill": "cc-exp"
+          }
+        },
+        "email": {
+          "type": "string",
+          "title": "email",
+          "description": "Presentation of the component 'email'. Autofill (email)",
+          "widget": {
+            "id": "email",
+            "autofill": "email"
+          }
+        },
+        "month": {
+          "type": "string",
+          "title": "month",
+          "description": "Presentation of the component 'month'.",
+          "widget": {
+            "id": "month"
+          }
+        },
+        "number": {
+          "type": "number",
+          "title": "number",
+          "description": "Presentation of the component 'number'.",
+          "widget": {
+            "id": "number"
+          }
+        },
+        "password": {
+          "type": "string",
+          "title": "password",
+          "description": "Presentation of the component 'password'. Autofill (current-password)",
+          "widget": {
+            "id": "password",
+            "autofill": "current-password"
+          }
+        },
+        "radio": {
+          "type": "string",
+          "title": "radio",
+          "description": "Presentation of the component 'radio'.",
+          "widget": {
+            "id": "radio"
+          },
+          "oneOf": [
+            {
+              "enum": [
+                "a"
+              ],
+              "description": "A"
+            },
+            {
+              "enum": [
+                "b"
+              ],
+              "description": "B",
+              "disabled": true
+            },
+            {
+              "enum": [
+                "c"
+              ],
+              "description": "C"
+            }
+          ]
+        },
+        "range": {
+          "type": "number",
+          "title": "range",
+          "description": "Presentation of the component 'range'.",
+          "widget": {
+            "id": "range"
+          }
+        },
+        "search": {
+          "type": "string",
+          "title": "search",
+          "description": "Presentation of the component 'search'.",
+          "widget": {
+            "id": "search"
+          }
+        },
+        "tel": {
+          "type": "string",
+          "title": "tel",
+          "description": "Presentation of the component 'tel'. Autofill (tel)",
+          "widget": {
+            "id": "tel",
+            "autofill": "tel"
+          }
+        },
+        "text": {
+          "type": "string",
+          "title": "text",
+          "description": "Presentation of the component 'text'.",
+          "widget": {
+            "id": "text"
+          },
+          "pattern": "^[A-Z]*$"
+        },
+        "autofill": {
+          "type": "string",
+          "title": "auto-fill (cc-number)",
+          "description": "Presentation of the component 'string'. Autofill (cc-number). Complete table of fields : https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#inappropriate-for-the-control",
+          "widget": {
+            "id": "string",
+            "autofill": "cc-number"
+          }
+        },
+        "time": {
+          "type": "string",
+          "title": "time",
+          "description": "Presentation of the component 'time'.",
+          "widget": {
+            "id": "time"
+          }
+        },
+        "url": {
+          "type": "string",
+          "title": "url",
+          "description": "Presentation of the component 'url'.",
+          "widget": {
+            "id": "url"
+          }
+        },
+        "week": {
+          "type": "string",
+          "title": "week",
+          "description": "Presentation of the component 'week'.",
+          "widget": {
+            "id": "week"
+          }
+        },
+        "textarea": {
+          "type": "string",
+          "title": "textarea",
+          "description": "Presentation of the component 'textarea'. Autofill (shipping street-address locality region postal-code country)",
+          "widget": {
+            "id": "textarea",
+            "autofill": "shipping street-address locality region postal-code country"
+          }
+        },
+        "autocomplete": {
+          "type": "string",
+          "title": "autocomplete",
+          "description": "Presentation of the component 'autocomplete'.",
+          "widget": {
+            "id": "autocomplete"
+          }
+        },
+        "select": {
+          "type": "string",
+          "title": "select",
+          "description": "Presentation of the component 'select'.",
+          "widget": {
+            "id": "select"
+          },
+          "oneOf": [
+            {
+              "enum": [
+                "one"
+              ],
+              "description": "A"
+            },
+            {
+              "enum": [
+                "two"
+              ],
+              "description": "B",
+              "disabled": true
+            },
+            {
+              "enum": [
+                "three"
+              ],
+              "description": "C"
+            }
+          ]
+        },
+        "select_async_targets": {
+          "type": "string",
+          "title": "Presentation of the component 'select' with async loaded values",
+          "description": "This dropdown widgets selectable items are lazy loaded via REST call",
+          "widget": {
+            "id": "select"
+          },
+          "oneOf": [
+            {
+              "enum": [
+                "Please select"
+              ],
+              "description": ""
+            }
+          ]
+        },
+        "select_button": {
+          "type": "string",
+          "title": "select_button",
+          "description": "Presentation of the component 'select_button'.",
+          "widget": {
+            "id": "select_button"
+          },
+          "oneOf": [
+            {
+              "enum": [
+                "a"
+              ],
+              "description": "A"
+            },
+            {
+              "enum": [
+                "b"
+              ],
+              "description": "B",
+              "disabled": true
+            },
+            {
+              "enum": [
+                "c"
+              ],
+              "description": "C"
+            }
+          ]
+        },
+        "button": {
+          "type": "object",
+          "title": "button",
+          "description": "Presentation of the component 'button'.",
+          "properties": {
+            "button_flat": {
+              "type": "object",
+              "title": "button_flat",
+              "description": " ",
+              "properties": {}
+            },
+            "button_raised": {
+              "type": "object",
+              "title": "button_raised",
+              "description": " ",
+              "properties": {}
+            },
+            "button_icon": {
+              "type": "object",
+              "title": "button_icon",
+              "description": " ",
+              "properties": {}
+            },
+            "button_fab": {
+              "type": "object",
+              "title": "button_fab",
+              "description": " ",
+              "properties": {}
+            }
+          }
+        }
+      },
+      "required": [
+        "autocomplete",
+        "radio",
+        "range",
+        "number",
+        "switch",
+        "textarea",
+        "select_button"
+      ]
+    },
+    "complexTypes": {
+      "type": "object",
+      "properties": {
+        "wizard": {
+          "type": "object",
+          "title": "wizard",
+          "properties": {
+            "property-1": {
+              "type": "string"
+            },
+            "property-2": {
+              "type": "string"
+            },
+            "property-3": {
+              "type": "string"
+            },
+            "property-4": {
+              "type": "string"
+            },
+            "property-5": {
+              "type": "string"
+            },
+            "property-6": {
+              "type": "string"
+            },
+            "property-7": {
+              "type": "string"
+            },
+            "property-8": {
+              "type": "string"
+            },
+            "property-9": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "miscTypes": {
+      "properties": {
+        "qrcode": {
+          "type": "object",
+          "description": "Presentation of the component 'QRCode'",
+          "properties": {
+            "qrcodeImg": {
+              "title": "QRCode",
+              "type": "string"
+            },
+            "qrcodeInput": {
+              "type": "string",
+              "title": "QRCode input",
+              "description": "This will be contained in the QRCode",
+              "maxLength": 200,
+              "minLength": 1
+            }
+          }
+        },
+        "spacer0": {
+          "type": "string"
+        },
+        "spacer_progress_header": {
+          "type": "string"
+        },
+        "progress": {
+          "type": "string",
+          "title": "progress",
+          "description": "Presentation of the component 'progress'.",
+          "widget": {
+            "id": "progress"
+          }
+        },
+        "spacer1": {
+          "type": "string"
+        },
+        "bbcode": {
+          "type": "string"
+        },
+        "spacer2": {
+          "type": "string"
+        },
+        "captchas": {
+          "type": "object",
+          "title": "CAPTCHAs",
+          "description": "Support of two different CAPTCHA types (visible & invisible)",
+          "properties": {
+            "captcha": {
+              "type": "string",
+              "title": "CAPTCHA",
+              "description": "You have to confirm CAPTCHA to get ready"
+            },
+            "captcha-invisible": {
+              "type": "string",
+              "title": "Invisible CAPTCHA",
+              "description": "Invisible CAPTCHA are confirmed automatically"
+            }
+          }
+        },
+        "spacer3": {
+          "type": "string"
+        },
+        "file": {
+          "type": "object",
+          "title": "File-Upload",
+          "description": "Presentation of the component 'file'.",
+          "properties": {
+            "file-upload-1": {
+              "type": "string",
+              "title": "Upload 1",
+              "description": "Upload any JPEG, GIF, TIFF, PNG, BMP or PDF with max file size of 10MB"
+            },
+            "file-upload-2": {
+              "type": "string",
+              "title": "Upload 2",
+              "description": "Upload any JPEG, GIF, TIFF, PNG, BMP or PDF with max file size of 10MB"
+            }
+          },
+          "required": [
+            "file-upload-1",
+            "file-upload-2"
+          ]
+        },
+        "spacer4": {
+          "type": "string"
+        },
+        "message": {
+          "type": "object"
+        }
+      },
+      "title": "Misc types",
+      "description": "Description of misc types",
+      "type": "object"
+    },
+    "array": {
+      "type": "object",
+      "description": "Changing values here will have an impact in section 'Datatable'",
+      "properties": {
+        "simple": {
+          "title": "Simple array",
+          "description": "Array items are of a simple string type",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "title": "Item label"
+          }
+        },
+        "complex": {
+          "title": "Complex array",
+          "description": "Array items are of a complex type",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "property-1": {
+                "type": "string",
+                "title": "Property 1"
+              },
+              "property-2": {
+                "type": "object",
+                "properties": {
+                  "sub1": {
+                    "type": "string",
+                    "title": "Property 2 -> sub 1"
+                  },
+                  "sub2": {
+                    "type": "string",
+                    "title": "Property 2 -> sub 2"
+                  },
+                  "sub3": {
+                    "type": "string",
+                    "title": "Property 2 -> sub 3"
+                  }
+                }
+              },
+              "property-3": {
+                "type": "string",
+                "title": "Property 3"
+              }
+            }
+          },
+          "minItems": 2,
+          "maxItems": 5
+        }
+      }
+    },
+    "datatable": {
+      "type": "object",
+      "properties": {}
+    },
+    "targets": {
+      "type": "object",
+      "order": [
+        "target_sources",
+        "target_destination"
+      ],
+      "properties": {
+        "target_destination": {
+          "type": "object",
+          "title": "Target fields",
+          "description": "This READONLY fields will be filled from selecting an item from the autocompletion",
+          "properties": {
+            "postalcode_field_target": {
+              "type": "string",
+              "title": "Postalcode - target field",
+              "readOnly": true
+            },
+            "city_field_target": {
+              "type": "string",
+              "title": "City - target field",
+              "readOnly": true
+            },
+            "street_field_target": {
+              "type": "string",
+              "title": "Street - target field",
+              "readOnly": true
+            },
+            "postalcode_city_field_target": {
+              "type": "string",
+              "title": "Postlacode + City - target field",
+              "description": "This target gets its value from the target expression \"address.postalcode + ' ' + address.city\"",
+              "readOnly": true
+            }
+          }
+        },
+        "target_sources": {
+          "type": "object",
+          "title": "Source fields",
+          "description": "This fields will set values for the 'Target fields'",
+          "properties": {
+            "autocomplete_targets": {
+              "type": "string",
+              "title": "Address autocomplete",
+              "description": ""
+            }
+          }
+        }
+      }
+    },
+    "bindings": {
+      "type": "object",
+      "title": "Custom binding feature",
+      "description": "Some filtering based on custom binding functions",
+      "properties": {
+        "selectA": {
+          "type": "string",
+          "title": "Food",
+          "description": "Select a type of food to change the content of the dropdown",
+          "oneOf": [
+            {
+              "enum": [
+                "all"
+              ],
+              "description": "All food"
+            },
+            {
+              "enum": [
+                "fruits"
+              ],
+              "description": "Fruits"
+            },
+            {
+              "enum": [
+                "vegetables"
+              ],
+              "description": "Vegetables"
+            },
+            {
+              "enum": [
+                "meat"
+              ],
+              "description": "Meat"
+            },
+            {
+              "enum": [
+                "smoothie"
+              ],
+              "description": "Smoothie"
+            }
+          ]
+        },
+        "selectB": {
+          "title": "Items",
+          "description": "This content will change in relation to the selection of the dropdown above",
+          "type": "string",
+          "oneOf": [
+            {
+              "enum": [
+                "fruits - apple"
+              ],
+              "description": "Apple"
+            },
+            {
+              "enum": [
+                "fruits - banana"
+              ],
+              "description": "Banana"
+            },
+            {
+              "enum": [
+                "fruits - grapes"
+              ],
+              "description": "Grapes"
+            },
+            {
+              "enum": [
+                "fruits - pitaya"
+              ],
+              "description": "Pitaya"
+            },
+            {
+              "enum": [
+                "vegetables - carrots"
+              ],
+              "description": "Carrots"
+            },
+            {
+              "enum": [
+                "vegetables - cucumber"
+              ],
+              "description": "Cucumber"
+            },
+            {
+              "enum": [
+                "vegetables - radish"
+              ],
+              "description": "Radish"
+            },
+            {
+              "enum": [
+                "vegetables - salad"
+              ],
+              "description": "Salad"
+            },
+            {
+              "enum": [
+                "meat - bovine"
+              ],
+              "description": "Bovine"
+            },
+            {
+              "enum": [
+                "meat - chicken"
+              ],
+              "description": "Chicken"
+            },
+            {
+              "enum": [
+                "meat - pork"
+              ],
+              "description": "Pork"
+            }
+          ]
+        }
+      }
+    },
+    "overlays": {
+      "type": "object",
+      "title": "Overlays",
+      "description": "Some types of overlays",
+      "properties": {
+        "dialogs": {
+          "type": "object",
+          "properties": {
+            "myDialogComplex": {
+              "type": "object",
+              "no-title": "My Dialog (complex)",
+              "no-description": "Some description (complex)",
+              "properties": {
+                "prop1": {
+                  "type": "string"
+                },
+                "prop2": {
+                  "type": "string"
+                },
+                "prop3": {
+                  "type": "string"
+                },
+                "prop4": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "enum": [
+                        "item1"
+                      ],
+                      "description": "Item 1"
+                    },
+                    {
+                      "enum": [
+                        "item2"
+                      ],
+                      "description": "Item 2",
+                      "disabled": true
+                    },
+                    {
+                      "enum": [
+                        "item3"
+                      ],
+                      "description": "Item 3"
+                    }
+                  ]
+                }
+              }
+            },
+            "myDialog": {
+              "type": "string",
+              "title": "My Dialog 1",
+              "description": "This dialog will only show up if you have typed the word 'dialog'"
+            },
+            "myDialogClick": {
+              "type": "string",
+              "title": "My Dialog 2",
+              "description": "You clicked the input field"
+            },
+            "dialogTriggerInput": {
+              "type": "object",
+              "properties": {
+                "testOnInput": {
+                  "type": "string",
+                  "title": "Open dialog by text",
+                  "description": "Type a string containing the word 'dialog' to enable the dialog at all"
+                },
+                "testOnClick": {
+                  "type": "string",
+                  "title": "Open dialog on click",
+                  "description": "Click this input 'readOnly' field to open the dialog"
+                }
+              },
+              "order": [
+                "testOnClick",
+                "testOnInput"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "osm": {
+      "type": "object",
+      "title": "OpenStreetMap",
+      "properties": {
+        "map": {
+          "type": "string",
+          "title": "Map",
+          "description": "Tapping on the map will update the value for the address search field"
+        },
+        "address": {
+          "type": "string",
+          "title": "Address"
+        },
+        "street_field": {
+          "type": "string",
+          "title": "Street"
+        },
+        "housenumber_field": {
+          "type": "string",
+          "title": "Housenumber"
+        },
+        "city_field": {
+          "type": "string",
+          "title": "City"
+        },
+        "fulladdress_field": {
+          "type": "string",
+          "title": "Full address"
+        }
+      },
+      "required": [
+        "address"
+      ]
+    }
+  },
+  "order": [
+    "simpleTypes",
+    "complexTypes",
+    "miscTypes",
+    "array",
+    "datatable",
+    "overlays",
+    "targets",
+    "bindings",
+    "osm"
+  ]
+}

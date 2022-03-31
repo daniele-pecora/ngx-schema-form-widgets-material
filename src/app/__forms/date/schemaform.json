@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "date-picker": {
+      "widget": {
+        "id": "date-picker",
+        "filled": true,
+        "_dateFormat": "dd.MM.yyyy",
+        "formatFilter": true
+      }
+    },
+    "notes": {
+      "type": "string",
+      "title": "Edit mode rules",
+      "widget": {
+        "id": "bbcode",
+        "bbcode": [
+          "[*]Click at the end of text = Backspace works[/*]",
+          "[*]Click into text = Select all text, DEL or Backspace deletes all text[/*]",
+          "[*]Navigate into text = Select all text, DEL or Backspace deletes all text[/*]"
+        ]
+      }
+    }
+  }
+}

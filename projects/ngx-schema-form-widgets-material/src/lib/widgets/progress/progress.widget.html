@@ -1,0 +1,23 @@
+<!--
+Element 'schema':
+        - title Label positioned above the progress indicator.
+                e.g. 'Just a moment...'
+        - description Some subtext positioned below the indicator
+                e.g. '... your request will be answered soon.'
+
+Element 'widget'
+        - id      Must be 'process'
+        - style:  Describes the indicator style as either a progress-spinner or a progress-bar.
+                  Values: 'bar', 'spinner' or empty.
+                  There is no default value but 'spinner' is the default behaviour
+
+The progress mode is always 'indeterminate'.
+
+-->
+<h4 *ngIf="schema.title" [ngClass]="'center-text'">{{schema.title}}</h4>
+<mat-progress-spinner *ngIf="schema.widget.style!=='bar'; else tmplProgressBar" mode="indeterminate"
+  #targetProgressSpinner></mat-progress-spinner>
+<ng-template #tmplProgressBar>
+    <mat-progress-bar #targetProgressBar mode="indeterminate"></mat-progress-bar>
+</ng-template>
+<p *ngIf="schema.description" [ngClass]="'center-text'">{{schema.description}}</p>

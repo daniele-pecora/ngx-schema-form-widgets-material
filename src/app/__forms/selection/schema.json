@@ -1,0 +1,123 @@
+{
+  "type": "object",
+  "properties": {
+    "select_async": {
+      "type": "string",
+      "oneOf": [
+        {
+          "enum": [
+            ""
+          ],
+          "description": "Loading..."
+        }
+      ]
+    },
+    "radio": {
+      "type": "string",
+      "oneOf": [
+        {
+          "enum": [
+            "a"
+          ]
+        },
+        {
+          "enum": [
+            "b"
+          ],
+          "readOnly": true
+        },
+        {
+          "enum": [
+            "c"
+          ]
+        }
+      ]
+    },
+    "select": {
+      "type": "string",
+      "oneOf": [
+        {
+          "enum": [
+            "a"
+          ]
+        },
+        {
+          "enum": [
+            "b"
+          ],
+          "readOnly": true
+        },
+        {
+          "enum": [
+            "c"
+          ]
+        }
+      ]
+    },
+    "select_button": {
+      "type": "string",
+      "oneOf": [
+        {
+          "enum": [
+            "a"
+          ]
+        },
+        {
+          "enum": [
+            "b"
+          ],
+          "readOnly": true
+        },
+        {
+          "enum": [
+            "c"
+          ]
+        }
+      ]
+    },
+    "select_readonly": {
+      "readOnly": true,
+      "type": "string",
+      "oneOf": [
+        {
+          "enum": [
+            "a"
+          ]
+        },
+        {
+          "enum": [
+            "b"
+          ],
+          "readOnly": true
+        },
+        {
+          "enum": [
+            "c"
+          ]
+        }
+      ]
+    },
+    "select_button_readonly": {
+      "readOnly": true,
+      "type": "string",
+      "oneOf": [
+        {
+          "enum": [
+            "a"
+          ]
+        },
+        {
+          "enum": [
+            "b"
+          ],
+          "readOnly": true
+        },
+        {
+          "enum": [
+            "c"
+          ]
+        }
+      ]
+    }
+  }
+}

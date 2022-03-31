@@ -1,0 +1,24 @@
+<div #layoutContainer class="layout-container">
+
+  <div class="ui-g">
+    <div class="ui-g-4 ui-sm-12">
+      <app-resize [preferredSize]="preferredSize" (change)="onChangeSize($event)"></app-resize>
+    </div>
+    <div class="ui-g-8 ui-sm-12">
+      <app-themer></app-themer>
+    </div>
+  </div>
+
+  <div class="ui-g">
+    <div class="ui-lg-offset-{{preferredSizeSpacer}}"></div>
+    <div class="ui-lg-{{preferredSize}}">
+      <ui-form-view *ngIf="uiInitialFormViewModel"
+        [noCard]="uiInitialFormViewModel?.formModelObject?.widget?.asCard || uiInitialFormViewModel?.formModelObject?.widget?.noCard"
+        [uiInitialFormViewModel]="uiInitialFormViewModel" (onLoaded)="onFormViewLoaded($event)"
+        (onModelChange)="onModelChanged($event)" (onModelChangeFinal)="actionTrigger($event)"></ui-form-view>
+    </div>
+  </div>
+</div>
+<pre>
+    {{(this.finalModelObject || {})|json}}
+  </pre>

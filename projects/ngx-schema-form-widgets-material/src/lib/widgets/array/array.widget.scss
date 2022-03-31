@@ -1,0 +1,53 @@
+/** 
+ * This enhances the alignment of the buttons to the outer border of an array item,
+ * so it doesn't overlap with the label of any following item
+ */
+ .array-widget-default > div {
+
+  &.itemInline {
+    display: inline-block;
+  }
+}
+/** 
+ * This enhances the alignment of the close buttons 
+ * when displaying as tab view
+ */
+::ng-deep {
+  .mat-tab-label-content {
+    width: 100%;
+  }
+}
+.mat-tab-label--icon-text {
+}
+.mat-tab-label--icon-close {
+}
+.mat-tab-label--button-close {
+  float: right;
+  position: absolute;
+  right: 0px;
+  min-width: unset;
+  padding: 0;
+}
+
+:host ::ng-deep {
+  /** accordiona close icon */
+  .mat-expansion-panel .mat-expansion-panel-header {
+    /**
+     * Keep the icons in accordion header vertical aligned
+     */
+    .ui-accordion-icon-close {
+      cursor: pointer;
+      /* class 'mat-expansion-panel-header-description' makes the icon the same color as the indicator icon */
+      &.mat-expansion-panel-header-description {
+        /** remove inherited formats from 'mat-expansion-panel-header-description' */
+        flex-grow: 0;
+        margin-right: unset;
+        &:focus {
+          color: unset;
+          /** no OS specific outlines */
+          outline: none;
+        }
+      }
+    }
+  }
+}

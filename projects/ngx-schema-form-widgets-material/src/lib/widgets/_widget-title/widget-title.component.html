@@ -1,0 +1,33 @@
+<ng-template #compContent><ng-content></ng-content></ng-template>
+<ng-template #defaultHeading>
+    <ng-container *ngIf="!isRoot;else isRootHeading">
+        <h3 *ngIf="title" [attr.class]="cssClass">{{title}}<ng-container [ngTemplateOutlet]="compContent"></ng-container></h3>
+    </ng-container>
+    <ng-template #isRootHeading>
+        <h2 *ngIf="title" [attr.class]="cssClass">{{title}}<ng-container [ngTemplateOutlet]="compContent"></ng-container></h2>
+    </ng-template>
+</ng-template>
+<ng-container *ngIf="schema?.widget?.heading;else defaultHeading">
+    <ng-container [ngSwitch]="schema?.widget?.heading">
+        <ng-container *ngSwitchCase="1">
+            <h1 *ngIf="title" [attr.class]="cssClass">{{title}}<ng-container [ngTemplateOutlet]="compContent"></ng-container></h1>
+        </ng-container>
+        <ng-container *ngSwitchCase="2">
+            <h2 *ngIf="title" [attr.class]="cssClass">{{title}}<ng-container [ngTemplateOutlet]="compContent"></ng-container></h2>
+        </ng-container>
+        <ng-container *ngSwitchCase="3">
+            <h3 *ngIf="title" [attr.class]="cssClass">{{title}}<ng-container [ngTemplateOutlet]="compContent"></ng-container></h3>
+        </ng-container>
+        <ng-container *ngSwitchCase="4">
+            <h4 *ngIf="title" [attr.class]="cssClass">{{title}}<ng-container [ngTemplateOutlet]="compContent"></ng-container></h4>
+        </ng-container>
+        <ng-container *ngSwitchCase="5">
+            <h5 *ngIf="title" [attr.class]="cssClass">{{title}}<ng-container [ngTemplateOutlet]="compContent"></ng-container></h5>
+        </ng-container>
+        <ng-container *ngSwitchCase="6">
+            <h6 *ngIf="title" [attr.class]="cssClass">{{title}}<ng-container [ngTemplateOutlet]="compContent"></ng-container></h6>
+        </ng-container>
+        <ng-container *ngSwitchDefault [ngTemplateOutlet]="defaultHeading">
+        </ng-container>
+    </ng-container>
+</ng-container>

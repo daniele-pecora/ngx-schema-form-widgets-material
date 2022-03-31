@@ -1,0 +1,10 @@
+{
+  "type": "object",
+  "properties": {
+    "switch": {
+      "type": "boolean",
+      "title": "switch",
+      "description": "Presentation of the component 'switch'."
+    }
+  }
+}

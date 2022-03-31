@@ -1,0 +1,70 @@
+<mat-form-field [appearance]="originField.schema?.widget?.filled?'fill':'standard'"
+  [class.ngx-ui-widget-full-width]="!originField.schema.widget?.size"
+>
+  <ngx-ui-widget-addon *ngIf="originField.schema?.widget?.prefix" [addons]="originField.schema.widget.prefix"></ngx-ui-widget-addon>
+  <input #input
+         matInput
+         [attr.primeng-pInputText]
+         [attr.id]="inputId"
+         [attr.type]="type"
+         [attr.name]="name"
+         [ngStyle]="style"
+         [ngClass]="styleClass"
+         [placeholder]="placeholder||null"
+         [attr.size]="size"
+         [attr.maxlength]="maxlength"
+         [attr.tabindex]="tabindex"
+         [disabled]="disabled"
+         [attr.disabled]="disabled?'disabled':null"
+         [readonly]="readonly"
+         [attr.required]="required"
+         (focus)="onInputFocus($event)"
+         (blur)="onInputBlur($event)"
+         (keydown)="onKeyDown($event)"
+         (keypress)="onKeyPress($event)"
+         (input)="onInput($event)"
+         (paste)="handleInputChange($event)"
+         [formControl]="originField.control"
+
+         [attr.aria-label]="ariaLabel"
+         [attr.aria-required]="ariaRequired"
+         [attr.autofocus]="autoFocus"
+
+         [attr.autocomplete]="originField?.schema?.widget?.autofill"
+  >
+  <ngx-ui-widget-addon *ngIf="originField.schema?.widget?.suffix" [addons]="originField.schema.widget.suffix" [suffix]="true"></ngx-ui-widget-addon>
+  <mat-label>{{ originField.schema.hasOwnProperty('title') ? originField.schema.title : originField.formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="originField.formProperty"></ngx-ui-widget-required-mark>
+      <!-- {{originField.formProperty|IsRequiredAsterisk}} -->
+    </mat-label>
+  <mat-hint align="start" *ngIf="originField.schema.description">{{originField.schema.description}}</mat-hint>
+
+  <mat-error *ngIf="originField.control?.errors">
+    <ngx-ui-field-validation-messages [formComponent]="originField"></ngx-ui-field-validation-messages>
+  </mat-error>
+
+</mat-form-field>
+
+<!-- original input mask field, docu purposes only -->
+<!--<input #input-->
+       <!--pInputText-->
+       <!--[attr.id]="inputId"-->
+       <!--[attr.type]="type"-->
+       <!--[attr.name]="name"-->
+       <!--[ngStyle]="style"-->
+       <!--[ngClass]="styleClass"-->
+       <!--[placeholder]="placeholder"-->
+       <!--[attr.size]="size"-->
+       <!--[attr.maxlength]="maxlength"-->
+       <!--[attr.tabindex]="tabindex"-->
+       <!--[attr.aria-label]="ariaLabel"-->
+       <!--[attr.aria-required]="ariaRequired"-->
+       <!--[disabled]="disabled"-->
+       <!--[readonly]="readonly"-->
+       <!--[attr.required]="required"-->
+       <!--(focus)="onInputFocus($event)"-->
+       <!--(blur)="onInputBlur($event)"-->
+       <!--(keydown)="onKeyDown($event)"-->
+       <!--(keypress)="onKeyPress($event)"-->
+       <!--[attr.autofocus]="autoFocus"-->
+       <!--(input)="onInput($event)"-->
+       <!--(paste)="handleInputChange($event)">-->

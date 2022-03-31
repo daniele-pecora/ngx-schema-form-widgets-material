@@ -1,0 +1,48 @@
+<!--
+Element 'input'
+  - title = label
+
+Element 'input' in 'widget' field do represent the same as in the primeng documentation
+  - min
+  - max
+  - step
+  - size
+
+Element 'widget':
+  - prefix [ {icon, text }]
+  - suffix  [ {icon, text }]
+  - filled = filled background for the input section of the widget
+  - noSpacer = Allows to hide the preserved free space where the helper-text and validation message are displayed.
+              `false` (default) = shows the preserved space
+              `true` = hides the preserved space when no helper-text and validation message is present.
+              'always' , will hide the space completely and will never display a helper-text or validation message
+-->
+<mat-form-field [appearance]="schema?.widget?.filled?'fill':'standard'"
+[class.ngx-ui-widget-full-width]="!schema.widget?.size"
+>
+  <ngx-ui-widget-addon *ngIf="schema?.widget?.prefix" [addons]="schema.widget.prefix"></ngx-ui-widget-addon>
+  <input
+    matInput
+    [name]="name"
+    [attr.type]="'number'"
+    [id]="id"
+    [formControl]="control"
+    [readonly]="schema.readOnly"
+    [disabled]="schema.readOnly"
+    [min]="schema.minimum||undefined"
+    [max]="schema.maximum||undefined"
+    [step]="schema.widget?.step||1"
+    [size]="schema?.widget?.size"
+    [attr.required]="(formProperty|IsRequiredAttrString)"
+    [attr.aria-required]="(formProperty|IsRequiredAttr)"
+  >
+  <ngx-ui-widget-addon *ngIf="schema?.widget?.suffix" [addons]="schema.widget.suffix" [suffix]="true"></ngx-ui-widget-addon>
+  <mat-label>{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+    <!-- {{formProperty|IsRequiredAsterisk}} -->
+  </mat-label>
+
+  <mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>
+  <mat-error *ngIf="control?.errors">
+    <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
+  </mat-error>
+</mat-form-field>

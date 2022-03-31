@@ -1,0 +1,24 @@
+.material-icons--big {
+  font-size: 5em;
+}
+
+.submit-dialog__icon-wrapper--text-center {
+  text-align: center;
+}
+
+.submit-dialog__material-icons--pending {
+  color: #5bc0de;
+}
+
+.submit-dialog__material-icons--success {
+  color: #5cb85c;
+}
+
+.submit-dialog__material-icons--error {
+  color: #d9534f;
+}
+
+app-themer {
+  margin-left: 1em;
+  display: block;
+}

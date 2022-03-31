@@ -1,0 +1,569 @@
+{
+  "widget": {
+    "id": "object",
+    "--id": "section",
+    "style": "tabview",
+    "sections": {
+      "simpleTypes": "Simple types",
+      "datatable": "Datatable",
+      "array": "Array"
+    },
+    "asCard": true,
+    "demo_only_startSection": "datatable"
+  },
+  "properties": {
+    "simpleTypes": {
+      "properties": {
+        "date": {
+          "widget": {
+            "id": "date-picker",
+            "filled": true
+          }
+        },
+        "radio": {
+          "widget": {
+            "id": "radio",
+            "filled": false
+          }
+        },
+        "select": {
+          "widget": {
+            "id": "select",
+            "filled": true
+          }
+        }
+      }
+    },
+    "datatable": {
+      "title": "Data tables",
+      "description": "Showing different types of tables. Some values were changed by using \"transformators\"",
+      "type": "object",
+      "properties": {
+        "table_key_value": {
+          "type": "object",
+          "title": "Simple key value table",
+          "description": "Created with static values, value expressions and converted values",
+          "widget": {
+            "paging": {
+              "size": 3,
+              "sizeOptions":[1,2,3],
+              "labels": {
+                "first": "First page",
+                "last": "Last page",
+                "prev": "Previous page",
+                "next": "Next page",
+                "report": "currentPage:{currentPage},totalPages:{totalPages},rows:{rows},first:{first},last:{last} and totalRecords:{totalRecords}",
+                "perPage": "Entries per page"
+              }
+            },
+            "id": "table",
+            "style": "keyValue",
+            "no_caption": "Datatable",
+            "collapsed": true,
+            "_keyColGroup": "colGroup1",
+            "_keyColWidth": "max",
+            "keyValue": [
+              {
+                "label": "Example: Date transform",
+                "valuePath": "/simpleTypes/date",
+                "transform": {
+                  "type": "dateFormat",
+                  "from": "dd.MM.yyyy",
+                  "to": "yyyy-MM-dd"
+                },
+                "empty": "false"
+              },
+              {
+                "label": "Example: Label transform",
+                "valuePath": "/simpleTypes/radio",
+                "transform": {
+                  "type": "selectionLabel",
+                  "path": "/simpleTypes/radio"
+                },
+                "empty": "Select a value from 'Simple Types > decision > radio'"
+              },
+              {
+                "label": "Example: Value transform",
+                "valuePath": "/simpleTypes/select",
+                "transform": {
+                  "type": "textMapping",
+                  "mapping": {
+                    "one": "You selected 'A' which has value 'one'",
+                    "two": "You selected 'B' which has value 'two'",
+                    "three": "You selected 'C' which has value 'three'"
+                  }
+                },
+                "empty": "Select a value from 'Simple Types > decision > select'"
+              },
+              {
+                "label": "Example: Transformer chain",
+                "valuePath": "/simpleTypes/select",
+                "transform": {
+                  "type": "chain",
+                  "transformers": [
+                    {
+                      "type": "selectionLabel",
+                      "path": "/simpleTypes/select"
+                    },
+                    {
+                      "type": "textMapping",
+                      "mapping": {
+                        "A": "😉 selected 'A' which has value 'one'",
+                        "B": "😉 selected 'B' which has value 'two'",
+                        "C": "😉 selected 'C' which has value 'three'"
+                      }
+                    }
+                  ]
+                },
+                "empty": "Select a value from 'Simple Types > decision > select'"
+              },
+              {
+                "label": "label (static)",
+                "value": "value (static)"
+              },
+              {
+                "label": "label (empty value)",
+                "value": "",
+                "empty": true
+              },
+              {
+                "label": "label (empty value placeholder)",
+                "value": "",
+                "empty": "-"
+              },
+              {
+                "label": "",
+                "value": "empty label"
+              },
+              {
+                "valuePath": "/array/simple/0"
+              },
+              {
+                "labelPath": "/array/simple/1",
+                "valuePath": "/array/simple/1"
+              },
+              {
+                "labelPath": "/array/simple/2",
+                "value": "",
+                "empty": true
+              }
+            ]
+          },
+          "properties": {}
+        },
+        "table_key_value2": {
+          "type": "object",
+          "title": "Simple key value table",
+          "description": "Created with static values, value expressions and converted values",
+          "_widget": "hidden",
+          "widget": {
+            "paging": {
+              "size": 4,
+              "sizeOptions": [
+                2,
+                3,
+                4,
+                5
+              ],
+              "report": "Showing {first} to {last} of {totalRecords} entries"
+            },
+            "id": "table",
+            "style": "keyValue",
+            "no_caption": "Datatable",
+            "collapsed": true,
+            "_keyColGroup": "colGroup1",
+            "_keyColWidth": "max",
+            "keyValue": [
+              {
+                "label": "Large of a very large cell content copied a Large of a very large cell content",
+                "value": "Very large label"
+              },
+              {
+                "label": "Example: Date transform",
+                "valuePath": "/simpleTypes/date",
+                "transform": {
+                  "type": "dateFormat",
+                  "from": "dd.MM.yyyy",
+                  "to": "yyyy-MM-dd"
+                }
+              },
+              {
+                "label": "Example: Label transform",
+                "valuePath": "/simpleTypes/radio",
+                "transform": {
+                  "type": "selectionLabel",
+                  "path": "/simpleTypes/radio"
+                },
+                "empty": "Select a value from 'Simple Types > decision > radio'"
+              },
+              {
+                "label": "Example: Value transform",
+                "valuePath": "/simpleTypes/select",
+                "transform": {
+                  "type": "textMapping",
+                  "mapping": {
+                    "one": "You selected 'A' which has value 'one'",
+                    "two": "You selected 'B' which has value 'two'",
+                    "three": "You selected 'C' which has value 'three'"
+                  }
+                },
+                "empty": "Select a value from 'Simple Types > decision > select'"
+              },
+              {
+                "label": "Example: Transformer chain",
+                "valuePath": "/simpleTypes/select",
+                "transform": {
+                  "type": "chain",
+                  "transformers": [
+                    {
+                      "type": "selectionLabel",
+                      "path": "/simpleTypes/select"
+                    },
+                    {
+                      "type": "textMapping",
+                      "mapping": {
+                        "A": "😉 selected 'A' which has value 'one'",
+                        "B": "😉 selected 'B' which has value 'two'",
+                        "C": "😉 selected 'C' which has value 'three'"
+                      }
+                    }
+                  ]
+                },
+                "empty": "Select a value from 'Simple Types > decision > select'"
+              },
+              {
+                "label": "label (static)",
+                "value": "value (static)"
+              },
+              {
+                "label": "label (empty value)",
+                "value": "",
+                "empty": true
+              },
+              {
+                "label": "label (empty value placeholder)",
+                "value": "",
+                "empty": "-"
+              },
+              {
+                "label": "",
+                "value": "empty label"
+              },
+              {
+                "valuePath": "/array/simple/0"
+              },
+              {
+                "labelPath": "/array/simple/1",
+                "valuePath": "/array/simple/1"
+              },
+              {
+                "labelPath": "/array/simple/2",
+                "value": "",
+                "empty": true
+              }
+            ]
+          },
+          "properties": {}
+        },
+        "table_key_value_light": {
+          "type": "object",
+          "title": "Simple key value table with divs",
+          "description": "Created with static values and value expressions",
+          "_widget": "hidden",
+          "widget": {
+            "id": "table",
+            "style": "keyValueLight",
+            "no_caption": "Datatable",
+            "collapsed": true,
+            "keyValue": [
+              {
+                "label": "Example: Date transform",
+                "valuePath": "/simpleTypes/date",
+                "transform": {
+                  "type": "dateFormat",
+                  "from": "dd.MM.yyyy",
+                  "to": "yyyy-MM-dd"
+                }
+              },
+              {
+                "label": "Example: Label transform",
+                "valuePath": "/simpleTypes/radio",
+                "transform": {
+                  "type": "selectionLabel",
+                  "path": "/simpleTypes/radio"
+                },
+                "empty": "Select a value from 'Simple Types > decision > radio'"
+              },
+              {
+                "label": "Example: Value transform",
+                "valuePath": "/simpleTypes/select",
+                "transform": {
+                  "type": "textMapping",
+                  "mapping": {
+                    "one": "You selected 'A' which has value 'one'",
+                    "two": "You selected 'B' which has value 'two'",
+                    "three": "You selected 'C' which has value 'three'"
+                  }
+                },
+                "empty": "Select a value from 'Simple Types > decision > select'"
+              },
+              {
+                "label": "Example: Transformer chain",
+                "valuePath": "/simpleTypes/select",
+                "transform": {
+                  "type": "chain",
+                  "transformers": [
+                    {
+                      "type": "selectionLabel",
+                      "path": "/simpleTypes/select"
+                    },
+                    {
+                      "type": "textMapping",
+                      "mapping": {
+                        "A": "😉 selected 'A' which has value 'one'",
+                        "B": "😉 selected 'B' which has value 'two'",
+                        "C": "😉 selected 'C' which has value 'three'"
+                      }
+                    }
+                  ]
+                },
+                "empty": "Select a value from 'Simple Types > decision > select'"
+              },
+              {
+                "label": "label (static)",
+                "value": "value (static)"
+              },
+              {
+                "label": "label (empty value)",
+                "value": "",
+                "empty": true
+              },
+              {
+                "label": "label (empty value placeholder)",
+                "value": "",
+                "empty": "-"
+              },
+              {
+                "label": "",
+                "value": "empty label"
+              },
+              {
+                "valuePath": "/array/simple/0"
+              },
+              {
+                "labelPath": "/array/simple/1",
+                "valuePath": "/array/simple/1"
+              },
+              {
+                "labelPath": "/array/simple/2",
+                "value": "",
+                "empty": true
+              }
+            ]
+          },
+          "properties": {}
+        },
+        "table_multi_col": {
+          "type": "object",
+          "title": "Multi column table",
+          "description": "Created by a model path. Change values in section 'Array' to see results here.",
+          "_widget": "hidden",
+          "widget": {
+            "paging": {
+              "size": 2,
+              "sizeOptions": [],
+              "report": "Showing {first} to {last} of {totalRecords} entries"
+            },
+            "id": "table",
+            "model": {
+              "path": "/array/complex",
+              "transform": {
+                "property-2/sub3": {
+                  "type": "textMapping",
+                  "mapping": {
+                    "2a sub 3": "Value was '2a sub 3' now transformed to 'THIS :-)'",
+                    "2b sub 3": "Value was '2b sub 3' now transformed to 'THAT :-)'"
+                  }
+                }
+              },
+              "example_only__excludes": [
+                "property-2/sub1"
+              ],
+              "example_only__includes": [
+                "property-2/sub1",
+                "property-2/sub2",
+                "property-2/sub3"
+              ]
+            },
+            "caption": "Datatable",
+            "collapsed": true
+          },
+          "properties": {}
+        },
+        "table_multi_col_model": {
+          "type": "object",
+          "title": "Multi column table",
+          "description": "Created with a predefined static model object",
+          "_widget": "hidden",
+          "widget": {
+            "paging": {
+              "size": 2,
+              "report": "Showing {first} to {last} of {totalRecords} entries"
+            },
+            "id": "table",
+            "caption": "Datatable",
+            "collapsed": true,
+            "model": {
+              "transform": {
+                "col-1": {
+                  "type": "textMapping",
+                  "mapping": {
+                    "1 1": "Value was '1 1' now transformed to 'THIS :-)'"
+                  }
+                },
+                "col-2": {
+                  "type": "textMapping",
+                  "mapping": {
+                    "2 2": "Value was '2 2' now transformed to 'THAT :-)'"
+                  }
+                }
+              },
+              "table": {
+                "columns": [
+                  {
+                    "field": "col-1",
+                    "header": "Col 1"
+                  },
+                  {
+                    "field": "col-2",
+                    "header": "Col 2"
+                  },
+                  {
+                    "field": "col-3",
+                    "header": "Col 3"
+                  },
+                  {
+                    "field": "col-4",
+                    "header": "Col 4"
+                  },
+                  {
+                    "field": "col-5",
+                    "header": "Col 5"
+                  }
+                ],
+                "data": [
+                  {
+                    "col-1": "1 1",
+                    "col-2": "1 2",
+                    "col-3": "1 3",
+                    "col-4": "1 4",
+                    "col-5": "1 5"
+                  },
+                  {
+                    "col-1": "2 1",
+                    "col-2": "2 2",
+                    "col-3": "2 3",
+                    "col-4": "2 4",
+                    "col-5": "2 5"
+                  },
+                  {
+                    "col-1": "3 1",
+                    "col-2": "3 2",
+                    "col-3": "3 3",
+                    "col-4": "3 4",
+                    "col-5": "3 5"
+                  },
+                  {
+                    "col-1": "4 1",
+                    "col-2": "4 2",
+                    "col-3": "4 3",
+                    "col-4": "4 4",
+                    "col-5": "4 5"
+                  },
+                  {
+                    "col-1": "5 1",
+                    "col-2": "5 2",
+                    "col-3": "5 3",
+                    "col-4": "5 4",
+                    "col-5": "5 5"
+                  }
+                ]
+              },
+              "example_only__excludes": [
+                "col-1"
+              ],
+              "example_only__includes": [
+                "col-2"
+              ]
+            }
+          },
+          "properties": {}
+        }
+      }
+    },
+    "array": {
+      "type": "object",
+      "description": "Changing values here will have an impact in section 'Datatable'",
+      "properties": {
+        "simple": {
+          "title": "Simple array",
+          "description": "Array items are of a simple string type",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "title": "Item label"
+          }
+        },
+        "complex": {
+          "title": "Complex array",
+          "description": "Array items are of a complex type",
+          "type": "array",
+          "widget": {
+            "id": "array",
+            "style": "-tabview",
+            "buttonAdd": {
+              "label": "Add item",
+              "iconPos": "right"
+            },
+            "buttonRemove": {
+              "label": "Remove item",
+              "iconPos": "right"
+            }
+          },
+          "items": {
+            "type": "object",
+            "properties": {
+              "property-1": {
+                "type": "string",
+                "title": "Property 1"
+              },
+              "property-2": {
+                "type": "object",
+                "properties": {
+                  "sub1": {
+                    "type": "string",
+                    "title": "Property 2 -> sub 1"
+                  },
+                  "sub2": {
+                    "type": "string",
+                    "title": "Property 2 -> sub 2"
+                  },
+                  "sub3": {
+                    "type": "string",
+                    "title": "Property 2 -> sub 3"
+                  }
+                }
+              },
+              "property-3": {
+                "type": "string",
+                "title": "Property 3"
+              }
+            }
+          },
+          "minItems": 2,
+          "maxItems": 5
+        }
+      }
+    }
+  }
+}

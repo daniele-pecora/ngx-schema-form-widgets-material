@@ -1,0 +1,168 @@
+::ng-deep {
+  .ngx-ui-table-no-border {
+    border: none;
+    .ui-table .ui-table-tbody > tr > td {
+      border: none;
+    }
+  }
+}
+
+::ng-deep {
+  td.mat-cell.ngx-ui-cell-border,
+  td.mat-footer-cell.ngx-ui-cell-border,
+  th.mat-header-cell.ngx-ui-cell-border,
+  mat-cell.ngx-ui-cell-border,
+  mat-footer-cell.ngx-ui-cell-border,
+  mat-header-cell.ngx-ui-cell-border {
+    padding-left: 24px;
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-right-color: rgba(0, 0, 0, 0.12);
+  }
+}
+
+
+table {
+  width: 100%;
+}
+
+td.mat-column-star {
+  width: 20px;
+  padding-right: 8px !important;
+}
+
+.mat-row {
+  &:hover {
+    background-color: #e9f3ff;
+  }
+  a {
+    color: #3e75ff;
+    text-decoration: none;
+    &:hover {
+    text-decoration: underline;
+    }
+  }
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-icon {
+  color: #3e75ff;
+}
+
+.ngx-ui-mat-responsive-table-cell-label {
+  display: none;
+}
+
+.ngx-ui-mat-responsive-table-caption {
+  width: 100%;
+  border:none;
+}
+
+.ngx-ui-mat-responsive-table-caption-hidden {
+  display: none;
+}
+
+/**
+ * Make table responsive
+ */
+@media screen and (max-width: 700px) {
+
+  .ngx-ui-mat-responsive-table.mat-elevation-z8 {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .ngx-ui-mat-responsive-table .mat-header-row {
+    display: none;
+  }
+
+  tbody {
+    display: block;
+    width: 100%;
+  }
+
+  .ngx-ui-mat-responsive-table.mat-table {
+    background: transparent;
+    * {
+      box-sizing: border-box;
+    }
+
+    .mat-row {
+      display: block;
+      overflow: hidden;
+      height: auto;
+      position: relative;
+      clear: both;
+      box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+      background-color: #fff;
+      border-radius: 3px;
+      + .mat-row {
+        margin-top: 24px;
+      }
+    }
+
+    .mat-cell {
+      display: block;
+      width: 100%;
+      padding: 0 16px;
+      margin: 16px 0;
+      border: 0 none;
+      &:first-child {
+        padding: 0 48px 0 16px;
+        a {
+          font-size: 20px;
+          // font-weight: 400;
+          color: inherit;
+        }
+        &:before {
+          display: none;
+        }
+      }
+      &.m-card-sub-title {
+        margin-top: -8px;
+        padding: 0 48px 0 16px;
+        color: rgba(0,0,0,.54);
+      }
+    }
+
+    .has_label_on_mobile {
+      &:before {
+        content: attr(data-label);
+        display: inline;
+        font-weight: normal;
+      }
+    }
+
+    .mat-column-star {
+      width: auto;
+      padding: 8px 0 0 !important;
+      margin: 0;
+      position: absolute;
+      top: 0;
+      right: 0;
+      &:before {
+        display: none;
+      }
+    }
+  }
+
+  .mat-paginator {
+    margin-top: 24px;
+  }
+
+  .ngx-ui-mat-responsive-table-cell-label {
+    display: inline;
+    font-weight: 700;
+  }
+  .ngx-ui-mat-responsive-table-cell-label:after {
+    content:":";
+  }
+}
+
+.mat-row-hide-empty, .mat-row.mat-row-hide-empty, .mat-table .mat-row.mat-row-hide-empty {
+  display: none;
+}

@@ -1,0 +1,40 @@
+<!--
+    In Element 'widget'
+                - msgs             = all the messages to show
+                    |- severity    = the severity
+                    |- title       = the label of the message
+                    |- text        = the text to set as message content
+
+                - inline      = set to true when using inside of forms
+                                will set 'display:inline-block' instead of 'display:block'
+-->
+<!-- <p-messages *ngIf="schema.widget?.msgs"
+            [(value)]="msgs"
+            [style.display]="!this.schema?.widget.hasOwnProperty('inline')||this.schema?.widget.inline?'inline-block':null"
+            [closable]="this.schema?.widget?.closable === true"></p-messages> -->
+
+<ng-container *ngFor="let msg of schema.widget?.msgs">
+    <div [style.display]="!this.schema?.widget.hasOwnProperty('inline')||this.schema?.widget.inline?'inline-block':null">
+        <div class="ui-messages ui-widget ui-corner-all ui-messages-{{msg?.severity}}"
+            [class.mat-warn]="msg.severity==='error'"
+            [class.mat-accent]="msg.severity==='success'"
+            [class.mat-primary]="msg.severity==='info'"
+            [class.mat-secondary]="msg.severity==='warn'"
+            [class.mat-toolbar]="true"
+        >
+            <span class="ui-messages-icon pi pi-info-circle" [ngSwitch]="msg?.severity">
+                <mat-icon *ngSwitchCase="'info'">info</mat-icon>
+                <mat-icon *ngSwitchCase="'success'">check_circle</mat-icon>
+                <mat-icon *ngSwitchCase="'warn'">warning</mat-icon>
+                <mat-icon *ngSwitchCase="'error'">error</mat-icon>
+                <mat-icon *ngSwitchDefault>info</mat-icon>
+            </span>
+            <ul>
+                <li>
+                    <span class="ui-messages-summary">{{msg?.title}}</span>
+                    <span class="ui-messages-detail">{{msg?.text}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</ng-container>

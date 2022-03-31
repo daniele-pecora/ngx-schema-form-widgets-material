@@ -1,0 +1,46 @@
+{
+  "type": "object",
+  "properties": {
+    "files": {
+      "type": "object",
+      "title": "File-Upload",
+      "description": "Presentation of the component 'file'.",
+      "properties": {
+        "file-upload-1": {
+          "type": "string",
+          "title": "Upload 1",
+          "description": "Upload any JPEG, GIF, TIFF, PNG, BMP or PDF with max file size of 10MB"
+        },
+        "file-upload-2": {
+          "type": "string",
+          "title": "Upload 2",
+          "description": "Upload any JPEG, GIF, TIFF, PNG, BMP or PDF with max file size of 10MB"
+        },
+        "file-upload-3": {
+          "type": "string",
+          "title": "Upload 3",
+          "description": "Upload any JPEG, GIF, TIFF, PNG, BMP or PDF with max file size of 10MB"
+        },
+        "file-upload-1-name": {
+          "type": "string",
+          "title": "File name of Upload 1",
+          "readOnly": true
+        },
+        "file-upload-1-size": {
+          "type": "string",
+          "title": "File size of Upload 1",
+          "readOnly": true
+        },
+        "file-upload-1-info": {
+          "type": "string",
+          "title": "File info of Upload 1",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "file-upload-1",
+        "file-upload-2"
+      ]
+    }
+  }
+}

@@ -1,0 +1,323 @@
+<!--
+
+Element 'button'
+ - label    : label
+ - description : tooltip
+ - id          : identifier for the button action and secondary style id if 'styleId' is not set
+ - styleId     : style id
+ - styleClass  : style class, can be addionally added to the button element
+ - disabled    : true|false|'valid'|'invalid'|'$ANY'|'$EMPTY' = disabled state, or fieldProperty is in/valid or fieldProperty has/ has not a value
+                 or any value prefix with '$VAL:' that must match with property value
+                 or any value prefix with '$NOT:' that must not match with property value
+ - severity    : primary|accent|warn = material button color attribute
+ - icon        : icon from primeng ultima
+ - iconPos     : left|right = primeng button icon position
+
+
+ - type          : One of the following button styles are supported
+    - 'flat'     = A flat button
+    - 'raised'   = A raised button
+    - 'fab'      = A floating action button
+    - 'mini-fab' = A floating action button at a regular button size
+
+   - position    = Set the position of the button
+                  {
+                    h:[left|right|outer-right|outer-left],
+                    v:[top|middle|bottom|outer-top|outer-bottom]
+                  }
+-->
+
+<ng-container [ngSwitch]="this.getButtonType()" *ngIf="isButtonVisibile(button, formProperty.valid, formProperty.value)">
+  <ng-container *ngSwitchCase="'mat-mini-fab'">
+    <button
+      [ngStyle]="button.inline===false?{display:'block'}:null"
+      [attr.id]="button.styleId||null"
+      i18n
+
+      [attr.rem-label]="button.label||null"
+      [attr.rem-icon]="getIcon(button.icon)||null"
+      [attr.rem-iconPos]="button.iconPos||null"
+
+      [attr.title]="button.description||button.label||null"
+      [disabled]="isClickableDisabled(button, formProperty.valid, formProperty.value)"
+      [color]="button.severity?getSeverity(button.severity):null"
+      [ngClass]="['ngx-ui-widget-button', (button.styleClass||''), (buttonClass||'')]"
+      (click)="button_action($event)"
+      type="button"
+      [matTooltip]="button.description||null"
+
+      mat-mini-fab
+
+
+      [class.ngx-ui-widget-button-left]="button?.position?.h==='left'"
+      [class.ngx-ui-widget-button-right]="button?.position?.h==='right'"
+      [class.ngx-ui-widget-button-left-outer]="button?.position?.h==='outer-left'"
+      [class.ngx-ui-widget-button-right-outer]="button?.position?.h==='outer-right'"
+      [class.ngx-ui-widget-button-top]="button?.position?.v==='top'"
+      [class.ngx-ui-widget-button-top-outer]="button?.position?.v==='outer-top'"
+      [class.ngx-ui-widget-button-middle]="button?.position?.v==='middle'"
+      [class.ngx-ui-widget-button-bottom]="button?.position?.v==='bottom'"
+      [class.ngx-ui-widget-button-bottom-outer]="button?.position?.v==='outer-bottom'"
+
+      [attr.role]="'button'"
+    >
+      <mat-icon *ngIf="button.icon && button.iconPos==='left'" class="mat-24" aria-label="">{{button.icon|IconName}}
+      </mat-icon>
+      <ng-container *ngIf="button.label">{{button.label}}</ng-container>
+      <mat-icon *ngIf="button.icon && button.iconPos!=='left'" class="mat-24" aria-label="">
+        {{button.icon|IconName}}
+      </mat-icon>
+    </button>
+  </ng-container>
+  <ng-container *ngSwitchCase="'mat-fab'">
+    <button
+      [ngStyle]="button.inline===false?{display:'block'}:null"
+      [attr.id]="button.styleId||null"
+      i18n
+
+      [attr.rem-label]="button.label||null"
+      [attr.rem-icon]="getIcon(button.icon)||null"
+      [attr.rem-iconPos]="button.iconPos||null"
+
+      [attr.title]="button.description||button.label||null"
+      [disabled]="isClickableDisabled(button, formProperty.valid, formProperty.value)"
+      [color]="button.severity?getSeverity(button.severity):null"
+      [ngClass]="['ngx-ui-widget-button', (button.styleClass||''), (buttonClass||'')]"
+      (click)="button_action($event)"
+      type="button"
+      [matTooltip]="button.description||null"
+
+      mat-fab
+
+
+      [class.ngx-ui-widget-button-left]="button?.position?.h==='left'"
+      [class.ngx-ui-widget-button-right]="button?.position?.h==='right'"
+      [class.ngx-ui-widget-button-left-outer]="button?.position?.h==='outer-left'"
+      [class.ngx-ui-widget-button-right-outer]="button?.position?.h==='outer-right'"
+      [class.ngx-ui-widget-button-top]="button?.position?.v==='top'"
+      [class.ngx-ui-widget-button-top-outer]="button?.position?.v==='outer-top'"
+      [class.ngx-ui-widget-button-middle]="button?.position?.v==='middle'"
+      [class.ngx-ui-widget-button-bottom]="button?.position?.v==='bottom'"
+      [class.ngx-ui-widget-button-bottom-outer]="button?.position?.v==='outer-bottom'"
+
+      [attr.role]="'button'"
+    >
+      <mat-icon *ngIf="button.icon && button.iconPos==='left'" class="mat-24" aria-label="">{{button.icon|IconName}}
+      </mat-icon>
+      <ng-container *ngIf="button.label">{{button.label}}</ng-container>
+      <mat-icon *ngIf="button.icon && button.iconPos!=='left'" class="mat-24" aria-label="">
+        {{button.icon|IconName}}
+      </mat-icon>
+    </button>
+  </ng-container>
+  <ng-container *ngSwitchCase="'mat-icon-button'">
+    <button
+      [ngStyle]="button.inline===false?{display:'block'}:null"
+      [attr.id]="button.styleId||null"
+      i18n
+
+      [attr.rem-label]="button.label||null"
+      [attr.rem-icon]="getIcon(button.icon)||null"
+      [attr.rem-iconPos]="button.iconPos||null"
+
+      [attr.title]="button.description||button.label||null"
+      [disabled]="isClickableDisabled(button, formProperty.valid, formProperty.value)"
+      [color]="button.severity?getSeverity(button.severity):null"
+      [ngClass]="['ngx-ui-widget-button', (button.styleClass||''), (buttonClass||'')]"
+      (click)="button_action($event)"
+      type="button"
+      [matTooltip]="button.description||null"
+
+      mat-icon-button
+
+
+      [class.ngx-ui-widget-button-left]="button?.position?.h==='left'"
+      [class.ngx-ui-widget-button-right]="button?.position?.h==='right'"
+      [class.ngx-ui-widget-button-left-outer]="button?.position?.h==='outer-left'"
+      [class.ngx-ui-widget-button-right-outer]="button?.position?.h==='outer-right'"
+      [class.ngx-ui-widget-button-top]="button?.position?.v==='top'"
+      [class.ngx-ui-widget-button-top-outer]="button?.position?.v==='outer-top'"
+      [class.ngx-ui-widget-button-middle]="button?.position?.v==='middle'"
+      [class.ngx-ui-widget-button-bottom]="button?.position?.v==='bottom'"
+      [class.ngx-ui-widget-button-bottom-outer]="button?.position?.v==='outer-bottom'"
+
+      [attr.role]="'button'"
+    >
+      <mat-icon *ngIf="button.icon && button.iconPos==='left'" class="mat-24" aria-label="">{{button.icon|IconName}}
+      </mat-icon>
+      <ng-container *ngIf="button.label">{{button.label}}</ng-container>
+      <mat-icon *ngIf="button.icon && button.iconPos!=='left'" class="mat-24" aria-label="">
+        {{button.icon|IconName}}
+      </mat-icon>
+    </button>
+  </ng-container>
+  <ng-container *ngSwitchCase="'mat-raised-button'">
+    <button
+      [ngStyle]="button.inline===false?{display:'block'}:null"
+      [attr.id]="button.styleId||null"
+      i18n
+
+      [attr.rem-label]="button.label||null"
+      [attr.rem-icon]="getIcon(button.icon)||null"
+      [attr.rem-iconPos]="button.iconPos||null"
+
+      [attr.title]="button.description||button.label||null"
+      [disabled]="isClickableDisabled(button, formProperty.valid, formProperty.value)"
+      [color]="button.severity?getSeverity(button.severity):null"
+      [ngClass]="['ngx-ui-widget-button', (button.styleClass||''), (buttonClass||'')]"
+      (click)="button_action($event)"
+      type="button"
+      [matTooltip]="button.description||null"
+
+      mat-raised-button
+      [class.mat-icon-button]="!this.button.label && this.button.icon"
+
+
+      [class.ngx-ui-widget-button-left]="button?.position?.h==='left'"
+      [class.ngx-ui-widget-button-right]="button?.position?.h==='right'"
+      [class.ngx-ui-widget-button-left-outer]="button?.position?.h==='outer-left'"
+      [class.ngx-ui-widget-button-right-outer]="button?.position?.h==='outer-right'"
+      [class.ngx-ui-widget-button-top]="button?.position?.v==='top'"
+      [class.ngx-ui-widget-button-top-outer]="button?.position?.v==='outer-top'"
+      [class.ngx-ui-widget-button-middle]="button?.position?.v==='middle'"
+      [class.ngx-ui-widget-button-bottom]="button?.position?.v==='bottom'"
+      [class.ngx-ui-widget-button-bottom-outer]="button?.position?.v==='outer-bottom'"
+
+      [attr.role]="'button'"
+    >
+      <mat-icon *ngIf="button.icon && button.iconPos==='left'" class="mat-24" aria-label="">{{button.icon|IconName}}
+      </mat-icon>
+      <ng-container *ngIf="button.label">{{button.label}}</ng-container>
+      <mat-icon *ngIf="button.icon && button.iconPos!=='left'" class="mat-24" aria-label="">
+        {{button.icon|IconName}}
+      </mat-icon>
+    </button>
+  </ng-container>
+  <ng-container *ngSwitchCase="'mat-flat-button'">
+      <button
+        [ngStyle]="button.inline===false?{display:'block'}:null"
+        [attr.id]="button.styleId||null"
+        i18n
+
+        [attr.rem-label]="button.label||null"
+        [attr.rem-icon]="getIcon(button.icon)||null"
+        [attr.rem-iconPos]="button.iconPos||null"
+
+        [attr.title]="button.description||button.label||null"
+        [disabled]="isClickableDisabled(button, formProperty.valid, formProperty.value)"
+        [color]="button.severity?getSeverity(button.severity):null"
+        [ngClass]="['ngx-ui-widget-button', (button.styleClass||''), (buttonClass||'')]"
+        (click)="button_action($event)"
+        type="button"
+        [matTooltip]="button.description||null"
+
+        mat-flat-button
+        [class.mat-icon-button]="!this.button.label && this.button.icon"
+
+
+        [class.ngx-ui-widget-button-left]="button?.position?.h==='left'"
+        [class.ngx-ui-widget-button-right]="button?.position?.h==='right'"
+        [class.ngx-ui-widget-button-left-outer]="button?.position?.h==='outer-left'"
+        [class.ngx-ui-widget-button-right-outer]="button?.position?.h==='outer-right'"
+        [class.ngx-ui-widget-button-top]="button?.position?.v==='top'"
+        [class.ngx-ui-widget-button-top-outer]="button?.position?.v==='outer-top'"
+        [class.ngx-ui-widget-button-middle]="button?.position?.v==='middle'"
+        [class.ngx-ui-widget-button-bottom]="button?.position?.v==='bottom'"
+        [class.ngx-ui-widget-button-bottom-outer]="button?.position?.v==='outer-bottom'"
+
+        [attr.role]="'button'"
+      >
+        <mat-icon *ngIf="button.icon && button.iconPos==='left'" class="mat-24" aria-label="">{{button.icon|IconName}}
+        </mat-icon>
+        <ng-container *ngIf="button.label">{{button.label}}</ng-container>
+        <mat-icon *ngIf="button.icon && button.iconPos!=='left'" class="mat-24" aria-label="">
+          {{button.icon|IconName}}
+        </mat-icon>
+      </button>
+    </ng-container>
+    <ng-container *ngSwitchCase="'mat-stroked-button'">
+        <button
+          [ngStyle]="button.inline===false?{display:'block'}:null"
+          [attr.id]="button.styleId||null"
+          i18n
+
+          [attr.rem-label]="button.label||null"
+          [attr.rem-icon]="getIcon(button.icon)||null"
+          [attr.rem-iconPos]="button.iconPos||null"
+
+          [attr.title]="button.description||button.label||null"
+          [disabled]="isClickableDisabled(button, formProperty.valid, formProperty.value)"
+          [color]="button.severity?getSeverity(button.severity):null"
+          [ngClass]="['ngx-ui-widget-button', (button.styleClass||''), (buttonClass||'')]"
+          (click)="button_action($event)"
+          type="button"
+          [matTooltip]="button.description||null"
+
+          mat-flat-button
+          [class.mat-icon-button]="!this.button.label && this.button.icon"
+
+
+          [class.ngx-ui-widget-button-left]="button?.position?.h==='left'"
+          [class.ngx-ui-widget-button-right]="button?.position?.h==='right'"
+          [class.ngx-ui-widget-button-left-outer]="button?.position?.h==='outer-left'"
+          [class.ngx-ui-widget-button-right-outer]="button?.position?.h==='outer-right'"
+          [class.ngx-ui-widget-button-top]="button?.position?.v==='top'"
+          [class.ngx-ui-widget-button-top-outer]="button?.position?.v==='outer-top'"
+          [class.ngx-ui-widget-button-middle]="button?.position?.v==='middle'"
+          [class.ngx-ui-widget-button-bottom]="button?.position?.v==='bottom'"
+          [class.ngx-ui-widget-button-bottom-outer]="button?.position?.v==='outer-bottom'"
+
+          [attr.role]="'button'"
+        >
+          <mat-icon *ngIf="button.icon && button.iconPos==='left'" class="mat-24" aria-label="">{{button.icon|IconName}}
+          </mat-icon>
+          <ng-container *ngIf="button.label">{{button.label}}</ng-container>
+          <mat-icon *ngIf="button.icon && button.iconPos!=='left'" class="mat-24" aria-label="">
+            {{button.icon|IconName}}
+          </mat-icon>
+        </button>
+      </ng-container>
+  <ng-container *ngSwitchDefault>
+    <button
+      [ngStyle]="button.inline===false?{display:'block'}:null"
+      [attr.id]="button.styleId||null"
+      i18n
+
+      [attr.rem-label]="button.label||null"
+      [attr.rem-icon]="getIcon(button.icon)||null"
+      [attr.rem-iconPos]="button.iconPos||null"
+
+      [attr.title]="button.description||button.label||null"
+      [disabled]="isClickableDisabled(button, formProperty.valid, formProperty.value)"
+      [color]="button.severity?getSeverity(button.severity):null"
+      [ngClass]="['ngx-ui-widget-button', (button.styleClass||''), (buttonClass||'')]"
+      (click)="button_action($event)"
+      type="button"
+      [matTooltip]="button.description||null"
+
+      mat-button
+
+      [class.mat-icon-button]="!this.button.label && this.button.icon"
+
+
+      [class.ngx-ui-widget-button-left]="button?.position?.h==='left'"
+      [class.ngx-ui-widget-button-right]="button?.position?.h==='right'"
+      [class.ngx-ui-widget-button-left-outer]="button?.position?.h==='outer-left'"
+      [class.ngx-ui-widget-button-right-outer]="button?.position?.h==='outer-right'"
+      [class.ngx-ui-widget-button-top]="button?.position?.v==='top'"
+      [class.ngx-ui-widget-button-top-outer]="button?.position?.v==='outer-top'"
+      [class.ngx-ui-widget-button-middle]="button?.position?.v==='middle'"
+      [class.ngx-ui-widget-button-bottom]="button?.position?.v==='bottom'"
+      [class.ngx-ui-widget-button-bottom-outer]="button?.position?.v==='outer-bottom'"
+
+      [attr.role]="'button'"
+    >
+      <mat-icon *ngIf="button.icon && button.iconPos==='left'" class="mat-24" aria-label="">{{button.icon|IconName}}
+      </mat-icon>
+      <ng-container *ngIf="button.label">{{button.label}}</ng-container>
+      <mat-icon *ngIf="button.icon && button.iconPos!=='left'" class="mat-24" aria-label="">
+        {{button.icon|IconName}}
+      </mat-icon>
+    </button>
+  </ng-container>
+</ng-container>

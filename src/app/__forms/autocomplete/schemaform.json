@@ -1,0 +1,74 @@
+{
+    "widget": {
+        "id": "form",
+        "split": false
+    },
+    "required": [
+        "autocomplete-simple"
+    ],
+    "properties": {
+        "autocomplete-simple": {
+            "widget": {
+                "id": "autocomplete",
+                "serviceUrl": "https://130.117.76.9/search/?key=iTzWSiYpGxDvhATNtSrqx5gDcnMOkntL&format=json&addressdetails=1&limit=10&countrycodes=de&q={__ac_query__}",
+                "labelExpression": "(item.address.postcode?item.address.postcode+' ':'') + (item.address.city?item.address.city:((item.address.state?item.address.state :'')))",
+                "resultExpression": "data",
+                "minLength": 1,
+                "_filled": true,
+                "forceSelection": true,
+                "forceSelectionError": {
+                    "errorWhenNotRequired": true,
+                    "errorCode": "OBJECT_MISSING_REQUIRED_PROPERTY",
+                    "errorMessage": "X Please select item from list"
+                },
+                "serviceOptions": {
+                    "method": "POST",
+                    "headers": {
+                        "X-ApiKey": "${apiKey}",
+                        "content-type": "application/json",
+                        "accept": "application/json",
+                        "X-MyHeader": "{mymodel.userId}"
+                    },
+                    "params": {
+                        "xq": "{__ac_query__}",
+                        "xcity": "{mymodel.city}",
+                        "xcountry": "{mymodel.country}"
+                    }
+                }
+            },
+            "m-placeholder": "12345 city"
+        },
+        "autocomplete-multi": {
+            "widget": {
+                "id": "autocomplete",
+                "serviceUrl": "https://130.117.76.9/search/?key=iTzWSiYpGxDvhATNtSrqx5gDcnMOkntL&format=json&addressdetails=1&limit=10&countrycodes=de&q={__ac_query__}",
+                "labelExpression": "(item.address.postcode?item.address.postcode+' ':'') + (item.address.city?item.address.city:((item.address.state?item.address.state :'')))",
+                "resultExpression": "data",
+                "minLength": 1,
+                "_filled": true,
+                "unique": true
+            },
+            "m-placeholder": "12345 city"
+        },
+        "autocomplete-multi-min-max": {
+            "widget": {
+                "id": "autocomplete",
+                "serviceUrl": "https://130.117.76.9/search/?key=iTzWSiYpGxDvhATNtSrqx5gDcnMOkntL&format=json&addressdetails=1&limit=10&countrycodes=de&q={__ac_query__}",
+                "labelExpression": "(item.address.postcode?item.address.postcode+' ':'') + (item.address.city?item.address.city:((item.address.state?item.address.state :'')))",
+                "resultExpression": "data",
+                "minLength": 1,
+                "_filled": true
+            },
+            "m-placeholder": "12345 city"
+        },
+        "autocomplete-multi-min-max-predefined": {
+            "widget": {
+                "id": "autocomplete",
+                "_filled": true,
+                "matchExpression": "!query || trim(query)=='' || 0==indexOf(toLowerCase(value),toLowerCase(query))",
+                "dropdown": true
+            },
+            "m-placeholder": "12345 city"
+        }
+    }
+}

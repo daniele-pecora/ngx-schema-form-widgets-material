@@ -1,0 +1,39 @@
+<!--
+Element 'checkbox'
+  - title = label
+
+Element 'checkbox' in 'widget'
+  - labelPosition = after|before
+-->
+<!--
+Element 'widget'
+  - noSpacer = Allows to hide the preserved free space where the helper-text and validation message are displayed.
+              `false` (default) = shows the preserved space
+              `true` = hides the preserved space when no helper-text and validation message is present.
+              'always' , will hide the space completely and will never display a helper-text or validation message
+-->
+<mat-form-field [appearance]="schema?.widget?.filled?'fill':'standard'" class="ngx-ui-mat-form-field fieldSpacerFix"
+[class.ngx-ui-widget-full-width]="!schema.widget?.size"
+>
+<!-- hidden field so mat-form-field can be used-->
+<input matInput [formControl]="control" [hidden]="true" aria-hidden="true" [attr.size]="schema.widget?.size||null">
+
+<mat-checkbox
+  #checkbox
+  [id]="id"
+  [name]="name"
+  [labelPosition]="schema.widget.labelPosition||'null'"
+  [formControl]="control"
+  [indeterminate]="control.value !== false && control.value !== true ? true :null"
+  [disabled]="schema.readOnly"
+  [required]="(formProperty|IsRequiredAttr)"
+  [attr.aria-required]="(formProperty|IsRequiredAttr)"
+>{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+<!--{{formProperty|IsRequiredAsterisk}}-->
+</mat-checkbox>
+<mat-hint *ngIf="schema.description">{{schema.description}}</mat-hint>
+<mat-error *ngIf="checkbox.invalid && checkbox.dirty && control?.errors">
+  <ngx-ui-field-validation-messages [formComponent]="this" [validationErrors]="control.errors"></ngx-ui-field-validation-messages>
+</mat-error>
+<input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="control">
+</mat-form-field>

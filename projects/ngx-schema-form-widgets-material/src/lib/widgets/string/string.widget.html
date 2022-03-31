@@ -1,0 +1,121 @@
+<!--
+Element 'schema':
+        - title
+        - name
+        - description
+        - minLength
+        - maxLength
+
+Element 'widget'
+        - mask (see primeng input mask)
+
+        - size                         - size of the HTML input field
+
+        - prefix [ {icon, text }]
+        - suffix  [ {icon, text }]
+        - filled = filled background for the input section of the widget
+-->
+<!--
+Element 'widget'
+  - noSpacer = Allows to hide the preserved free space where the helper-text and validation message are displayed.
+              `false` (default) = shows the preserved space
+              `true` = hides the preserved space when no helper-text and validation message is present.
+              'always' , will hide the space completely and will never display a helper-text or validation message
+-->
+<!-- due to a misconcetion in ReactiveForm setting '[disabled]' doesn't visualize the 'disabled' state, so also '[attr.disabled]' must be set -->
+<input *ngIf="this.getInputType()==='hidden'; else notHiddenFieldBlock"
+       matInput
+       [name]="name"
+       [readonly]="schema.readOnly"
+       [attr.type]="this.getInputType()"
+       [attr.id]="id"
+       [formControl]="control"
+       [placeholder]="schema.placeholder||null"
+       [disabled]="schema.readOnly"
+       [attr.disabled]="schema.readOnly?'disabled':null"
+       [attr.maxlength]="schema.maxLength||null"
+       [attr.minlength]="schema.minLength||null"
+       [attr.size]="schema.widget?.size||null"
+       [attr.autocomplete]="schema?.widget?.autofill"
+
+       aria-hidden="true"
+>
+
+<ng-template #notHiddenFieldBlock>
+  <mat-form-field *ngIf="!schema.widget || !schema.widget.mask" [appearance]="schema?.widget?.filled?'fill':'standard'"
+  [class.ngx-ui-widget-full-width]="!schema.widget?.size"
+  >
+    <ngx-ui-widget-addon *ngIf="schema?.widget?.prefix" [addons]="schema.widget.prefix"></ngx-ui-widget-addon>
+    <input *ngIf="schema?.widget?.keyFilter && (!schema.widget || !schema.widget.mask); else noKeyFilter"
+           matInput
+           [name]="name"
+           [readonly]="schema.readOnly"
+           [attr.type]="this.getInputType()"
+           [id]="id"
+           [formControl]="control"
+           [placeholder]="schema.placeholder||null"
+           [disabled]="schema.readOnly"
+           [attr.disabled]="schema.readOnly?'disabled':null"
+           [attr.maxlength]="schema.maxLength||null"
+           [attr.minlength]="schema.minLength||null"
+           [attr.size]="schema.widget?.size||null"
+           [keyFilter]="schema?.widget?.keyFilter||null"
+           [attr.autocomplete]="schema?.widget?.autofill"
+
+           [attr.required]="(formProperty|IsRequiredAttrString)"
+           [attr.aria-required]="(formProperty|IsRequiredAttr)"
+    >
+    <input #noKeyFilter
+          *ngIf="!schema.widget || !schema.widget.mask"
+           matInput
+           [name]="name"
+           [readonly]="schema.readOnly"
+           [attr.type]="this.getInputType()"
+           [id]="id"
+           [formControl]="control"
+           [placeholder]="schema.placeholder||null"
+           [disabled]="schema.readOnly"
+           [attr.disabled]="schema.readOnly?'disabled':null"
+           [attr.maxlength]="schema.maxLength||null"
+           [attr.minlength]="schema.minLength||null"
+           [attr.size]="schema.widget?.size||null"
+           [attr.autocomplete]="schema?.widget?.autofill"
+
+           [attr.required]="(formProperty|IsRequiredAttrString)"
+           [attr.aria-required]="(formProperty|IsRequiredAttr)"
+    >
+    <ngx-ui-widget-addon *ngIf="schema?.widget?.suffix" [addons]="schema.widget.suffix" [suffix]="true"></ngx-ui-widget-addon>
+    <mat-label>{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}<ngx-ui-widget-required-mark [formProperty]="formProperty"></ngx-ui-widget-required-mark>
+      <!-- {{formProperty|IsRequiredAsterisk}} -->
+    </mat-label>
+
+    <mat-hint align="start" *ngIf="schema.description">{{schema.description}}</mat-hint>
+
+    <mat-error *ngIf="control?.errors">
+      <ngx-ui-field-validation-messages [formComponent]="this"></ngx-ui-field-validation-messages>
+    </mat-error>
+
+  </mat-form-field>
+
+  <ngx-ui-string-inputMask
+    *ngIf="schema.widget && schema.widget.mask"
+
+    [originField]="this"
+
+    [readonly]="schema.readOnly"
+    [type]="this.getInputType()"
+    inputId="{{id}}"
+    [formControl]="control"
+    [placeholder]="schema.placeholder||null"
+    [disabled]="schema.readOnly"
+
+    [slotChar]="schema.widget.slotChar ? schema.widget.slotChar : '_'"
+    [mask]="schema.widget.mask"
+
+    [maxlength]="schema.maxLength||null"
+    [minlength]="schema.minLength||null"
+    [size]="schema.widget?.size||null"
+
+    [required]="(formProperty|IsRequiredAttr)"
+  ></ngx-ui-string-inputMask>
+</ng-template>

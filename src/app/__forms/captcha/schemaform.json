@@ -1,0 +1,47 @@
+{
+  "widget": {
+    "id": "form",
+    "asCard": true
+  },
+  "properties": {
+    "captchas": {
+      "type": "object",
+      "widget": "form",
+      "properties": {
+        "captcha": {
+          "widget": {
+            "_script_url": "https://nocapctha.js",
+            "loadingMsg": "Custom message showing when CAPTCHA is loading...",
+            "loadingError": "Custom message showing when loading CAPTCHA has failed",
+            "id": "captcha",
+            "siteKey": "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI",
+            "type": "image audio",
+            "language": "de",
+            "theme": "light",
+            "size": "visible",
+            "consentRequired": true,
+            "consentContent": "[size=14]Diese Seite verwendet Google ReCAPTCHA [img=https://www.gstatic.com/recaptcha/api2/logo_48.png height=25]. [br]Bevor das Formular abgesendet werden kann, wird das Einverständnis [u][url=https://policies.google.com/privacy? target=_blank]zur Datenschutzrichtlinie von Google Dienste[/url][/u] benötigt[/size]",
+            "consentPrompt": "Ich bin einverstanden",
+            "consentCookieName": "ReCAPTCHA_ui-widget-consentCookie",
+            "consentStatic": true,
+            "consentTitle": "Einverständniserklärung zur Nutzung von ReCAPTCHA"
+          }
+        },
+        "captcha-invisible": {
+          "widget": {
+            "id": "captcha",
+            "siteKey": "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI",
+            "type": "image audio",
+            "language": "de",
+            "theme": "light",
+            "size": "invisible"
+          }
+        }
+      },
+      "order": [
+        "captcha-invisible",
+        "captcha"
+      ]
+    }
+  }
+}

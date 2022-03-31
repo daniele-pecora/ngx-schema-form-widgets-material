@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "properties": {
+    "checkAge": {
+      "type": "boolean",
+      "widget": {
+        "id": "checkbox",
+        "labelPosition": "before",
+        "validationMessage": "Certify your age."
+      },
+      "title": "I'm 18 years old or above",
+      "description": "Verification of your age.",
+      "enum": [
+        true
+      ]
+    }
+  }
+}

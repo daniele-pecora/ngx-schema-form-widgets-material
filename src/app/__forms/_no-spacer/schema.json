@@ -1,0 +1,51 @@
+{
+    "type": "object",
+    "properties": {
+        "input": {
+            "type": "string",
+            "title": "input 1",
+            "description": "Helpertext 1 (helper text)",
+            "pattern": "[A-Z]"
+        },
+        "input2": {
+            "type": "string",
+            "title": "input 2 (noSpacer)",
+            "_description": "Helpertext 2",
+            "pattern": "[A-Z]"
+        },
+        "input3": {
+            "type": "string",
+            "title": "input 3 (always)",
+            "description": "Helpertext 3",
+            "pattern": "[A-Z]"
+        },
+        "input4": {
+            "type": "string",
+            "title": "input 4 (default)",
+            "_description": "Helpertext 4",
+            "pattern": "[A-Z]"
+        },
+        "hr1": {
+            "type": "string"
+        },
+        "checkboxes1": {
+            "type": "array",
+            "items": [
+                {
+                    "type": "boolean"
+                }
+            ]
+        },
+        "hr2": {
+            "type": "string"
+        },
+        "checkboxes2": {
+            "type": "array",
+            "items": [
+                {
+                    "type": "boolean"
+                }
+            ]
+        }
+    }
+}

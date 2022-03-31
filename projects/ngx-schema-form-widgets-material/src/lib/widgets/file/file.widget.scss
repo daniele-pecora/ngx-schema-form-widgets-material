@@ -1,0 +1,54 @@
+.input-upload-file--delete {
+  vertical-align: bottom;
+}
+
+.input-upload-file--delete--solo {
+  margin-left: -1.5em;
+}
+
+.file-upload-label--display-block {
+  display: block;
+}
+
+.file-upload-image-no-preview {
+  display: inline-block;
+  /** margin fixes the delete button when the file name is not shown */
+  margin-bottom: 0.5em;
+  margin-right: 0.2em;
+  /* make absolute content possible */
+  position: relative;
+}
+
+.file-upload-image-no-preview-icon {
+  display: block;
+  min-width: 3em;
+  min-height: 3em;
+  text-align: center;
+  opacity: 0.5;
+  padding: 1em;
+  text-align: center;
+  line-height: 1em;
+  /** not setting a border color uses the text color so it matches with the icon */
+  border-style: solid;
+  border-width: 2px;
+  /** margin fixes the delete button when the file name is not shown */
+/*  margin-bottom: 0.5em;
+  margin-right: 0.2em;*/
+}
+
+.file-upload-image-no-preview-text {
+  font-size: 0.5em;
+  position: absolute;
+}
+
+.file-upload-label {
+  margin-right: 1em;
+}
+
+/**
+ * to get the data from img tag the tag must be present in html structure
+ * but must not be neccessary visible
+ */
+ .input-upload-file--preview-hidden {
+  display: none;
+}

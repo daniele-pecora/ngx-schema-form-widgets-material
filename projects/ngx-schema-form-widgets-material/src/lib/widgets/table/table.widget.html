@@ -1,0 +1,650 @@
+<!--
+    Element 'widget':
+        - caption    = Table caption
+        - model      = The description of the table data
+            - path      :  The path to the object containing the model to render in table.
+                            e.g. <code>/complexTypes/wizard</code>
+            - table = The model a static object. Will be ignored if <code>path</code> is set
+                            - columns = An array containing the columns information
+                                - header = The label to show as column header
+                                - field  = The property in data property
+                                - sort   = Enable sorting for this column
+                                - sortAriaLabel     = Aria label text for sorting icon
+                                - sortAriaLabelAsc  = Aria label text for sorting icon when sorting ascending
+                                - sortAriaLabelDesc = Aria label text for sorting icon when sorting descending
+                            - data = An array of items containig values for every columns field
+                        e.g.
+                        {
+                            "columns" : [
+                                {"header" : "Column 1", "field" : "property-1", 
+                                    "sort": true, 
+                                    "sortAriaLabel": "Activate to sort 'Column 1'",
+                                    "sortAriaLabelAsc": "Activate to sort 'Column 1' in ascending order",
+                                    "sortAriaLabelDesc": "Activate to sort 'Column 1' in descending order"
+                                 }
+                                ,{"header" : "Column 2", "field" : "property-2"}
+                                ,{"header" : "Column 3", "field" : "property-3"}
+                                ],
+                            "data" : [
+                                { "property-1" : "Value 1", "property-2" : "Value 2", "property-3" : "Value 3",  }
+                                ,{ "property-1" : "Value 1a", "property-2" : "Value 2a", "property-3" : "Value 3a",  }
+                                ,{ "property-1" : "Value 1b", "property-2" : "Value 2b", "property-3" : "Value 3b",  }
+                            ]
+                        }
+            - excludes  :  Array of columns-id <code>columns.field</code> for columns that will not be shown up in table
+                           e.g:
+                           <code>
+                                "excludes": [
+                                    "col-1"
+                                ]
+                           </code>
+                           or
+                           <code>git
+                                "excludes": [
+                                    "property-2/sub1"
+                                ]
+                           </code>
+                           or
+            - includes  :  Array of columns-id <code>columns.field</code> for columns that should be shown up in table explicitely
+                           e.g:
+                           <code>
+                                "includes": [
+                                    "col-5",
+                                    "col-6"
+                                ]
+                           </code>
+                           or
+                           <code>
+                                "includes": [
+                                    "property-2/sub1",
+                                    "property-2/sub2",
+                                    "property-2/sub3"
+                                ]
+                           </code> 
+                           
+            - transform :  A transformer for converting a cell value.
+                           See also section 'Currentyl supported transformers'
+                           e.g:
+                            <code>
+                                "model": {
+                                    "path": "/array/complex",
+                                    "transform": {
+                                        "property-2/sub3": {
+                                            "type": "textMapping",
+                                            "mapping": {
+                                            "2a sub 3": "Value was '2a sub 3' but I give you 'THIS :-)'",
+                                            "2b sub 3": "Value was '2b sub 3' but I give you 'THAT :-)'"
+                                        }
+                                    }
+                                }
+                            </code>
+            - transformLabel: Same as <code>transform</code> but for Labels
+
+        - style      = keyValue | keyValueLight | (default|normal)
+        - collapsed  = true|false if true it removes border from cells
+
+        Table modes
+        - default       A multi-column table based on a widget path.
+                        The path to the data may point to an object or array type
+        - keyValueLight Is the same as KeyValue but with DIVs.
+                        This might be useful when presenting less data.
+        - keyValue          KeyValue draws a table with only 2 columns where the left column contains the labels and the right column contains the values
+                    {
+                            - label     :   The label to set.
+                                            Set to an empty string to leave empty.
+                            - value     :   The value to set.
+                                            Set to an empty string to leave empty.
+                            - labelPath :   The path to a widget to use its label.
+                                            e.g :  /array/simple/1
+                                            If its parent is of a type `array` then the title will be taken from the parents `items` property.
+                                            If either the property `label` is set or the property `labelPath` or no tilte is found
+                                            then the title will be tried to be resolved via the `valuePath` property if set.
+                                            Will be ignored if `label` is set.
+                            - valuePath :   the path to a widget containing the value to use.
+                                            Will be ignored if `value` is set.
+                            - empty     :   false|true|'string'
+                                            Default empty values will be excluded.
+                                            <code>false</code> Set to false to exclude rows with empty values (default)
+                                            <code>true</code>  Set to true to include also rows with empty values
+                                            <code>string</code> set to any string as replacement for empty values
+                            - transform :   A transformer for converting a cell value.
+                                            See also section 'Currentyl supported transformers'
+                                            e.g:
+                                            <code>
+                                            "transform": {
+                                                "type": "dateFormat",
+                                                "from": "dd.MM.yyyy",
+                                                "to": "yyyy-MM-dd"
+                                            }
+                                            </code>
+                            - transformLabel: Same as <code>transform</code> but for Labels
+
+                    }
+                
+                    tables of type `keyValue` have support for setting the with for the `key` column
+                    by using percentage or column groups
+                        using percentage: 
+                        - `keyColWidth` = the width of the key column in percentage (n%). eg: `30%`
+
+                        using column group definition:
+                        - `keyColGroup` = the name of the tables to group their column for size measuring
+                        - `keyColWidth` = the algorithm/width to process
+                            values:
+                                - `max` = will use the width of the largest possible key column of all tables (only with `keyColGroup`)
+                                - `min` = will use the width of the smallest possible key column of all tables (only with `keyColGroup`)
+
+
+        Paging
+            Table types/modes supporting paging are `default` and `keyValue`. (The table mode `keyValueLight` DOES NOT support paging.)
+            - paging = Setting any value will enable paging for this table
+                - size        = Set the amount of items per page (default all)
+                - sizeOptions = An array of numbers defining the page sizes the use can select from
+                - position    = Position of the paginator, options are "top", "bottom" (default), "both" (NOT YET SUPPORTED WILL COME IN FUTURE RELEASE)
+            Note:
+                When using paginator im may come to unexpected behavour when counting pages
+                if empty rows are hidden by using the `keyValue.empty` feature.
+                So it is explicitly NOT RECOMMENDED to activate that feature when using a paginator.
+                
+
+                - labels
+                    - next      =  Tooltip for the lint to the next page
+                    - prev      =  Tooltip for the lint to the previous page
+                    - first     =  Tooltip for the lint to the first page
+                    - last      =  Tooltip for the lint to the last page
+                    - perPage   =  Label to show besides the selection or number of items per page
+                    - report    =  Template of the current page report element. 
+                                    Available placeholders are:
+                                    `{currentPage}`  the index of the current page
+                                    `{totalPages}`   the amount of total pages
+                                    `{rows}`         the amount of entry per page
+                                    `{first}`        the index of the first entry of the current page
+                                    `{last}`         the index of the last entry of the current page
+                                    `{totalRecords}` the number of total entries
+                                     all index do start at 1
+            Example:
+            ```
+            "widget": {
+                "id": "table",
+                "paging": {
+                    "size": 4,
+                    "sizeOptions": [2, 3, 4, 5 ],
+                    "labels": {
+                        "first": "First page",
+                        "last": "Last page",
+                        "prev": "Previous page",
+                        "next": "Next page",
+                        "report": "Showing {first} to {last} of {totalRecords} entries. Current page:{currentPage} of {totalPages} showing {rows} entries",
+                        "perPage": "Entries per page"
+                    }
+                },
+                ...
+            }
+            ```
+
+
+            ------------------------------------------------
+            Currentyl supported transformers
+            ------------------------------------------------
+            
+            Text mapping (textMapping)
+            ------------------------------
+            This transformer will simply hold a replacement mapping
+            - type               : The type of the transformer.
+                                    Must be set to <code>textMapping</code>
+            - mapping            : The replacement mapping.
+                                    Any cell value that matches a key will be replaced in table by the value
+                                    e.g: 
+                                    <code>
+                                    "transform": {
+                                            "type": "textMapping",
+                                            "mapping": {
+                                                "one": "You selected 'Option 1'",
+                                                "two": "You selected 'Option 2'",
+                                                "three": "You selected 'Option 3'"
+                                            }
+                                        }
+                                    <code>
+
+            Section label (selectionLabel)
+            ------------------------------
+            This transformer will search a given form-property path for the label of a selected option.
+            - type            : The type of the transformer.
+                                Must be set to <code>selectionLabel</code>
+            - path            : The path pointing to any form-property that has an <code>oneOf</code> or <code>anyOf</code> definition
+                                of which then the <code>description</code> will be taken as cell value.
+                                This is mostly meant to be used with ui widgets that have options as like
+                                <code>radio</code>, <code>select</code>, <code>select-button</code> etc...
+                                e.g:
+                                <code>
+                                "transform": {
+                                    "type": "selectionLabel",
+                                    "path": "/simpleTypes/radio"
+                                }
+                                </code>
+            
+            Dateformat (dateFormat)
+            ------------------------------
+            This transformer will parse and format a date string
+            - type            : The type of the transformer.
+                                Must be set to <code>dateFormat</code>
+            - dateFormat      : This transformer will parse and format a date string
+                                e.g:
+                                <code>
+                                "transform": {
+                                    "type": "dateFormat",
+                                    "from": "dd.MM.yyyy",
+                                    "to": "yyyy-MM-dd"
+                                }
+                                </code>
+
+            ChainTransform (chain)
+            ------------------------------
+            This transformer will process an array of transformers
+            passing the resulting value to the subsequent transformer in array
+            - type            : The type of the transformer.
+                                Must be set to <code>chain</code>
+            - transformers    : An array containing the transformer chain
+                                e.g:
+                                <code>
+                                "transform": {
+                                    "type": "chain",
+                                    "transformers": [
+                                        {
+                                            "type": "selectionLabel",
+                                            "path": "/simpleTypes/radio"
+                                        },
+                                        {
+                                            "type": "textMapping",
+                                            "mapping": {
+                                                "Option label 1": "You selected Option 1"
+                                            }
+                                        }
+                                    ]
+                                }
+                                </code>
+
+            Expression (expression)
+            ------------------------------
+            This transformer will evaluate an expression and set the result as value.
+            - type            : The type of the transformer.
+                                Must be set to <code>expression</code>
+            - path            : The path pointing to any form-property which value
+                                will be the root-context of the expression
+            - name            : The name which the value object of <code>path</code>
+                                will be set in the root-context.
+                                If empty then the value object of <code>path</code>
+                                will be the root-context.
+                                
+                                e.g:
+                                1)
+                                When <code>name</code> is not set:
+                                <code>
+                                "transform": {
+                                    "type": "expression",
+                                    "path": "/simpleTypes"
+                                }
+                                </code>
+                                then the expression might look like:
+                                <code>"value" : "name + '(' + email + ')''"</code>
+                                or for tables with static model
+                                <code>"expression" : "name + '(' + email + ')''"</code>
+
+                                2)
+                                When <code>name</code> set:
+                                <code>
+                                "transform": {
+                                    "type": "expression",
+                                    "path": "/simpleTypes",
+                                    "name": "stype",
+                                    "expression": "stype.name + '(' + stype.email + ')''"
+                                }
+                                </code>
+                                then the expression might look like:
+                                <code>"value" : "stype.name + '(' + stype.email + ')''"</code>
+                                or for tables with static model
+                                <code>"expression" : "stype.name + '(' + stype.email + ')''"</code>
+
+            BBCode (bbcode)
+            ------------------------------
+            This transformer will evaluate any bbcode and set the result HTML as value.
+            - type            : The type of the transformer.
+                                Must be set to <code>bbcode</code>
+                                This is the only settings property this transformer has
+
+                                e.g:
+                                <code>
+                                "transform": {
+                                    "type": "bbcode"
+                                }
+                                </code>
+                                then the bbcode might look like:
+                                <code>"value" : "[b]my bold value[/b]"</code>
+
+
+-->
+<ng-template #bottomPaginator>
+    <mat-paginator 
+    #paginator
+    *ngIf="schema?.widget?.paging && -1!==['both', 'bottom'].indexOf(schema?.widget?.paging?.position||'bottom')" 
+    [hidePageSize]="false"
+    [pageSize]="schema?.widget?.paging?.size" 
+    [pageSizeOptions]="schema?.widget?.paging?.sizeOptions" 
+    showFirstLastButtons></mat-paginator>
+</ng-template>
+<!-- TODO add feature paginator position `top` and `both` (see:https://stackblitz.com/edit/angular-vj293b?file=app%2Ftable-pagination-example.html)
+<mat-paginator 
+    (page)="syncPrimaryPaginator($event)" 
+    *ngIf="bottomPaginator.paginator && schema?.widget?.paging && 'both'===(schema?.widget?.paging?.position||'bottom')" 
+    [hidePageSize]="bottomPaginator.paginator?bottomPaginator.paginator.hidePageSize:false"
+    [pageSize]="bottomPaginator.paginator?bottomPaginator.paginator.pageSize:schema?.widget?.paging?.size" 
+    [pageSizeOptions]="bottomPaginator.paginator?bottomPaginator.paginator.pageSizeOptions:schema?.widget?.paging?.sizeOptions" 
+    showFirstLastButtons
+    [length]="bottomPaginator.paginator.length" 
+    [pageIndex]="bottomPaginator.paginator.pageIndex"
+    ></mat-paginator>
+
+<mat-paginator 
+    *ngIf="schema?.widget?.paging && 'top'===(schema?.widget?.paging?.position||'bottom')" 
+    [hidePageSize]="false"
+    [pageSize]="schema?.widget?.paging?.size" 
+    [pageSizeOptions]="schema?.widget?.paging?.sizeOptions" 
+    showFirstLastButtons></mat-paginator>
+-->
+<div [class.ngx-ui-table-no-border]="schema.widget.collapsed">
+    <h4 *ngIf="schema.title">{{ schema.hasOwnProperty('title') ? schema.title : formProperty.path }}</h4>
+    <h5 *ngIf="schema.description">{{schema.description}}</h5>
+
+    <ng-container [ngSwitch]="schema?.widget?.style">
+        <ng-container *ngSwitchCase="'keyValue'" [ngTemplateOutlet]="templateTableKeyValue"></ng-container>
+        <ng-container *ngSwitchCase="'keyValueLight'" [ngTemplateOutlet]="templateTableKeyValueLight"></ng-container>
+        <ng-container *ngSwitchDefault [ngTemplateOutlet]="templateTableDefault"></ng-container>
+    </ng-container>
+
+    <ng-template #templateTableKeyValue>
+        <!--schema?.widget?.keyValue-->
+        <table #tableKeyValue mat-table 
+        [dataSource]="tableDataSourceKeyValue" 
+        class="mat-elevation-z8"
+        matSort
+        #tableKeyValue
+        [class.dataColGroupTable]="colGroupWidthCalculated"
+        >
+            <!-- col definition for the KEY column -->
+            <ng-container matColumnDef="col_key">
+                <th mat-header-cell *matHeaderCellDef
+                [class.ngx-ui-cell-border]="schema?.widget?.collapsed!==true"
+                >Key</th>
+                <td mat-cell *matCellDef="let item"
+                [class.ngx-ui-cell-border]="schema?.widget?.collapsed!==true"
+                [attr.data-colGroup]="formProperty?.schema?.widget?.keyColGroup"
+                [attr.width]="formProperty?.schema?.widget?.keyColWidth"
+                >
+                    <ng-container [ngTemplateOutlet]="rowTemplateKeyValue_Label" [ngTemplateOutletContext]="{
+                        value: item.value === '' ? '' : (item.value || (item.valuePath ? formProperty.searchProperty(item.valuePath)?.value : '')),
+                        label: item.label === '' ? '' : (item.label || (item.labelPath ? (formProperty.searchProperty(item.labelPath)?.parent?.schema?.items?.title||formProperty.searchProperty(item.labelPath)?.schema?.title) : '') || (item.valuePath ? (formProperty.searchProperty(item.valuePath)?.parent?.schema?.items?.title||formProperty.searchProperty(item.valuePath)?.schema?.title) : '')),
+                        empty: ((!item.empty && item.empty !== '') ? false : ((item.empty === true) ? '' : item.empty)),
+                        transform: item.transform,
+                        transformLabel: item.transformLabel
+                    }">
+                    </ng-container>
+                </td>
+            </ng-container>
+            <!-- col definition for the VALUE column -->
+            <ng-container matColumnDef="col_value">
+                <th mat-header-cell *matHeaderCellDef
+                [class.ngx-ui-cell-border]="schema?.widget?.collapsed!==true"
+                >Value</th>
+                <td mat-cell *matCellDef="let item"
+                [class.ngx-ui-cell-border]="schema?.widget?.collapsed!==true"
+
+                >
+                    <ng-container [ngTemplateOutlet]="rowTemplateKeyValue_Value" [ngTemplateOutletContext]="{
+                        value: item.value === '' ? '' : (item.value || (item.valuePath ? formProperty.searchProperty(item.valuePath)?.value : '')),
+                        label: item.label === '' ? '' : (item.label || (item.labelPath ? (formProperty.searchProperty(item.labelPath)?.parent?.schema?.items?.title||formProperty.searchProperty(item.labelPath)?.schema?.title) : '') || (item.valuePath ? (formProperty.searchProperty(item.valuePath)?.parent?.schema?.items?.title||formProperty.searchProperty(item.valuePath)?.schema?.title) : '')),
+                        empty: ((!item.empty && item.empty !== '') ? false : ((item.empty === true) ? '' : item.empty)),
+                        transform: item.transform,
+                        transformLabel: item.transformLabel
+                    }">
+                    </ng-container>
+                </td>
+            </ng-container>
+
+            <!-- Caption -->
+            <ng-container matColumnDef="table-caption">
+                <th mat-header-cell *matHeaderCellDef
+                [attr.colspan]="model.colIds?.length"
+                class="ngx-ui-mat-responsive-table-caption"
+                >
+                    {{schema.widget.caption}}</th>
+            </ng-container>
+            <ng-template *ngIf="schema?.widget?.caption">
+            <tr mat-header-row *matHeaderRowDef="['table-caption']"
+            [class.ngx-ui-mat-responsive-table-caption-hidden]="!schema?.widget?.caption"
+            ></tr>
+            </ng-template>
+
+            <!-- hide headers for now -->
+            <!-- <mat-header-row *matHeaderRowDef="['col_key', 'col_value']"></mat-header-row> -->
+
+            <!-- default row definition -->
+            <tr mat-row *matRowDef="let item;let index; columns: ['col_key', 'col_value']"
+            [class.mat-row-hide-empty]="isEmptyRow(index, item)"
+            ></tr>
+
+            <!-- row definition for empty rows: hides empty rows -->
+            <!-- WORKAROUND:
+                when a complete row is hidden because of 'empty:false'
+                and the property defined at 'valuePath' or 'labelPath'
+                provides a value delayed then the row will still be not visible
+                due to missing change detection here.
+                So we use the workaround to just hide empty rows with the conditional css class attribute '[class.mat-row-hide-empty]'
+                and not the 'matRowDef' definition below
+            -->
+            <!-- <ng-container mat-row *matRowDef="let item; columns: [];when: isEmptyRow"></ng-container> -->
+
+        </table>
+        <!--
+        <mat-paginator *ngIf="schema?.widget?.pagingEnabled" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        -->
+    </ng-template>
+    <!-- template for KEY cell -->
+    <ng-template #rowTemplateKeyValue_Label let-value="value" let-label="label" let-empty="empty" let-transform="transform" let-transformLabel="transformLabel">
+        <ng-container *ngIf="value || empty!==false">
+            <!-- {{label}} -->
+            <ng-container *ngIf="transformLabel; else noConverterLabel"
+                [ngTemplateOutlet]="valueTD"
+                [ngTemplateOutletContext]="{
+                    value:label,
+                    formProperty:formProperty,
+                    transformer:transformLabel
+                }" >
+            </ng-container>
+            <ng-template #noConverterLabel>
+                {{label}}
+            </ng-template>
+        </ng-container>
+    </ng-template>
+    <!-- template for VALUE cell -->
+    <ng-template #rowTemplateKeyValue_Value let-value="value" let-label="label" let-empty="empty" let-transform="transform" let-transformLabel="transformLabel">
+        <ng-container *ngIf="value || empty!==false">
+            <ng-container *ngIf="transform; else noConverter"
+                [ngTemplateOutlet]="valueTD"
+                [ngTemplateOutletContext]="{
+                    value:(value||empty),
+                    formProperty:formProperty,
+                    transformer:transform
+                }" >
+            </ng-container>
+            <ng-template #noConverter>
+                {{value||empty}}
+            </ng-template>
+        </ng-container>
+    </ng-template>
+
+
+    <ng-template #templateTableKeyValueLight>
+        <div *ngIf="schema?.widget?.keyValue" class="ngx-ui-div-table">
+            <ng-container *ngFor="let item of schema?.widget?.keyValue" class="ngx-ui-div-row">
+                <ng-container [ngTemplateOutlet]="rowTemplateKeyValueLight" [ngTemplateOutletContext]="{
+                    value: item.value === '' ? '' : (item.value || (item.valuePath ? formProperty.searchProperty(item.valuePath)?.value : '')),
+                    label: item.label === '' ? '' : (item.label || (item.labelPath ? (formProperty.searchProperty(item.labelPath)?.parent?.schema?.items?.title||formProperty.searchProperty(item.labelPath)?.schema?.title) : '') || (item.valuePath ? (formProperty.searchProperty(item.valuePath)?.parent?.schema?.items?.title||formProperty.searchProperty(item.valuePath)?.schema?.title) : '')),
+                    empty: ((!item.empty && item.empty !== '') ? false : ((item.empty === true) ? '' : item.empty)),
+                    transform: item.transform,
+                    transformLabel: item.transformLabel
+                }">
+                </ng-container>
+            </ng-container>
+        </div>
+    </ng-template>
+    <ng-template #rowTemplateKeyValueLight let-value="value" let-label="label" let-empty="empty" let-transform="transform" let-transformLabel="transformLabel">
+        <div class="ngx-ui-div-row" *ngIf="value || empty!==false">
+            <!-- LABEL -->
+            <ng-container *ngIf="transformLabel; else noConverterLabel">
+                <ng-container *ngIf="label && transformerStatus(transformLabel);else noBBCode">
+                    <!-- safe html for bbcode -->
+                    <div class="ngx-ui-div-col"
+                        [innerHTML]="calculateValue((label||''), formProperty, transformLabel)">
+                    </div>
+                </ng-container>
+                <ng-template #noBBCode>
+                    <!-- use <code>calculateValue</code> instead to trigger change detection
+                        <div>{{(value||empty)|DataConverter:formProperty:transform}}</div> -->
+                    <div class="ngx-ui-div-col">{{calculateValue((label||''), formProperty, transformLabel)}}</div>
+                </ng-template>
+            </ng-container>
+            <ng-template #noConverterLabel>
+                <div class="ngx-ui-div-col">{{label}}</div>
+            </ng-template>
+
+            <!-- VALUE -->
+            <ng-container *ngIf="transform; else noConverter">
+                <ng-container *ngIf="(value||empty) && transformerStatus(transform);else noBBCode">
+                    <!-- safe html for bbcode -->
+                    <div class="ngx-ui-div-col"
+                        [innerHTML]="calculateValue((value||empty), formProperty, transform)">
+                    </div>
+                </ng-container>
+                <ng-template #noBBCode>
+                    <!-- use <code>calculateValue</code> instead to trigger change detection
+                        <div>{{(value||empty)|DataConverter:formProperty:transform}}</div> -->
+                    <div class="ngx-ui-div-col">{{calculateValue((value||empty), formProperty, transform)}}</div>
+                </ng-template>
+            </ng-container>
+            <ng-template #noConverter>
+                <div class="ngx-ui-div-col">{{value||empty}}</div>
+            </ng-template>
+
+
+        </div>
+    </ng-template>
+
+    <ng-template #templateTableDefault>
+        <!--model?.values-->
+        <mat-table 
+        #tableDefault
+        [dataSource]="tableDataSource" 
+        class="mat-elevation-z8 ngx-mat-responsive-table"
+        matSort
+        (matSortChange)="onMatSortChange($event, tableDefault)"
+        >
+
+            <!-- whit this we create dynamic cell definition -->
+            <ng-container *ngFor="let col of model?.cols; let colIndex = index" matColumnDef="{{col.field}}">
+                <ng-template #matHeaderCellContent>
+                    <!-- {{col.header}} -->
+                    <ng-container *ngIf="(schema?.widget?.model?.transformLabel||{})[col.field]; else noConverterLabel"
+                    [ngTemplateOutlet]="valueTH"
+                    [ngTemplateOutletContext]="{
+                        value:col.header,
+                        formProperty:formProperty,
+                        transformer:schema.widget.model.transformLabel[col.field]
+                    }" >
+                    </ng-container>
+                    <ng-template #noConverterLabel>
+                        <span class="_ngx-ui-mat-responsive-table-cell-label">{{col.header}}</span>
+                    </ng-template>
+                </ng-template>
+                <ng-container *ngIf="col.sort">
+                <mat-header-cell *matHeaderCellDef="let item"
+                [class.ngx-ui-cell-border]="schema?.widget?.collapsed!==true"
+                mat-sort-header
+                >
+                    <ng-container [ngTemplateOutlet]="matHeaderCellContent"></ng-container>
+                </mat-header-cell>
+                </ng-container>
+                <ng-container *ngIf="!col.sort">
+                <mat-header-cell *matHeaderCellDef="let item"
+                [class.ngx-ui-cell-border]="schema?.widget?.collapsed!==true"
+                >
+                    <ng-container [ngTemplateOutlet]="matHeaderCellContent"></ng-container>
+                </mat-header-cell>
+                </ng-container>
+                <mat-cell *matCellDef="let item"
+                [class.ngx-ui-cell-border]="schema?.widget?.collapsed!==true"
+                >
+                    <ng-container *ngIf="(schema?.widget?.model?.transform||{})[col.field]; else noConverter"
+                    [ngTemplateOutlet]="valueTD"
+                    [ngTemplateOutletContext]="{
+                        value:item[col.field],
+                        formProperty:formProperty,
+                        transformer:schema.widget.model.transform[col.field]
+                    }" >
+                    </ng-container>
+                <ng-template #noConverter>
+                    {{item[col.field]}}
+                </ng-template>
+                </mat-cell>
+            </ng-container>
+
+            <!-- Caption -->
+            <ng-container matColumnDef="table-caption">
+                <th mat-header-cell *matHeaderCellDef
+                [attr.colspan]="model.colIds?.length"
+                class="ngx-ui-mat-responsive-table-caption"
+                >
+                    {{schema.widget.caption}}</th>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="['table-caption']"
+            [class.ngx-ui-mat-responsive-table-caption-hidden]="!schema?.widget?.caption"
+            ></mat-header-row>
+
+            <mat-header-row *matHeaderRowDef="model?.colIds"></mat-header-row>
+            <mat-row *matRowDef="let item;let index; columns: model?.colIds"></mat-row>
+        </mat-table>
+        <!--
+        <mat-paginator *ngIf="schema?.widget?.pagingEnabled" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        -->
+    </ng-template>
+
+
+    <ng-template #valueTD let-value="value" let-transformer="transformer" let-formProperty="formProperty">
+        <ng-container *ngIf="value && transformerStatus(transformer);else noBBCode">
+            <!-- safe html for bbcode --><!-- unfortunately with angular material we must use an inner SPAN element -->
+            <span [innerHTML]="calculateValue(value, formProperty, transformer)"></span>
+        </ng-container>
+        <ng-template #noBBCode>
+            <!-- use <code>calculateValue</code> instead to trigger change detection
+                {{value|DataConverter:formProperty:transformer}} -->
+            {{calculateValue(value, formProperty, transformer)}}
+        </ng-template>
+    </ng-template>
+
+    <ng-template #valueTH let-value="value" let-transformer="transformer" let-formProperty="formProperty">
+        <ng-container *ngIf="value && transformerStatus(transformer);else noBBCode">
+            <!-- safe html for bbcode --><!-- unfortunately with angular material we must use an inner SPAN element -->
+            <span class="_ngx-ui-mat-responsive-table-cell-label" [innerHTML]="calculateValue(value, formProperty, transformer)"></span>
+        </ng-container>
+        <ng-template #noBBCode>
+            <!-- use <code>calculateValue</code> instead to trigger change detection
+                {{value|DataConverter:formProperty:transformer}} -->
+            <span class="_ngx-ui-mat-responsive-table-cell-label">{{calculateValue(value, formProperty, transformer)}}</span>
+        </ng-template>
+    </ng-template>
+</div>
+
+<ng-container
+    *ngIf="formProperty?.schema?.widget?.keyColGroup && -1==formProperty?.schema?.widget?.keyColWidth.indexOf('%') && ('max'===formProperty?.schema?.widget?.keyColWidth || 'min'===formProperty?.schema?.widget?.keyColWidth)">
+    <ng-container *ngIf="calculateColGroupStyle()"></ng-container>
+</ng-container>
+
+<ng-container [ngTemplateOutlet]="bottomPaginator"></ng-container>
